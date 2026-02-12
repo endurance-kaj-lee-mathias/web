@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-    <p>Endurance</p>
+    <p>Public</p>
 </template>
