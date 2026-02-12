@@ -15,7 +15,9 @@
         "vue-router": "^5.0.1",
         "@tailwindcss/vite": "^4.1.18",
         "tailwindcss": "^4.1.18",
-        "vue-sonner": "^2.0.9"
+        "vue-sonner": "^2.0.9",
+        "axios": "^1.13.2",
+        "@josempgon/vue-keycloak": "^3.3.2"
     },
     "devDependencies": {
         "@tsconfig/node24": "^24.0.4",
