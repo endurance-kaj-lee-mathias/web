@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { Toaster } from "vue-sonner";
-import { useKeycloak } from "@josempgon/vue-keycloak";
+import Sidebar from "@/components/layout/bar/sidebar.vue";
 import { RouterView } from "vue-router";
-
-const keycloak = useKeycloak();
+import { Toaster } from "vue-sonner";
 </script>
 
 <template>
-    Authenticated: {{ keycloak.isAuthenticated }}
-    <RouterView />
-    <Toaster />
+    <main class="flex w-screen h-screen">
+        <Sidebar />
+        <section class="w-screen">
+            <section class="flex flex-col gap-2 p-2 grow overflow-auto">
+                <RouterView />
+                <Toaster />
+            </section>
+        </section>
+    </main>
 </template>
