@@ -15,7 +15,7 @@ const router = createRouter({
     routes: [
         {
             path: "/",
-            redirect: "/analytics",
+            redirect: "/account",
         },
         ...getRoutes().map(
             (route: Route): RouteRecordRaw => ({
@@ -30,20 +30,20 @@ const router = createRouter({
         ),
     ],
 });
-router.beforeEach((to, _from, next) => {
-    const keycloak = useKeycloak();
 
+const keycloak = useKeycloak();
+router.beforeEach(async (to, _from, next) => {
     if (keycloak.isPending.value) {
-        const unwatch = watch(
-            () => keycloak.isPending.value,
-            (pending: boolean) => {
-                if (pending) return;
-                unwatch();
-                next();
-            },
-        );
-
-        return;
+        await new Promise<void>((resolve) => {
+            const unwatch = watch(
+                () => keycloak.isPending.value,
+                (pending: boolean) => {
+                    if (pending) return;
+                    unwatch();
+                    resolve();
+                },
+            );
+        });
     }
 
     const guarded: boolean = to.meta.auth as boolean;
