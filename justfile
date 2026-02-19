@@ -2,7 +2,7 @@
     just --list
 
 deps:
-    npm install
+    clear && npm install
 
 run:
-    npm run dev
+    clear && npm run dev

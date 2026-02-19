@@ -4,6 +4,8 @@ import Account from "@/components/layout/bar/account.vue";
 import Header from "@/components/layout/bar/header.vue";
 import Link from "@/components/layout/bar/link.vue";
 import { ref } from "vue";
+import { Gap } from "@/components/common/layout/gap";
+import { getVisibleRoutes } from "@/router/routes";
 
 const state = ref(false);
 </script>
@@ -17,15 +19,21 @@ const state = ref(false);
 
     <aside
         :class="[
-            'fixed sm:relative flex flex-col justify-between gap-2 bg-light-2 border-r-3 border-medium-3 p-4 h-full',
+            'fixed sm:relative flex flex-col justify-between gap-2 bg-light-2 border-r-2 border-medium-3 px-6 py-4 h-full',
             'transition-all duration-300 overflow-hidden z-50',
             'w-[90%] sm:min-w-fit sm:max-w-50',
             state ? 'left-0' : '-left-full sm:left-0',
         ]"
     >
-        <Column>
+        <Column :gap="Gap.LARGE">
             <Header />
-            <Link href="/account" />
+
+            <Column>
+                <Link v-for="route in getVisibleRoutes()" :href="route.path">
+                    <Component :is="route.icon" />
+                    {{ route.title }}
+                </Link>
+            </Column>
         </Column>
 
         <Account />

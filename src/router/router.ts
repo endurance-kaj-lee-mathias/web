@@ -1,22 +1,34 @@
-import Protected from "@/features/message/protected.vue";
-import Public from "@/features/message/public.vue";
 import { hasRoles, Role } from "@/lib/auth/roles";
 import { useKeycloak } from "@josempgon/vue-keycloak";
 import { watch } from "vue";
-import { createRouter, createWebHistory } from "vue-router";
+import {
+    createRouter,
+    createWebHistory,
+    type RouteRecordRaw,
+} from "vue-router";
+import type { Route } from "@/router/route";
+import { getRoutes } from "@/router/routes";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-        { path: "/", component: Public },
         {
-            path: "/message",
-            component: Protected,
-            meta: { auth: true, roles: [Role.ADMIN] },
+            path: "/",
+            redirect: "/account",
         },
+        ...getRoutes().map(
+            (route: Route): RouteRecordRaw => ({
+                path: route.path,
+                component: route.component,
+                meta: {
+                    title: route.title,
+                    auth: route.auth.guarded,
+                    roles: route.auth.roles ?? [],
+                },
+            }),
+        ),
     ],
 });
-
 router.beforeEach((to, _from, next) => {
     const keycloak = useKeycloak();
 
