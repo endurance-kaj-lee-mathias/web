@@ -1,10 +1,5 @@
+import type { Role } from "@/models/roles";
 import { useKeycloak } from "@josempgon/vue-keycloak";
-
-export const Role = {
-    ADMIN: "admin",
-} as const;
-
-export type Role = (typeof Role)[keyof typeof Role];
 
 export function hasRoles(roles: Role[]): boolean {
     const keycloak = useKeycloak();

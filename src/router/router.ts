@@ -1,4 +1,4 @@
-import { hasRoles, Role } from "@/lib/auth/roles";
+import { Role } from "@/models/roles";
 import { useKeycloak } from "@josempgon/vue-keycloak";
 import { watch } from "vue";
 import {
@@ -8,13 +8,14 @@ import {
 } from "vue-router";
 import type { Route } from "@/router/route";
 import { getRoutes } from "@/router/routes";
+import { hasRoles } from "@/services/authentication";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: "/",
-            redirect: "/account",
+            redirect: "/analytics",
         },
         ...getRoutes().map(
             (route: Route): RouteRecordRaw => ({
@@ -38,7 +39,7 @@ router.beforeEach((to, _from, next) => {
             (pending: boolean) => {
                 if (pending) return;
                 unwatch();
-                next(to.path);
+                next();
             },
         );
 
