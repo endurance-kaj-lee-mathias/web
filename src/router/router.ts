@@ -7,7 +7,7 @@ import {
     type RouteRecordRaw,
 } from "vue-router";
 import type { Route } from "@/router/route";
-import { getRoutes } from "@/router/routes";
+import { getRoutes } from "@/router/routes/routes";
 import { hasRoles } from "@/services/authentication";
 
 const router = createRouter({
@@ -15,7 +15,7 @@ const router = createRouter({
     routes: [
         {
             path: "/",
-            redirect: "/account",
+            redirect: "/profile",
         },
         ...getRoutes().map(
             (route: Route): RouteRecordRaw => ({

@@ -3,5 +3,5 @@ import Base from "@/components/layout/base.vue";
 </script>
 
 <template>
-    <Base> Analytics </Base>
+    <Base> Veterans </Base>
 </template>

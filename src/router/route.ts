@@ -6,7 +6,7 @@ export interface Route {
     title?: string;
     path: string;
     component: Component;
-    visible?: boolean;
+    visible: Visibility;
     auth: {
         guarded: Guarded;
         roles?: Role[];
@@ -17,4 +17,10 @@ export enum Guarded {
     PUBLIC,
     ONLY_PUBLIC,
     PRIVATE,
+}
+
+export enum Visibility {
+    BAR,
+    ICON,
+    NONE,
 }
