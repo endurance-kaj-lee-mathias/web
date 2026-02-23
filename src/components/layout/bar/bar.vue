@@ -1,41 +1,32 @@
 <script setup lang="ts">
-import Column from "@/components/common/layout/column.vue";
-import Account from "@/components/layout/bar/account.vue";
-import Header from "@/components/layout/bar/header.vue";
-import Link from "@/components/layout/bar/link.vue";
-import { ref } from "vue";
+import Row from "@/components/common/layout/row.vue";
 import { Gap } from "@/components/common/layout/gap";
-import { getVisibleRoutes } from "@/router/routes";
-
-const state = ref(true);
+import { getRoutesBasedOnVisibility } from "@/router/routes/routes";
+import { Justify } from "@/components/common/layout/justify";
+import Link from "@/components/layout/bar/link.vue";
+import { Visibility } from "@/router/route";
 </script>
 
 <template>
-    <section
-        v-if="state"
-        class="sm:hidden fixed inset-0 bg-black/50 z-40"
-        @click="state = false"
-    ></section>
+    <Row :gap="Gap.LARGE" :justify="Justify.BETWEEN">
+        <section
+            class="flex flex-row gap-2 mt-4 justify-between w-full items-center md:hidden"
+        >
+            <RouterLink to="/">
+                <h2 className="text-lg font-semibold">Moko</h2>
+            </RouterLink>
+        </section>
 
-    <aside
-        :class="[
-            'fixed sm:relative flex flex-col justify-between gap-2 bg-light-2 border-r-2 border-medium-3 px-4 py-2 h-full',
-            'transition-all duration-300 overflow-hidden z-50',
-            'w-[90%] sm:w-96',
-            state ? 'left-0' : '-left-full sm:left-0',
-        ]"
-    >
-        <Column :gap="Gap.LARGE">
-            <Header />
-
-            <Column :gap="Gap.SMALL">
-                <Link v-for="route in getVisibleRoutes()" :href="route.path">
-                    <Component v-if="route.icon" :is="route.icon" />
+        <section class="hidden md:flex">
+            <Row :gap="Gap.LARGE" :wrap="true">
+                <Link
+                    v-for="route in getRoutesBasedOnVisibility(Visibility.BAR)"
+                    :href="route.path"
+                >
+                    <component :is="route.icon" />
                     {{ route.title ?? "Route" }}
                 </Link>
-            </Column>
-        </Column>
-
-        <Account />
-    </aside>
+            </Row>
+        </section>
+    </Row>
 </template>

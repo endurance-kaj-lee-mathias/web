@@ -1,4 +1,4 @@
-import { type Route } from "@/router/route";
+import { Visibility, type Route } from "@/router/route";
 import { auth } from "@/router/routes/auth";
 import {
     bookings,
@@ -21,6 +21,6 @@ export function getRoutes(): Route[] {
     ];
 }
 
-export function getVisibleRoutes(): Route[] {
-    return getRoutes().filter((route: Route) => route.visible ?? true);
+export function getRoutesBasedOnVisibility(visibility: Visibility): Route[] {
+    return getRoutes().filter((route: Route) => route.visible === visibility);
 }
