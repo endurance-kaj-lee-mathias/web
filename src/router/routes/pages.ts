@@ -48,6 +48,7 @@ export const veterans: Route[] = [
 export const notifications: Route[] = [
     {
         icon: NotificationsIcon,
+        title: "Notifications",
         path: "/notifications",
         visible: Visibility.ICON,
         component: Notifications,
@@ -58,6 +59,7 @@ export const notifications: Route[] = [
 export const messages: Route[] = [
     {
         icon: MessagesIcon,
+        title: "Messages",
         path: "/messages",
         visible: Visibility.ICON,
         component: Messages,
@@ -68,6 +70,7 @@ export const messages: Route[] = [
 export const profile: Route[] = [
     {
         icon: ProfileIcon,
+        title: "Profile",
         path: "/profile",
         visible: Visibility.ICON,
         component: Profile,

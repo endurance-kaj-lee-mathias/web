@@ -15,7 +15,7 @@ import { Gap } from "../common/layout/gap";
             <section
                 :class="`flex flex-col ${Gap.MEDIUM} mx-auto max-w-2xl w-full`"
             >
-                {children}
+                <slot />
             </section>
         </section>
     </section>

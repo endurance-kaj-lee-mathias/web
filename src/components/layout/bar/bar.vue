@@ -1,26 +1,39 @@
 <script setup lang="ts">
 import Row from "@/components/common/layout/row.vue";
 import { Gap } from "@/components/common/layout/gap";
-import { getRoutesBasedOnVisibility } from "@/router/routes/routes";
+import { getRoutes } from "@/router/routes/routes";
 import { Justify } from "@/components/common/layout/justify";
 import Link from "@/components/layout/bar/link.vue";
 import { Visibility } from "@/router/route";
+import Button from "@/components/layout/bar/button.vue";
+import MenuButton from "@/components/layout/bar/menu/button.vue";
+import { ref } from "vue";
+import MenuIcon from "@/components/icons/menu.vue";
+import Menu from "@/components/layout/bar/menu/menu.vue";
+
+const menu = ref(false);
+const open = () => (menu.value = true);
+const close = () => (menu.value = false);
 </script>
 
 <template>
     <Row :gap="Gap.LARGE" :justify="Justify.BETWEEN">
         <section
-            class="flex flex-row gap-2 mt-4 justify-between w-full items-center md:hidden"
+            class="flex flex-row gap-2 justify-between w-full items-center md:hidden"
         >
             <RouterLink to="/">
-                <h2 className="text-lg font-semibold">Moko</h2>
+                <h2 className="text-xl font-bold">Endurance</h2>
             </RouterLink>
+
+            <MenuButton :click="open">
+                <MenuIcon />
+            </MenuButton>
         </section>
 
         <section class="hidden md:flex">
             <Row :gap="Gap.LARGE" :wrap="true">
                 <Link
-                    v-for="route in getRoutesBasedOnVisibility(Visibility.BAR)"
+                    v-for="route in getRoutes(Visibility.BAR)"
                     :href="route.path"
                 >
                     <component :is="route.icon" />
@@ -28,5 +41,18 @@ import { Visibility } from "@/router/route";
                 </Link>
             </Row>
         </section>
+
+        <section className="hidden md:flex">
+            <Row :wrap="true">
+                <Button
+                    v-for="route in getRoutes(Visibility.ICON)"
+                    :href="route.path"
+                >
+                    <component :is="route.icon" />
+                </Button>
+            </Row>
+        </section>
     </Row>
+
+    <Menu :state="menu" :close="close" />
 </template>

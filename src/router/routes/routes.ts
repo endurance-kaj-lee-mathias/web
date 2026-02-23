@@ -9,7 +9,7 @@ import {
     veterans,
 } from "@/router/routes/pages";
 
-export function getRoutes(): Route[] {
+export function getAllRoutes(): Route[] {
     return [
         ...auth,
         ...journals,
@@ -21,6 +21,8 @@ export function getRoutes(): Route[] {
     ];
 }
 
-export function getRoutesBasedOnVisibility(visibility: Visibility): Route[] {
-    return getRoutes().filter((route: Route) => route.visible === visibility);
+export function getRoutes(visibility: Visibility): Route[] {
+    return getAllRoutes().filter(
+        (route: Route) => route.visible === visibility,
+    );
 }
