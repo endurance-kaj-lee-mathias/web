@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { Gap } from "@/components/common/layout/gap";
 import { Align } from "@/components/common/layout/align";
-import Switcher from "@/components/icons/switcher.vue";
 import { Justify } from "@/components/common/layout/justify";
 import { RouterLink, useRoute } from "vue-router";
+import { getRandomImage } from "@/services/account";
 import { useKeycloak } from "@josempgon/vue-keycloak";
 import { computed } from "vue";
 
@@ -19,24 +19,18 @@ function matches(): boolean {
 <template>
     <RouterLink
         to="/account"
-        :class="`px-3 py-2.5 flex flex-row ${Gap.SMALL} ${Align.CENTER} ${Justify.BETWEEN} rounded-lg transition-colors duration-100 cursor-pointer select-none ${matches() ? 'bg-medium-3' : 'hover:bg-medium-3'}`"
+        :class="`px-3 py-2.5 flex flex-row ${Gap.MEDIUM} ${Align.CENTER} rounded-lg transition-colors duration-100 cursor-pointer select-none ${matches() ? 'bg-medium-3' : 'hover:bg-medium-3'}`"
     >
-        <section :class="`flex flex-row ${Gap.MEDIUM}`">
-            <img src="/images/logo.svg" class="w-9" />
+        <img :src="getRandomImage()" class="w-11 rounded-lg" />
 
-            <section class="flex flex-col">
-                <h2 class="font-bold flex flex-row gap-2 items-center">
-                    {{ username }}
-                </h2>
+        <section class="flex flex-col min-w-0">
+            <h2 class="text-lg font-bold truncate">
+                {{ username }}
+            </h2>
 
-                <p class="text-xs text-medium font-semibold -mt-1">
-                    {{ email }}
-                </p>
-            </section>
-        </section>
-
-        <section class="text-medium-2">
-            <Switcher />
+            <p class="text-xs text-medium font-semibold -mt-1 truncate">
+                {{ email }}
+            </p>
         </section>
     </RouterLink>
 </template>

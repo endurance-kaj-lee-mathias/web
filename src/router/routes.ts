@@ -1,54 +1,74 @@
-import type { Route } from "@/router/route";
-import Analytics from "@/components/icons/analytics.vue";
-import Public from "@/features/message/public.vue";
-import Journal from "@/components/icons/journal.vue";
-import Messages from "@/components/icons/messages.vue";
-import Bookings from "@/components/icons/bookings.vue";
-import Account from "@/features/account.vue";
+import { Guarded, type Route } from "@/router/route";
+import AnalyticsIcon from "@/components/icons/analytics.vue";
+import JournalIcon from "@/components/icons/journal.vue";
+import MessagesIcon from "@/components/icons/messages.vue";
+import BookingsIcon from "@/components/icons/bookings.vue";
+import Account from "@/features/account/account.vue";
+import Info from "@/features/info/info.vue";
+import Analytics from "@/features/analytics/analytics.vue";
+import Journal from "@/features/journal/journal.vue";
+import Messages from "@/features/messages/messages.vue";
+import Bookings from "@/features/bookings/bookings.vue";
 
-const routes: Route[] = [
+const info: Route[] = [
     {
-        icon: Analytics,
-        title: "Analytics",
-        path: "/analytics",
-        component: Public,
-        auth: { guarded: true },
+        path: "/info",
+        visible: false,
+        component: Info,
+        auth: { guarded: Guarded.PUBLIC },
     },
+];
+
+const account: Route[] = [
     {
-        icon: Journal,
-        title: "Journals",
-        path: "/journals",
-        component: Public,
-        auth: { guarded: true },
-    },
-    {
-        icon: Messages,
-        title: "Messages",
-        path: "/messages",
-        component: Public,
-        auth: { guarded: true },
-    },
-    {
-        icon: Bookings,
-        title: "Bookings",
-        path: "/bookings",
-        component: Public,
-        auth: { guarded: true },
-    },
-    {
-        icon: Analytics,
-        title: "Account",
         path: "/account",
         visible: false,
         component: Account,
-        auth: { guarded: false },
+        auth: { guarded: Guarded.PRIVATE },
+    },
+    {
+        path: "/account/login",
+        visible: false,
+        component: Account,
+        auth: { guarded: Guarded.ONLY_PUBLIC },
+    },
+];
+
+const routes: Route[] = [
+    {
+        icon: AnalyticsIcon,
+        title: "Analytics",
+        path: "/analytics",
+        component: Analytics,
+        auth: { guarded: Guarded.PRIVATE },
+    },
+    {
+        icon: JournalIcon,
+        title: "Journals",
+        path: "/journals",
+        component: Journal,
+        auth: { guarded: Guarded.PRIVATE },
+    },
+    {
+        icon: MessagesIcon,
+        title: "Messages",
+        path: "/messages",
+        component: Messages,
+        auth: { guarded: Guarded.PRIVATE },
+    },
+    {
+        icon: BookingsIcon,
+        title: "Bookings",
+        path: "/bookings",
+        component: Bookings,
+        auth: { guarded: Guarded.PRIVATE },
     },
 ];
 
 export function getRoutes(): Route[] {
-    return routes;
+    return [...info, ...account, ...routes];
 }
 
 export function getVisibleRoutes(): Route[] {
-    return routes.filter((route: Route) => route.visible ?? true);
+    return getRoutes().filter((route: Route) => route.visible ?? true);
 }

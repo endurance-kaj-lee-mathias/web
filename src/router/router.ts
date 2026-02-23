@@ -32,6 +32,7 @@ const router = createRouter({
 });
 
 const keycloak = useKeycloak();
+
 router.beforeEach(async (to, _from, next) => {
     if (keycloak.isPending.value) {
         await new Promise<void>((resolve) => {

@@ -10,7 +10,7 @@ import { Gap } from "@/components/common/layout/gap";
                 Endurance
             </h2>
 
-            <p class="text-medium font-semibold -mt-1">
+            <p class="text-xs lg:text-sm text-medium font-semibold -mt-1">
                 Strength
                 <span class="underline decoration-wavy">beyond</span>
                 service

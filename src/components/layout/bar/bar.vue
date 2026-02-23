@@ -19,19 +19,19 @@ const state = ref(true);
 
     <aside
         :class="[
-            'fixed sm:relative flex flex-col justify-between gap-2 bg-light-2 border-r-2 border-medium-3 px-3 py-2 h-full',
+            'fixed sm:relative flex flex-col justify-between gap-2 bg-light-2 border-r-2 border-medium-3 px-4 py-2 h-full',
             'transition-all duration-300 overflow-hidden z-50',
-            'w-[90%] sm:min-w-fit sm:max-w-50',
+            'w-[90%] sm:w-96',
             state ? 'left-0' : '-left-full sm:left-0',
         ]"
     >
         <Column :gap="Gap.LARGE">
             <Header />
 
-            <Column>
+            <Column :gap="Gap.SMALL">
                 <Link v-for="route in getVisibleRoutes()" :href="route.path">
-                    <Component :is="route.icon" />
-                    {{ route.title }}
+                    <Component v-if="route.icon" :is="route.icon" />
+                    {{ route.title ?? "Route" }}
                 </Link>
             </Column>
         </Column>

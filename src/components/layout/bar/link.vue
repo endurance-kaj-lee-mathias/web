@@ -13,7 +13,7 @@ function matches(path: string): boolean {
 <template>
     <RouterLink
         :to="href"
-        :class="`px-3 py-2 font-semibold text-lg flex flex-row items-center ${Gap.MEDIUM} transition-colors duration-100 cursor-pointer select-none rounded-lg ${matches(href) ? 'bg-dark text-light' : 'text-medium-2 hover:bg-medium-3'}`"
+        :class="`px-3 py-2 font-semibold text-lg flex flex-row items-center ${Gap.MEDIUM} transition-colors duration-100 cursor-pointer select-none rounded-lg ${matches(href) ? 'bg-medium-3 text-medium' : 'text-medium-2 hover:bg-medium-3 hover:text-medium'}`"
     >
         <slot />
     </RouterLink>
