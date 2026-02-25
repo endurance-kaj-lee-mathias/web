@@ -12,6 +12,7 @@ import type { Profile } from "@/features/profile/models/profile";
 import { ref } from "vue";
 import { getOrCreate } from "@/features/profile/services/profile";
 import Empty from "@/components/common/states/empty.vue";
+import Preferences from "@/features/profile/components/preferences.vue";
 
 const keycloak = useKeycloak();
 const profile: Ref<Profile | null> = ref(null);
@@ -37,11 +38,15 @@ function logout() {
                 :about="profile.about"
                 :image="profile.image"
                 :logout="logout"
-                :viewer="Viewer.OWNER" />
+                :viewer="Viewer.OWNER"
+            />
 
             <Introduction
                 :username="profile.username"
                 :introduction="profile.introduction"
-        /></Column>
+            />
+
+            <Preferences />
+        </Column>
     </Base>
 </template>

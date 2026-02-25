@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-defineProps<{ click: () => void }>();
+defineProps<{ click?: () => void }>();
 </script>
 
 <template>
