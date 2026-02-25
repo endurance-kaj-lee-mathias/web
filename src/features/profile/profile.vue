@@ -16,6 +16,7 @@ import Preferences from "@/features/profile/components/preferences.vue";
 
 const keycloak = useKeycloak();
 const profile: Ref<Profile | null> = ref(null);
+const preferences = ref(false);
 
 onMounted(async () => {
     profile.value = await getOrCreate();
@@ -37,6 +38,7 @@ function logout() {
                 :username="profile.username"
                 :about="profile.about"
                 :image="profile.image"
+                :preferences="() => (preferences = true)"
                 :logout="logout"
                 :viewer="Viewer.OWNER"
             />
@@ -46,7 +48,7 @@ function logout() {
                 :introduction="profile.introduction"
             />
 
-            <Preferences />
+            <Preferences v-model="preferences" />
         </Column>
     </Base>
 </template>

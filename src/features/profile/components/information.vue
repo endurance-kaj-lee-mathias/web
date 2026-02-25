@@ -7,7 +7,6 @@ import { Justify } from "@/components/common/layout/justify";
 import { Padding } from "@/components/common/layout/padding";
 import Row from "@/components/common/layout/row.vue";
 import { Viewer } from "@/features/profile/components/viewer";
-import Static from "@/components/common/images/static.vue";
 import Actions from "@/features/profile/components/actions.vue";
 import Dynamic from "@/components/common/images/dynamic.vue";
 
@@ -16,6 +15,7 @@ defineProps<{
     username: string;
     about: string;
     image: string;
+    preferences: () => void;
     logout: () => void;
     viewer: Viewer;
 }>();
@@ -50,7 +50,11 @@ defineProps<{
         </Row>
 
         <section class="flex flex-col md:justify-between md:items-end p-1">
-            <Actions :logout="logout" :viewer="viewer" />
+            <Actions
+                :preferences="preferences"
+                :logout="logout"
+                :viewer="viewer"
+            />
 
             <Row :gap="Gap.LARGE">
                 <Statistic title="Level" value="{level.toString()}" />

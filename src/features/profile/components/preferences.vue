@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
-import { ref } from "vue";
-
-const state = ref(false);
+defineProps<{ modelValue: boolean }>();
 </script>
 
 <template>
-    <button @click="state = true">Open Dialog</button>
-
-    <Dialog v-model:open="state">
+    <Dialog
+        :open="modelValue"
+        @update:open="$emit('update:modelValue', $event)"
+    >
         <DialogContent
             title="Preferences"
             description="Edit your profile details."
