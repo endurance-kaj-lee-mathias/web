@@ -72,7 +72,7 @@ export const profile: Route[] = [
         icon: ProfileIcon,
         title: "Profile",
         path: "/profile",
-        visible: Visibility.ICON,
+        visible: Visibility.BAR,
         component: Profile,
         auth: { guarded: Guarded.PRIVATE },
     },

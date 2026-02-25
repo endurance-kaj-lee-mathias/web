@@ -6,10 +6,10 @@ import { Justify } from "@/components/common/layout/justify";
 import Link from "@/components/layout/bar/link.vue";
 import { Visibility } from "@/router/route";
 import Button from "@/components/layout/bar/button.vue";
-import MenuButton from "@/components/layout/bar/menu/button.vue";
+import Small from "@/components/common/buttons/small.vue";
 import { ref } from "vue";
 import MenuIcon from "@/components/icons/menu.vue";
-import Menu from "@/components/layout/bar/menu/menu.vue";
+import Menu from "@/components/layout/bar/menu.vue";
 
 const menu = ref(false);
 const open = () => (menu.value = true);
@@ -25,9 +25,9 @@ const close = () => (menu.value = false);
                 <h2 className="text-xl font-bold">Endurance</h2>
             </RouterLink>
 
-            <MenuButton :click="open">
+            <Small :click="open">
                 <MenuIcon />
-            </MenuButton>
+            </Small>
         </section>
 
         <section class="hidden md:flex">

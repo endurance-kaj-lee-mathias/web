@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import CloseIcon from "@/components/icons/close.vue";
-import Button from "@/components/layout/bar/menu/button.vue";
-import Link from "../link.vue";
+import Small from "@/components/common/buttons/small.vue";
+import Link from "@/components/layout/bar/link.vue";
 import { getRoutes } from "@/router/routes/routes";
 import { Visibility } from "@/router/route";
 
@@ -21,9 +21,9 @@ defineProps<{ state: boolean; close: () => void }>();
         >
             <h2 class="text-xl font-bold">Endurance</h2>
 
-            <Button :click="close">
+            <Small :click="close">
                 <CloseIcon />
-            </Button>
+            </Small>
         </section>
 
         <section class="flex flex-col gap-4 p-4 border-b-2 border-light-2">
