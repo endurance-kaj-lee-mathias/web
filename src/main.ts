@@ -1,6 +1,6 @@
 import app from "@/app.vue";
 import { config } from "@/config/idp";
-import router from "@/router";
+import router from "@/router/router";
 import "@/styles.css";
 import { vueKeycloak } from "@josempgon/vue-keycloak";
 import { createApp } from "vue";
