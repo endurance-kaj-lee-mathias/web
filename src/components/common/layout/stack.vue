@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Gap } from "@/components/common/layout/gap";
 import { Align } from "@/components/common/layout/align";
 import { Justify } from "@/components/common/layout/justify";
 import { Padding } from "@/components/common/layout/padding";

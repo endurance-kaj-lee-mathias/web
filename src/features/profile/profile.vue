@@ -9,10 +9,11 @@ import { useKeycloak } from "@josempgon/vue-keycloak";
 import { onMounted } from "vue";
 import type { Ref } from "vue";
 import type { Profile } from "@/features/profile/models/profile";
+import { from as fromAddress } from "@/features/profile/models/address";
 import { ref } from "vue";
 import { getOrCreate } from "@/features/profile/services/profile";
 import Empty from "@/components/common/states/empty.vue";
-import Preferences from "@/features/profile/components/preferences.vue";
+import Preferences from "@/features/profile/components/preferences/preferences.vue";
 
 const keycloak = useKeycloak();
 const profile: Ref<Profile | null> = ref(null);
@@ -48,7 +49,24 @@ function logout() {
                 :introduction="profile.introduction"
             />
 
-            <Preferences v-model="preferences" />
+            <Preferences
+                v-model="preferences"
+                :personal="{
+                    firstName: '',
+                    name: '',
+                    address: fromAddress(),
+                    phone: '',
+                }"
+                :about="{
+                    about: profile.about,
+                    introduction: profile.introduction,
+                }"
+                :save="
+                    (about: string, introduction: string) => {
+                        console.log(about + ' ' + introduction);
+                    }
+                "
+            />
         </Column>
     </Base>
 </template>

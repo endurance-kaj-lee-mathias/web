@@ -23,19 +23,23 @@ defineProps<{
 
 <template>
     <Row :justify="Justify.BETWEEN" :items="Align.STRETCH" :responsive="true">
-        <Row :gap="Gap.LARGE" :items="Align.STRETCH">
+        <Row :gap="Gap.LARGE" :items="Align.STRETCH" :responsive="true">
             <Dynamic :src="image" :alt="`Picture of ${name}`" />
 
             <Column :padding="Padding.SMALL">
                 <Column :gap="Gap.NONE">
-                    <Row
-                        :gap="Gap.LARGE"
-                        :items="Align.CENTER"
-                        :responsive="false"
-                    >
+                    <Row :items="Align.CENTER" :wrap="true">
                         <h2 class="max-w-xs text-3xl font-bold truncate">
                             {{ name }}
                         </h2>
+
+                        <section class="block md:hidden">
+                            <Actions
+                                :preferences="preferences"
+                                :logout="logout"
+                                :viewer="viewer"
+                            />
+                        </section>
                     </Row>
 
                     <h3 className="max-w-xs text-medium text-lg truncate">
@@ -49,17 +53,12 @@ defineProps<{
             </Column>
         </Row>
 
-        <section class="flex flex-col md:justify-between md:items-end p-1">
+        <section class="hidden md:block">
             <Actions
                 :preferences="preferences"
                 :logout="logout"
                 :viewer="viewer"
             />
-
-            <Row :gap="Gap.LARGE">
-                <Statistic title="Level" value="{level.toString()}" />
-                <Statistic title="Time Played" value="{playTime.toString()}" />
-            </Row>
         </section>
     </Row>
 </template>
