@@ -10,21 +10,22 @@ import About from "@/features/profile/components/preferences/about.vue";
 import Privacy from "@/features/profile/components/preferences/privacy.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { watch } from "vue";
+import Address from "@/features/profile/components/preferences/address.vue";
 
 const props = defineProps<{
     modelValue: boolean;
     personal: {
         firstName: string;
-        name: string;
-        address: {
-            street: string;
-            number: number;
-            addition: string;
-            zip: number;
-            city: string;
-            country: string;
-        };
+        lastName: string;
+        userName: string;
         phone: string;
+    };
+    address: {
+        street: string;
+        number: number;
+        city: string;
+        zip: number;
+        country: string;
     };
     about: { about: string; introduction: string };
     save: (about: string, introduction: string) => void;
@@ -33,6 +34,7 @@ const props = defineProps<{
 const tab = ref(Tabs.PERSONAL);
 const emit = defineEmits(["update:modelValue"]);
 const personal = ref({ ...props.personal });
+const address = ref({ ...props.address });
 const about = ref({ ...props.about });
 
 watch(
@@ -64,6 +66,10 @@ watch(
                 <Personal
                     v-if="tab === Tabs.PERSONAL"
                     v-model:values="personal"
+                />
+                <Address
+                    v-if="tab === Tabs.ADDRESS && props.address"
+                    v-model:values="address"
                 />
                 <About v-if="tab === Tabs.ABOUT" v-model:values="about" />
                 <Privacy v-if="tab === Tabs.PRIVACY" />

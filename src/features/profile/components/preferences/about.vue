@@ -2,33 +2,22 @@
 import Box from "@/components/common/inputs/box.vue";
 import Input from "@/components/common/inputs/input.vue";
 import Column from "@/components/common/layout/column.vue";
-import { computed } from "vue";
+import { useComputedField } from "@/features/profile/components/preferences/compute";
 
-const props = defineProps<{
-    values: { about: string; introduction: string };
-}>();
+type Values = {
+    about: string;
+    introduction: string;
+};
 
-const emit = defineEmits<{
-    (e: "update:values", value: typeof props.values): void;
-}>();
+const props = defineProps<{ values: Values }>();
+const emit = defineEmits<{ (e: "update:values", value: Values): void }>();
 
-const about = computed({
-    get: () => props.values.about,
-    set: (val: string) =>
-        emit("update:values", {
-            ...props.values,
-            about: val,
-        }),
-});
-
-const introduction = computed({
-    get: () => props.values.introduction,
-    set: (val: string) =>
-        emit("update:values", {
-            ...props.values,
-            introduction: val,
-        }),
-});
+const about = useComputedField<string, Values>(props, emit, "about");
+const introduction = useComputedField<string, Values>(
+    props,
+    emit,
+    "introduction",
+);
 </script>
 
 <template>
