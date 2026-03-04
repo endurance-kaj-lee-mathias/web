@@ -10,8 +10,11 @@ import { onMounted } from "vue";
 import type { Ref } from "vue";
 import type { Profile } from "@/features/profile/models/profile";
 import { ref } from "vue";
-import { getOrCreate } from "@/features/profile/services/profile";
+import { getOrCreate as getOrCreateProfile } from "@/features/profile/services/profile";
 import Preferences from "@/features/profile/components/preferences/preferences.vue";
+import Loading from "@/components/common/states/loading.vue";
+import type { Address } from "@/features/profile/models/address";
+import { get as getAddress } from "@/features/profile/services/address";
 import Error from "@/components/common/states/error.vue";
 
 const keycloak = useKeycloak();
@@ -19,7 +22,7 @@ const profile: Ref<Profile | null> = ref(null);
 const preferences = ref(false);
 
 onMounted(async () => {
-    profile.value = await getOrCreate();
+    profile.value = await getOrCreateProfile();
 });
 
 function logout() {
@@ -31,10 +34,12 @@ function logout() {
 <template>
     <Base>
         <Error>
-            <Column :gap="Gap.EXTRA_LARGE">
+            <Loading v-if="!profile" />
+
+            <Column v-else :gap="Gap.EXTRA_LARGE">
                 <Information
                     :name="`${profile.firstName} ${profile.lastName}`"
-                    :username="profile.userName"
+                    :username="profile.username"
                     :about="profile.about"
                     :image="profile.image"
                     :preferences="() => (preferences = true)"
@@ -43,7 +48,7 @@ function logout() {
                 />
 
                 <Introduction
-                    :username="profile.userName"
+                    :username="profile.username"
                     :introduction="profile.introduction"
                 />
 
@@ -52,14 +57,14 @@ function logout() {
                     :personal="{
                         firstName: profile.firstName,
                         lastName: profile.lastName,
-                        userName: profile.userName,
-                        phone: '',
+                        username: profile.username,
+                        phoneNumber: profile.phoneNumber,
                     }"
                     :address="{
                         street: profile.address.street,
-                        number: profile.address.number,
-                        city: profile.address.city,
-                        zip: profile.address.zip,
+                        locality: profile.address.locality,
+                        postalCode: profile.address.postalCode,
+                        region: profile.address.region,
                         country: profile.address.country,
                     }"
                     :about="{

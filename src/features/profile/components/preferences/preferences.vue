@@ -1,35 +1,34 @@
 <script lang="ts" setup>
 import Button from "@/components/common/buttons/button.vue";
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
-import { ref } from "vue";
-import { Tabs } from "@/features/profile/components/preferences/tabs";
-import Row from "@/components/common/tabs/row.vue";
 import Column from "@/components/common/layout/column.vue";
-import Personal from "@/features/profile/components/preferences/personal.vue";
-import About from "@/features/profile/components/preferences/about.vue";
-import Privacy from "@/features/profile/components/preferences/privacy.vue";
 import { Gap } from "@/components/common/layout/gap";
-import { watch } from "vue";
+import Row from "@/components/common/tabs/row.vue";
+import About from "@/features/profile/components/preferences/about.vue";
 import Address from "@/features/profile/components/preferences/address.vue";
+import Personal from "@/features/profile/components/preferences/personal.vue";
+import Privacy from "@/features/profile/components/preferences/privacy.vue";
+import { Tabs } from "@/features/profile/components/preferences/tabs";
+import type { Personal as PersonalModel } from "@/features/profile/models/personal";
+import type { About as AboutModel } from "@/features/profile/models/about";
+import { ref, useTemplateRef, watch } from "vue";
+import type { Address as AddressModel } from "@/features/profile/models/address";
+import { changeProfile } from "@/features/profile/services/profile";
+import { reactive } from "vue";
+import Loading from "@/components/common/states/loading.vue";
+import Error from "@/components/common/states/error.vue";
 
 const props = defineProps<{
     modelValue: boolean;
-    personal: {
-        firstName: string;
-        lastName: string;
-        userName: string;
-        phone: string;
-    };
-    address: {
-        street: string;
-        number: number;
-        city: string;
-        zip: number;
-        country: string;
-    };
-    about: { about: string; introduction: string };
-    save: (about: string, introduction: string) => void;
+    personal: PersonalModel;
+    address: AddressModel;
+    about: AboutModel;
 }>();
+
+const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
+const state = reactive({
+    loading: false,
+});
 
 const tab = ref(Tabs.PERSONAL);
 const emit = defineEmits(["update:modelValue"]);
@@ -44,6 +43,17 @@ watch(
         tab.value = Tabs.PERSONAL;
     },
 );
+
+async function save() {
+    try {
+        state.loading = true;
+        await changeProfile(props.personal, props.address, props.about);
+        state.loading = false;
+    } catch (error: unknown) {
+        state.loading = false;
+        boundary.value!.error = error as Error;
+    }
+}
 </script>
 
 <template>
@@ -55,30 +65,33 @@ watch(
             title="Preferences"
             description="Edit your profile details"
             :footer="true"
+            :closeable="true"
         >
-            <Column :gap="Gap.LARGE">
-                <Row
-                    :titles="Object.values(Tabs)"
-                    :current="tab"
-                    :navigate="(title: string) => (tab = title as Tabs)"
-                />
+            <Error ref="boundary">
+                <Loading v-if="state.loading" />
 
-                <Personal
-                    v-if="tab === Tabs.PERSONAL"
-                    v-model:values="personal"
-                />
-                <Address
-                    v-if="tab === Tabs.ADDRESS && props.address"
-                    v-model:values="address"
-                />
-                <About v-if="tab === Tabs.ABOUT" v-model:values="about" />
-                <Privacy v-if="tab === Tabs.PRIVACY" />
-            </Column>
+                <Column v-else :gap="Gap.LARGE">
+                    <Row
+                        :titles="Object.values(Tabs)"
+                        :current="tab"
+                        :navigate="(title: string) => (tab = title as Tabs)"
+                    />
+
+                    <Personal
+                        v-if="tab === Tabs.PERSONAL"
+                        v-model:values="personal"
+                    />
+                    <Address
+                        v-if="tab === Tabs.ADDRESS && props.address"
+                        v-model:values="address"
+                    />
+                    <About v-if="tab === Tabs.ABOUT" v-model:values="about" />
+                    <Privacy v-if="tab === Tabs.PRIVACY" />
+                </Column>
+            </Error>
 
             <template v-slot:footer>
-                <Button @click="() => save(about.about, about.introduction)"
-                    >Save</Button
-                >
+                <Button @click="save">Save</Button>
             </template>
         </DialogContent>
     </Dialog>

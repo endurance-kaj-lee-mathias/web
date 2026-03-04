@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Small from "@/components/common/buttons/small.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Align } from "@/components/common/layout/align";
 import { Gap } from "@/components/common/layout/gap";

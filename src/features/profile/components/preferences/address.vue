@@ -5,35 +5,28 @@ import Column from "@/components/common/layout/column.vue";
 import { Size } from "@/components/common/layout/grid";
 import Grid from "@/components/common/layout/grid.vue";
 import { useComputedField } from "@/features/profile/components/preferences/compute";
+import type { Address as AddressModel } from "@/features/profile/models/address";
 
-type Values = {
-    street: string;
-    number: number;
-    city: string;
-    zip: number;
-    country: string;
-};
-
-const props = defineProps<{ values: Values }>();
-const emit = defineEmits<{ (e: "update:values", value: Values): void }>();
+const props = defineProps<{ values: AddressModel }>();
+const emit = defineEmits<{ (e: "update:values", value: AddressModel): void }>();
 
 const street = useComputedField(props, emit, "street");
-const number = useComputedField(props, emit, "number");
-const city = useComputedField(props, emit, "city");
-const zip = useComputedField(props, emit, "zip");
+const locality = useComputedField(props, emit, "locality");
+const postalCode = useComputedField(props, emit, "postalCode");
+const region = useComputedField(props, emit, "region");
 const country = useComputedField(props, emit, "country");
 </script>
 
 <template>
     <Column>
-        <Input v-model="street" label="Street" />
-        <Number v-model="number" label="Number" />
+        <Input v-model="street" label="Street and Number" :required="true" />
 
         <Grid :size="Size.SMALL">
-            <Input v-model="city" label="City" />
-            <Number v-model="zip" label="Zip" />
+            <Input v-model="locality" label="City" :required="true" />
+            <Number v-model="postalCode" label="Postal Code" :required="true" />
         </Grid>
 
-        <Input v-model="country" label="Country" />
+        <Input v-model="region" label="Region" :required="true" />
+        <Input v-model="country" label="Country" :required="true" />
     </Column>
 </template>

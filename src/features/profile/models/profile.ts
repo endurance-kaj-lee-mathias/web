@@ -5,7 +5,8 @@ export interface Profile {
     id: ProfileId;
     firstName: string;
     lastName: string;
-    userName: string;
+    username: string;
+    phoneNumber: string;
     about: string;
     introduction: string;
     image: string;

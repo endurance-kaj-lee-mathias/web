@@ -10,19 +10,18 @@ import {
     type DialogContentEmits,
     type DialogContentProps,
 } from "radix-vue";
-
 import Small from "@/components/common/buttons/small.vue";
 import { Align } from "@/components/common/layout/align";
 import Column from "@/components/common/layout/column.vue";
 import { Justify } from "@/components/common/layout/justify";
 import Row from "@/components/common/layout/row.vue";
 import CloseIcon from "@/components/icons/close.vue";
-import Stack from "@/components/common/layout/stack.vue";
 
 interface Props extends DialogContentProps {
     title: string;
     description: string;
     header?: boolean;
+    closeable?: boolean;
     footer?: boolean;
 }
 
@@ -61,7 +60,7 @@ const emitsAsProps = useEmitAsProps(emits);
                             </DialogDescription>
                         </section>
 
-                        <DialogClose>
+                        <DialogClose v-if="closeable">
                             <Small>
                                 <CloseIcon />
                             </Small>
