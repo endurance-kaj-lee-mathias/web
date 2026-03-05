@@ -9,6 +9,7 @@ import FriendIcon from "@/components/icons/friend.vue";
 import { Viewer } from "@/features/profile/components/viewer";
 
 defineProps<{
+    preferences: () => void;
     logout: () => void;
     viewer: Viewer;
 }>();
@@ -16,7 +17,7 @@ defineProps<{
 
 <template>
     <Row :gap="Gap.SMALL" :items="Align.CENTER" :responsive="false">
-        <Small v-if="viewer === Viewer.OWNER" :click="() => {}">
+        <Small v-if="viewer === Viewer.OWNER" :click="preferences">
             <EditIcon />
         </Small>
 

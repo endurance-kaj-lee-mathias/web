@@ -4,7 +4,7 @@ defineProps<{ src: string }>();
 
 <template>
     <section
-        class="bg-cover w-26 h-26 rounded-lg"
+        class="bg-cover bg-center md:w-26 w-full h-26 rounded-lg bg-accent"
         :style="`background-image: url('${src}');`"
     />
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Small from "@/components/common/buttons/small.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Align } from "@/components/common/layout/align";
 import { Gap } from "@/components/common/layout/gap";
@@ -7,7 +6,6 @@ import { Justify } from "@/components/common/layout/justify";
 import { Padding } from "@/components/common/layout/padding";
 import Row from "@/components/common/layout/row.vue";
 import { Viewer } from "@/features/profile/components/viewer";
-import Static from "@/components/common/images/static.vue";
 import Actions from "@/features/profile/components/actions.vue";
 import Dynamic from "@/components/common/images/dynamic.vue";
 
@@ -16,6 +14,7 @@ defineProps<{
     username: string;
     about: string;
     image: string;
+    preferences: () => void;
     logout: () => void;
     viewer: Viewer;
 }>();
@@ -23,19 +22,23 @@ defineProps<{
 
 <template>
     <Row :justify="Justify.BETWEEN" :items="Align.STRETCH" :responsive="true">
-        <Row :gap="Gap.LARGE" :items="Align.STRETCH">
+        <Row :gap="Gap.LARGE" :items="Align.STRETCH" :responsive="true">
             <Dynamic :src="image" :alt="`Picture of ${name}`" />
 
             <Column :padding="Padding.SMALL">
                 <Column :gap="Gap.NONE">
-                    <Row
-                        :gap="Gap.LARGE"
-                        :items="Align.CENTER"
-                        :responsive="false"
-                    >
+                    <Row :items="Align.CENTER" :wrap="true">
                         <h2 class="max-w-xs text-3xl font-bold truncate">
                             {{ name }}
                         </h2>
+
+                        <section class="block md:hidden">
+                            <Actions
+                                :preferences="preferences"
+                                :logout="logout"
+                                :viewer="viewer"
+                            />
+                        </section>
                     </Row>
 
                     <h3 className="max-w-xs text-medium text-lg truncate">
@@ -49,13 +52,12 @@ defineProps<{
             </Column>
         </Row>
 
-        <section class="flex flex-col md:justify-between md:items-end p-1">
-            <Actions :logout="logout" :viewer="viewer" />
-
-            <Row :gap="Gap.LARGE">
-                <Statistic title="Level" value="{level.toString()}" />
-                <Statistic title="Time Played" value="{playTime.toString()}" />
-            </Row>
+        <section class="hidden md:block">
+            <Actions
+                :preferences="preferences"
+                :logout="logout"
+                :viewer="viewer"
+            />
         </section>
     </Row>
 </template>
