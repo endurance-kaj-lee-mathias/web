@@ -9,7 +9,7 @@ import Journal from "@/features/journal/journal.vue";
 import Messages from "@/features/messages/messages.vue";
 import Notifications from "@/features/notifications/notifications.vue";
 import Profile from "@/features/profile/profile.vue";
-import Veterans from "@/features/veterans/veterans.vue";
+import Veterans from "@/features/veterans/veterans/veterans.vue";
 import { Guarded, Visibility, type Route } from "@/router/route";
 
 export const journals: Route[] = [

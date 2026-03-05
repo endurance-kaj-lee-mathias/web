@@ -5,8 +5,8 @@ import { Tabs } from "@/features/veterans/tabs";
 import { ref } from "vue";
 import Error from "@/components/common/states/error.vue";
 import Row from "@/components/common/tabs/row.vue";
-import Search from "@/features/veterans/components/search.vue";
-import Veterans from "@/features/veterans/components/veterans.vue";
+import Search from "@/features/veterans/veterans/components/search.vue";
+import Veterans from "@/features/veterans/veterans/components/veterans.vue";
 import { useTemplateRef } from "vue";
 import { send } from "@/features/veterans/services/veterans";
 
@@ -35,8 +35,9 @@ async function add(username: string) {
                 />
 
                 <Column v-if="tab === Tabs.VETERANS">
+                    <Search :send="add" />
+
                     <Error ref="boundary">
-                        <Search :send="add" />
                         <Veterans />
                     </Error>
                 </Column>
