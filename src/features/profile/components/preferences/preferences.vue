@@ -26,12 +26,12 @@ const props = defineProps<{
 }>();
 
 const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
+const emit = defineEmits(["update:modelValue", "saved"]);
 const state = reactive({
     loading: false,
 });
 
 const tab = ref(Tabs.PERSONAL);
-const emit = defineEmits(["update:modelValue"]);
 const personal = ref({ ...props.personal });
 const address = ref({ ...props.address });
 const about = ref({ ...props.about });
@@ -47,7 +47,8 @@ watch(
 async function save() {
     try {
         state.loading = true;
-        await changeProfile(props.personal, props.address, props.about);
+        await changeProfile(personal.value, address.value, about.value);
+        emit("saved");
         state.loading = false;
     } catch (error: unknown) {
         state.loading = false;

@@ -13,17 +13,17 @@ import { ref } from "vue";
 import { getOrCreate as getOrCreateProfile } from "@/features/profile/services/profile";
 import Preferences from "@/features/profile/components/preferences/preferences.vue";
 import Loading from "@/components/common/states/loading.vue";
-import type { Address } from "@/features/profile/models/address";
-import { get as getAddress } from "@/features/profile/services/address";
 import Error from "@/components/common/states/error.vue";
 
 const keycloak = useKeycloak();
 const profile: Ref<Profile | null> = ref(null);
 const preferences = ref(false);
 
-onMounted(async () => {
+onMounted(async () => await fetch());
+
+async function fetch() {
     profile.value = await getOrCreateProfile();
-});
+}
 
 function logout() {
     if (!keycloak.keycloak.value) return;
@@ -71,11 +71,7 @@ function logout() {
                         about: profile.about,
                         introduction: profile.introduction,
                     }"
-                    :save="
-                        (about: string, introduction: string) => {
-                            console.log(about + ' ' + introduction);
-                        }
-                    "
+                    @saved="fetch"
                 />
             </Column>
         </Error>

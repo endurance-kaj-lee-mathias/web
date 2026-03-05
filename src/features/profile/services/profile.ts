@@ -1,10 +1,9 @@
 import { Env } from "@/lib/env";
 import type { Profile } from "@/features/profile/models/profile";
 import { client } from "@/lib/auth/client";
-import { plainText } from "@/lib/headers";
 import type { Personal } from "@/features/profile/models/personal";
 import type { About } from "@/features/profile/models/about";
-import type { Address } from "@/features/profile/models/address";
+import { type Address, matches } from "@/features/profile/models/address";
 
 const api = client(Env.apiUrl);
 
@@ -34,11 +33,7 @@ export async function changeProfile(
             changeIntroduction(profile.introduction, about.introduction),
         ]);
     } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(error.message);
-            return;
-        }
-
+        if (error instanceof Error) throw new Error(error.message);
         throw new Error("Could not update profile");
     }
 }
@@ -46,7 +41,9 @@ export async function changeProfile(
 async function changeFirstName(old: string, model: string): Promise<void> {
     try {
         if (old === model) return;
-        await api.patch("/users/me/first-name", model, plainText());
+        await api.patch("/users/me/first-name", {
+            firstName: model,
+        });
     } catch {
         throw new Error("First name could not be updated");
     }
@@ -55,7 +52,9 @@ async function changeFirstName(old: string, model: string): Promise<void> {
 async function changeLastName(old: string, model: string): Promise<void> {
     try {
         if (old === model) return;
-        await api.patch("/users/me/last-name", model, plainText());
+        await api.patch("/users/me/last-name", {
+            lastName: model,
+        });
     } catch {
         throw new Error("Last name could not be updated");
     }
@@ -64,7 +63,9 @@ async function changeLastName(old: string, model: string): Promise<void> {
 async function changePhoneNumber(old: string, model: string): Promise<void> {
     try {
         if (old === model) return;
-        await api.patch("/users/me/phone-number", model, plainText());
+        await api.patch("/users/me/phone-number", {
+            phoneNumber: model,
+        });
     } catch {
         throw new Error("Phone number could not be updated");
     }
@@ -72,17 +73,19 @@ async function changePhoneNumber(old: string, model: string): Promise<void> {
 
 async function changeAddress(old: Address, model: Address): Promise<void> {
     try {
-        if (old === model) return;
+        if (matches(old, model)) return;
         await api.patch("/users/me/address", model);
     } catch {
-        throw new Error("Phone number could not be updated");
+        throw new Error("Address could not be updated");
     }
 }
 
 async function changeAbout(old: string, model: string): Promise<void> {
     try {
         if (old === model) return;
-        await api.patch("/users/me/about", model, plainText());
+        await api.patch("/users/me/about", {
+            about: model,
+        });
     } catch {
         throw new Error("About could not be updated");
     }
@@ -91,7 +94,9 @@ async function changeAbout(old: string, model: string): Promise<void> {
 async function changeIntroduction(old: string, model: string): Promise<void> {
     try {
         if (old === model) return;
-        await api.patch("/users/me/introduction", model, plainText());
+        await api.patch("/users/me/introduction", {
+            introduction: model,
+        });
     } catch {
         throw new Error("Introduction could not be updated");
     }
