@@ -24,10 +24,25 @@ const phoneNumber = useComputedField(props, emit, "phoneNumber");
         </Input>
 
         <Grid :size="Size.SMALL">
-            <Input v-model="firstName" label="First Name" :required="true" />
-            <Input v-model="lastName" label="Last Name" :required="true" />
+            <Input
+                v-model="firstName"
+                label="First Name"
+                placeholder="John"
+                :required="true"
+            />
+            <Input
+                v-model="lastName"
+                label="Last Name"
+                placeholder="Doe"
+                :required="true"
+            />
         </Grid>
 
-        <Input v-model="phoneNumber" label="Phone Number" :required="true" />
+        <Input
+            v-model="phoneNumber"
+            label="Phone Number"
+            placeholder="+32 000 00 00 00"
+            :required="true"
+        />
     </Column>
 </template>

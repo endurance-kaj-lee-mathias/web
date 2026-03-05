@@ -6,7 +6,7 @@ defineProps<{ title: string; active: boolean; navigate: () => void }>();
     <button
         @click="navigate"
         :class="`text-lg cursor-pointer font-semibold transition-colors
-        duration-75 px-3 py-0.5 rounded-lg min-w-32 ${active ? 'bg-accent text-white' : 'hover:bg-light-2'}`"
+        duration-75 px-3 py-0.5 rounded-lg min-w-32 ${active ? 'bg-accent text-white' : 'hover:bg-light-2 text-medium'}`"
     >
         <p>{{ title }}</p>
     </button>
