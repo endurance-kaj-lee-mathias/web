@@ -1,24 +1,27 @@
 <script setup lang="ts">
 import Base from "@/components/layout/base.vue";
-import Information from "@/features/profile/components/information.vue";
-import { Viewer } from "@/features/profile/components/viewer";
-import Introduction from "@/features/profile/components/introduction.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Tabs } from "@/features/veterans/tabs";
-import { Gap } from "@/components/common/layout/gap";
-import { useKeycloak } from "@josempgon/vue-keycloak";
-import { onMounted } from "vue";
-import type { Ref } from "vue";
-import type { Profile } from "@/features/profile/models/profile";
 import { ref } from "vue";
-import { getOrCreate as getOrCreateProfile } from "@/features/profile/services/profile";
-import Preferences from "@/features/profile/components/preferences/preferences.vue";
-import Loading from "@/components/common/states/loading.vue";
 import Error from "@/components/common/states/error.vue";
 import Row from "@/components/common/tabs/row.vue";
 import Search from "@/features/veterans/components/search.vue";
+import Veterans from "@/features/veterans/components/veterans.vue";
+import { useTemplateRef } from "vue";
+import { send } from "@/features/veterans/services/veterans";
 
 const tab = ref(Tabs.VETERANS);
+const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
+
+async function add(username: string) {
+    if (username.length <= 0) return;
+
+    try {
+        await send(username);
+    } catch (error: unknown) {
+        boundary.value!.error = error as Error;
+    }
+}
 </script>
 
 <template>
@@ -32,7 +35,10 @@ const tab = ref(Tabs.VETERANS);
                 />
 
                 <Column v-if="tab === Tabs.VETERANS">
-                    <Search />
+                    <Error ref="boundary">
+                        <Search :send="add" />
+                        <Veterans />
+                    </Error>
                 </Column>
                 <Column v-if="tab === Tabs.REQUESTS"> Requests </Column>
             </Column>
