@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { ref, onErrorCaptured } from "vue";
 import Stack from "@/components/common/layout/stack.vue";
+import Link from "@/components/common/link.vue";
 import { Justify } from "@/components/common/layout/justify";
 import { Align } from "@/components/common/layout/align";
+import router from "@/router/router";
 
 const error = ref<Error | null>(null);
 
@@ -15,10 +17,16 @@ defineExpose({ error });
 </script>
 
 <template>
-    <Stack v-if="error" :justify="Justify.CENTER" :align="Align.CENTER">
-        <p class="text-medium">Something went wrong!</p>
-        <p class="text-medium-2 text-sm">"{{ error.message }}"</p>
-    </Stack>
+    <section v-if="error" class="my-4">
+        <Stack :justify="Justify.CENTER" :align="Align.CENTER">
+            <p class="text-medium">Something went wrong!</p>
+            <p class="text-medium-2 text-sm">"{{ error.message }}"</p>
+            <p class="text-medium-2 text-sm">
+                Click <Link :action="() => router.go(0)">here</Link> to try
+                again
+            </p>
+        </Stack>
+    </section>
 
     <section v-else>
         <slot />

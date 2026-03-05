@@ -24,7 +24,7 @@ const tab = ref(Tabs.VETERANS);
 <template>
     <Base>
         <Error>
-            <Column :gap="Gap.EXTRA_LARGE">
+            <Column>
                 <Row
                     :titles="Object.values(Tabs)"
                     :current="tab"
