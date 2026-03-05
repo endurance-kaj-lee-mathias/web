@@ -1,4 +1,4 @@
-import type { Veteran } from "@/features/veterans/models/veteran";
+import type { Veteran } from "@/features/veterans/veterans/models/veteran";
 import { client } from "@/lib/auth/client";
 import { Env } from "@/lib/env";
 
@@ -6,7 +6,7 @@ const api = client(Env.apiUrl);
 
 export async function getAll(): Promise<Veteran[]> {
     try {
-        const { data } = await api.get<Veteran[]>("/support");
+        const { data } = await api.get<Veteran[]>("/users/support");
         return data;
     } catch {
         throw new Error("Veterans could not be fetched");
@@ -15,9 +15,7 @@ export async function getAll(): Promise<Veteran[]> {
 
 export async function send(username: string): Promise<void> {
     try {
-        await api.post("/support/invites", {
-            username,
-        });
+        await api.post("/requests", { username });
     } catch {
         throw new Error("Request could not be sent");
     }

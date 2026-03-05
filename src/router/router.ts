@@ -1,11 +1,12 @@
+import { initializeAuth } from "@/router/auth";
+import type { Route } from "@/router/route";
+import { getAllRoutes } from "@/router/routes/routes";
+import { initializeSlashes } from "@/router/slashes";
 import {
     createRouter,
     createWebHistory,
     type RouteRecordRaw,
 } from "vue-router";
-import type { Route } from "@/router/route";
-import { getAllRoutes } from "@/router/routes/routes";
-import { initializeAuth } from "@/router/auth";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,4 +30,5 @@ const router = createRouter({
 });
 
 initializeAuth(router);
+initializeSlashes(router);
 export default router;

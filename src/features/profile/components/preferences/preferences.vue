@@ -3,7 +3,7 @@ import Button from "@/components/common/buttons/button.vue";
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
-import Row from "@/components/common/tabs/row.vue";
+import Row from "@/components/common/tabs/buttons/row.vue";
 import About from "@/features/profile/components/preferences/about.vue";
 import Address from "@/features/profile/components/preferences/address.vue";
 import Personal from "@/features/profile/components/preferences/personal.vue";
