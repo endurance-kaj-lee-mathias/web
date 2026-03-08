@@ -12,8 +12,8 @@ function matches(): boolean {
 <template>
     <RouterLink
         :to="href"
-        :class="`text-lg cursor-pointer font-semibold text-center transition-colors
-        duration-75 px-3 py-0.5 rounded-lg min-w-32 ${matches() ? 'bg-accent text-light' : 'hover:bg-light-2 text-medium'}`"
+        :class="`text-lg cursor-pointer text-center font-semibold transition-colors
+        duration-100 px-3 py-0.5 rounded-lg min-w-32 ${matches() ? 'bg-accent text-light' : 'bg-medium-3 text-medium hover:bg-accent hover:text-light'}`"
     >
         <p>{{ title }}</p>
     </RouterLink>

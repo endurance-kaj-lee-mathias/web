@@ -50,7 +50,7 @@ async function fetch() {
                             )
                         "
                         :username="request.sender.username"
-                        image=""
+                        :image="request.sender.image"
                     />
                 </Grid>
             </Error>

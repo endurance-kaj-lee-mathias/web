@@ -5,7 +5,7 @@ const route = useRoute();
 defineProps<{ href: string }>();
 
 function matches(path: string): boolean {
-    return path === route.path;
+    return path === route.path || (path !== "/" && route.path.startsWith(path));
 }
 </script>
 

@@ -7,4 +7,5 @@ export interface Request {
     sender: User;
     receiver: User;
     status: Status;
+    note: string;
 }
