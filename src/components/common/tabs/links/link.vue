@@ -13,7 +13,7 @@ function matches(): boolean {
     <RouterLink
         :to="href"
         :class="`text-lg cursor-pointer font-semibold text-center transition-colors
-        duration-75 px-3 py-0.5 rounded-lg min-w-32 ${matches() ? 'bg-accent text-white' : 'hover:bg-light-2 text-medium'}`"
+        duration-75 px-3 py-0.5 rounded-lg min-w-32 ${matches() ? 'bg-accent text-light' : 'hover:bg-light-2 text-medium'}`"
     >
         <p>{{ title }}</p>
     </RouterLink>

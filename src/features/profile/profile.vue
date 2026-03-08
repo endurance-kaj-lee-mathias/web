@@ -6,7 +6,7 @@ import Introduction from "@/features/profile/components/introduction.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { useKeycloak } from "@josempgon/vue-keycloak";
-import { onMounted } from "vue";
+import { onMounted, useTemplateRef } from "vue";
 import type { Ref } from "vue";
 import type { Profile } from "@/features/profile/models/profile";
 import { ref } from "vue";
@@ -14,15 +14,21 @@ import { getOrCreate as getOrCreateProfile } from "@/features/profile/services/p
 import Preferences from "@/features/profile/components/preferences/preferences.vue";
 import Loading from "@/components/common/states/loading.vue";
 import Error from "@/components/common/states/error.vue";
+import { getFullName } from "@/lib/name";
 
 const keycloak = useKeycloak();
 const profile: Ref<Profile | null> = ref(null);
+const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
 const preferences = ref(false);
 
 onMounted(async () => await fetch());
 
 async function fetch() {
-    profile.value = await getOrCreateProfile();
+    try {
+        profile.value = await getOrCreateProfile();
+    } catch (error: unknown) {
+        boundary.value!.error = error as Error;
+    }
 }
 
 function logout() {
@@ -33,12 +39,12 @@ function logout() {
 
 <template>
     <Base>
-        <Error>
+        <Error ref="boundary">
             <Loading v-if="!profile" />
 
             <Column v-else :gap="Gap.EXTRA_LARGE">
                 <Information
-                    :name="`${profile.firstName} ${profile.lastName}`"
+                    :name="getFullName(profile.firstName, profile.lastName)"
                     :username="profile.username"
                     :about="profile.about"
                     :image="profile.image"

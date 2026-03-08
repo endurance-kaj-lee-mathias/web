@@ -10,6 +10,8 @@ import { getAll } from "@/features/veterans/requests/services/requests";
 import { onMounted, reactive, ref, useTemplateRef } from "vue";
 import Loading from "@/components/common/states/loading.vue";
 import type { Requests } from "@/features/veterans/requests/models/requests";
+import Request from "./components/request.vue";
+import { getFullName } from "@/lib/name";
 
 const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
 const requests = ref(null as Requests | null);
@@ -33,12 +35,23 @@ async function fetch() {
 
             <Error ref="boundary">
                 <Loading v-if="!requests" />
-                <Empty v-else-if="requests.outgoing.length <= 0" />
+                <Empty
+                    v-else-if="requests.outgoing.length <= 0"
+                    message="No incoming requests found!"
+                />
 
                 <Grid v-else>
-                    <p v-for="request in requests.outgoing">
-                        {{ request.status }}
-                    </p>
+                    <Request
+                        v-for="request in requests.outgoing"
+                        :name="
+                            getFullName(
+                                request.sender.firstName,
+                                request.sender.lastName,
+                            )
+                        "
+                        :username="request.sender.username"
+                        image=""
+                    />
                 </Grid>
             </Error>
         </Column>

@@ -22,8 +22,7 @@ defineExpose({ error });
             <p class="text-medium">Something went wrong!</p>
             <p class="text-medium-2 text-sm">"{{ error.message }}"</p>
             <p class="text-medium-2 text-sm">
-                Click <Link :action="() => router.go(0)">here</Link> to try
-                again
+                Click <Link :action="() => router.go(0)">here</Link> to reload
             </p>
         </Stack>
     </section>

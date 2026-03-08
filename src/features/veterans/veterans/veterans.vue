@@ -22,9 +22,13 @@ const state = reactive({
 onMounted(async () => await fetch());
 
 async function fetch() {
-    state.loading = true;
-    veterans.value = await getAll();
-    state.loading = false;
+    try {
+        state.loading = true;
+        veterans.value = await getAll();
+        state.loading = false;
+    } catch (error: unknown) {
+        boundary.value!.error = error as Error;
+    }
 }
 async function add(username: string) {
     if (username.length <= 0) return;
@@ -45,7 +49,10 @@ async function add(username: string) {
 
             <Error ref="boundary">
                 <Loading v-if="!veterans" />
-                <Empty v-else-if="veterans.length <= 0" />
+                <Empty
+                    v-else-if="veterans.length <= 0"
+                    message="No veterans found!"
+                />
 
                 <Grid v-else>
                     <p v-for="veteran in veterans">{{ veteran.username }}</p>
