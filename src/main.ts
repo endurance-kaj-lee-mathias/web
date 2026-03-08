@@ -3,6 +3,7 @@ import { config } from "@/config/idp";
 import router from "@/router/router";
 import "@/styles.css";
 import { vueKeycloak } from "@josempgon/vue-keycloak";
+import { createPinia } from "pinia";
 import { createApp } from "vue";
 
 createApp(app)
@@ -16,4 +17,5 @@ createApp(app)
                 window.location.origin + "/check-sso.html",
         },
     })
+    .use(createPinia())
     .mount("#app");

@@ -7,17 +7,15 @@ import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { useKeycloak } from "@josempgon/vue-keycloak";
 import { onMounted, useTemplateRef } from "vue";
-import type { Ref } from "vue";
-import type { Profile } from "@/features/profile/models/profile";
 import { ref } from "vue";
-import { getOrCreate as getOrCreateProfile } from "@/features/profile/services/profile";
 import Preferences from "@/features/profile/components/preferences/preferences.vue";
 import Loading from "@/components/common/states/loading.vue";
 import Error from "@/components/common/states/error.vue";
 import { getFullName } from "@/lib/name";
+import { useProfile } from "@/stores/profile";
 
 const keycloak = useKeycloak();
-const profile: Ref<Profile | null> = ref(null);
+const store = useProfile();
 const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
 const preferences = ref(false);
 
@@ -25,7 +23,7 @@ onMounted(async () => await fetch());
 
 async function fetch() {
     try {
-        profile.value = await getOrCreateProfile();
+        await store.fetch();
     } catch (error: unknown) {
         boundary.value!.error = error as Error;
     }
@@ -40,42 +38,47 @@ function logout() {
 <template>
     <Base>
         <Error ref="boundary">
-            <Loading v-if="!profile" />
+            <Loading v-if="!store.profile" />
 
             <Column v-else :gap="Gap.EXTRA_LARGE">
                 <Information
-                    :name="getFullName(profile.firstName, profile.lastName)"
-                    :username="profile.username"
-                    :about="profile.about"
-                    :image="profile.image"
+                    :name="
+                        getFullName(
+                            store.profile.firstName,
+                            store.profile.lastName,
+                        )
+                    "
+                    :username="store.profile.username"
+                    :about="store.profile.about"
+                    :image="store.profile.image"
                     :preferences="() => (preferences = true)"
                     :logout="logout"
                     :viewer="Viewer.OWNER"
                 />
 
                 <Introduction
-                    :username="profile.username"
-                    :introduction="profile.introduction"
+                    :username="store.profile.username"
+                    :introduction="store.profile.introduction"
                 />
 
                 <Preferences
                     v-model="preferences"
                     :personal="{
-                        firstName: profile.firstName,
-                        lastName: profile.lastName,
-                        username: profile.username,
-                        phoneNumber: profile.phoneNumber,
+                        firstName: store.profile.firstName,
+                        lastName: store.profile.lastName,
+                        username: store.profile.username,
+                        phoneNumber: store.profile.phoneNumber,
                     }"
                     :address="{
-                        street: profile.address.street,
-                        locality: profile.address.locality,
-                        postalCode: profile.address.postalCode,
-                        region: profile.address.region,
-                        country: profile.address.country,
+                        street: store.profile.address.street,
+                        locality: store.profile.address.locality,
+                        postalCode: store.profile.address.postalCode,
+                        region: store.profile.address.region,
+                        country: store.profile.address.country,
                     }"
                     :about="{
-                        about: profile.about,
-                        introduction: profile.introduction,
+                        about: store.profile.about,
+                        introduction: store.profile.introduction,
                     }"
                     @saved="fetch"
                 />
