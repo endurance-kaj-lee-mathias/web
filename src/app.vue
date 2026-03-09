@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import { Toaster } from "vue-sonner";
-import { useProfile } from "./stores/profile";
-import { onMounted } from "vue";
+import { useProfile } from "@/stores/profile";
+
+import { watch } from "vue";
+import { useKeycloak } from "@josempgon/vue-keycloak";
 
 const store = useProfile();
-onMounted(async () => store.fetch());
+const keycloak = useKeycloak();
+
+watch(
+    () => keycloak.isAuthenticated,
+    async (authenticated) => {
+        if (authenticated) return;
+        await store.fetch();
+    },
+    { immediate: true },
+);
 </script>
 
 <template>

@@ -76,6 +76,7 @@ async function read(value: Request) {
                         v-if="request"
                         :request="request"
                         v-model="state.details"
+                        @responded="fetch"
                     />
                 </Column>
             </Error>
