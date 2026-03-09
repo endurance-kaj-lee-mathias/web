@@ -10,13 +10,19 @@ import { getAll } from "@/features/veterans/requests/services/requests";
 import { onMounted, reactive, ref, useTemplateRef } from "vue";
 import Loading from "@/components/common/states/loading.vue";
 import type { Requests } from "@/features/veterans/requests/models/requests";
-import Request from "./components/request.vue";
+import type { Request } from "@/features/veterans/requests/models/request";
+import Details from "@/features/veterans/requests/components/details.vue";
 import { getFullName } from "@/lib/name";
+import Card from "@/components/common/card/card.vue";
+import Button from "@/components/common/buttons/button.vue";
+import { Gap } from "@/components/common/layout/gap";
 
 const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
 const requests = ref(null as Requests | null);
+const request = ref(null as Request | null);
 const state = reactive({
     loading: false,
+    details: false,
 });
 
 onMounted(async () => await fetch());
@@ -25,6 +31,11 @@ async function fetch() {
     state.loading = true;
     requests.value = await getAll();
     state.loading = false;
+}
+
+async function read(value: Request) {
+    request.value = value;
+    state.details = true;
 }
 </script>
 
@@ -40,19 +51,33 @@ async function fetch() {
                     message="No incoming requests found!"
                 />
 
-                <Grid v-else>
-                    <Request
-                        v-for="request in requests.outgoing"
-                        :name="
-                            getFullName(
-                                request.sender.firstName,
-                                request.sender.lastName,
-                            )
-                        "
-                        :username="request.sender.username"
-                        :image="request.sender.image"
+                <Column v-else :gap="Gap.EXTRA_LARGE">
+                    <Grid>
+                        <Card
+                            v-for="request in requests.outgoing"
+                            :title="
+                                getFullName(
+                                    request.sender.firstName,
+                                    request.sender.lastName,
+                                )
+                            "
+                            :image="request.sender.image"
+                            :footer="true"
+                            :options="true"
+                        >
+                            <p>@{{ request.sender.username }}</p>
+                            <template v-slot:footer>
+                                <Button @click="read(request)">Read</Button>
+                            </template>
+                        </Card>
+                    </Grid>
+
+                    <Details
+                        v-if="request"
+                        :request="request"
+                        v-model="state.details"
                     />
-                </Grid>
+                </Column>
             </Error>
         </Column>
     </Base>

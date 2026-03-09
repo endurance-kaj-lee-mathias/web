@@ -13,11 +13,14 @@ import Loading from "@/components/common/states/loading.vue";
 import Error from "@/components/common/states/error.vue";
 import { getFullName } from "@/lib/name";
 import { useProfile } from "@/stores/profile";
+import { reactive } from "vue";
 
 const keycloak = useKeycloak();
 const store = useProfile();
 const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
-const preferences = ref(false);
+const state = reactive({
+    preferences: false,
+});
 
 onMounted(async () => await fetch());
 
@@ -51,7 +54,7 @@ function logout() {
                     :username="store.profile.username"
                     :about="store.profile.about"
                     :image="store.profile.image"
-                    :preferences="() => (preferences = true)"
+                    :preferences="() => (state.preferences = true)"
                     :logout="logout"
                     :viewer="Viewer.OWNER"
                 />
@@ -62,7 +65,7 @@ function logout() {
                 />
 
                 <Preferences
-                    v-model="preferences"
+                    v-model="state.preferences"
                     :personal="{
                         firstName: store.profile.firstName,
                         lastName: store.profile.lastName,
