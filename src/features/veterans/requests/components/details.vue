@@ -46,7 +46,7 @@ watch(
                 </Input>
 
                 <Box label="Note" :disabled="true">
-                    {{ request.note }}
+                    {{ request.note ?? "No note found!" }}
                 </Box>
             </Column>
 
