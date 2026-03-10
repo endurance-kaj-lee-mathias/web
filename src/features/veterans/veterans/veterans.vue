@@ -9,16 +9,14 @@ import Grid from "@/components/common/layout/grid.vue";
 import Empty from "@/components/common/states/empty.vue";
 import { useVeterans } from "@/features/veterans/veterans/composables/use-veterans";
 import { useTemplateRef, watchEffect } from "vue";
-import {
-    add as addVeteran,
-    remove as removeVeteran,
-} from "@/features/veterans/veterans/services/veterans";
+import { remove as removeVeteran } from "@/features/veterans/veterans/services/veterans";
+import { add as addVeteran } from "@/features/veterans/veterans/services/requests";
 import Loading from "@/components/common/states/loading.vue";
 import type { VeteranId } from "@/features/veterans/models/id";
 import { getFullName } from "@/lib/name";
 import Card from "@/components/common/card/card.vue";
 import Button from "@/components/common/buttons/button.vue";
-import Add from "./components/add.vue";
+import Add from "@/features/veterans/veterans/components/add.vue";
 import { ref } from "vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
@@ -38,10 +36,11 @@ async function add(value: string) {
 }
 
 async function send(username: string, note: string) {
-    if (username.length <= 0) return;
+    state.value.note = false;
 
     try {
-        await addVeteran(username);
+        await addVeteran(username, note);
+        state.value.username = "";
         boundary.value!.error = null;
     } catch (error: unknown) {
         boundary.value!.error = error as Error;
@@ -51,6 +50,7 @@ async function send(username: string, note: string) {
 async function remove(id: VeteranId) {
     try {
         await removeVeteran(id);
+        state.value.note = false;
         boundary.value!.error = null;
     } catch (error: unknown) {
         boundary.value!.error = error as Error;

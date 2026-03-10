@@ -14,17 +14,9 @@ export async function getAll(): Promise<Veteran[]> {
     }
 }
 
-export async function add(username: string): Promise<void> {
-    try {
-        await api.post("/requests", { username });
-    } catch {
-        throw new Error("Request could not be sent");
-    }
-}
-
 export async function remove(id: VeteranId): Promise<void> {
     try {
-        await api.delete(`/support/${id}`);
+        await api.delete(`/users/support/${id}`);
     } catch {
         throw new Error("Veteran could not be removed");
     }

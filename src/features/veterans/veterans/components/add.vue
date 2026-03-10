@@ -3,9 +3,9 @@ import Button from "@/components/common/buttons/button.vue";
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import Column from "@/components/common/layout/column.vue";
 import Box from "@/components/common/inputs/box.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
-defineProps<{
+const props = defineProps<{
     modelValue: boolean;
     username: string;
     send: (username: string, note: string) => void;
@@ -13,6 +13,15 @@ defineProps<{
 
 const emit = defineEmits(["update:modelValue"]);
 const note = ref("");
+
+watch(
+    () => props.username,
+    (username) => {
+        if (!username) return;
+        note.value = `Hello @${username}, I would like to connect with you on the Endurance platform!`;
+    },
+    { immediate: true },
+);
 </script>
 
 <template>
