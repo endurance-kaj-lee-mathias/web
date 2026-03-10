@@ -6,4 +6,5 @@ export interface Veteran {
     firstName: string;
     lastName: string;
     username: string;
+    image: string;
 }

@@ -7,7 +7,7 @@ import Row from "@/components/common/tabs/links/row.vue";
 import Grid from "@/components/common/layout/grid.vue";
 import Empty from "@/components/common/states/empty.vue";
 import { getAll } from "@/features/veterans/requests/services/requests";
-import { onMounted, reactive, ref, useTemplateRef } from "vue";
+import { onMounted, onUnmounted, reactive, ref, useTemplateRef } from "vue";
 import Loading from "@/components/common/states/loading.vue";
 import type { Requests } from "@/features/veterans/requests/models/requests";
 import type { Request } from "@/features/veterans/requests/models/request";
@@ -16,6 +16,7 @@ import { getFullName } from "@/lib/name";
 import Card from "@/components/common/card/card.vue";
 import Button from "@/components/common/buttons/button.vue";
 import { Gap } from "@/components/common/layout/gap";
+import { POLLING_RATE } from "@/lib/polling";
 
 const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
 const requests = ref(null as Requests | null);
@@ -25,7 +26,17 @@ const state = reactive({
     details: false,
 });
 
-onMounted(async () => await fetch());
+let interval: number | undefined;
+
+onMounted(async () => {
+    await fetch();
+    interval = window.setInterval(fetch, POLLING_RATE);
+});
+
+onUnmounted(() => {
+    if (!interval) return;
+    clearInterval(interval);
+});
 
 async function fetch() {
     state.loading = true;
@@ -47,14 +58,14 @@ async function read(value: Request) {
             <Error ref="boundary">
                 <Loading v-if="!requests" />
                 <Empty
-                    v-else-if="requests.outgoing.length <= 0"
+                    v-else-if="requests.incoming.length <= 0"
                     message="No incoming requests found!"
                 />
 
                 <Column v-else :gap="Gap.EXTRA_LARGE">
                     <Grid>
                         <Card
-                            v-for="request in requests.outgoing"
+                            v-for="request in requests.incoming"
                             :title="
                                 getFullName(
                                     request.sender.firstName,
