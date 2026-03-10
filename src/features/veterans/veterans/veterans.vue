@@ -18,16 +18,31 @@ import type { VeteranId } from "@/features/veterans/models/id";
 import { getFullName } from "@/lib/name";
 import Card from "@/components/common/card/card.vue";
 import Button from "@/components/common/buttons/button.vue";
+import Add from "./components/add.vue";
+import { ref } from "vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { veterans, loading, error } = useVeterans();
 watchEffect(() => error.value && boundary.value?.capture(error.value));
+const state = ref({
+    note: false,
+    username: "",
+});
 
-async function add(username: string) {
+async function add(value: string) {
+    if (value.length <= 0) return;
+
+    state.value.username = value;
+    state.value.note = true;
+    boundary.value!.error = null;
+}
+
+async function send(username: string, note: string) {
     if (username.length <= 0) return;
 
     try {
         await addVeteran(username);
+        boundary.value!.error = null;
     } catch (error: unknown) {
         boundary.value!.error = error as Error;
     }
@@ -36,6 +51,7 @@ async function add(username: string) {
 async function remove(id: VeteranId) {
     try {
         await removeVeteran(id);
+        boundary.value!.error = null;
     } catch (error: unknown) {
         boundary.value!.error = error as Error;
     }
@@ -46,31 +62,39 @@ async function remove(id: VeteranId) {
     <Base>
         <Column>
             <Row :tabs="Object.values(Tabs)" />
-            <Search :send="add" />
+            <Search :add="add" />
 
             <Boundary ref="boundary">
                 <Loading v-if="loading || !veterans" />
-                <Empty
-                    v-else-if="veterans.length <= 0"
-                    message="No veterans found!"
-                />
+                <Column v-else-if="veterans.length <= 0">
+                    <Empty message="No veterans found!" />
+                    <Add
+                        v-model="state.note"
+                        :username="state.username"
+                        :send="send"
+                    />
+                </Column>
 
-                <Grid v-else>
-                    <Card
-                        v-for="veteran in veterans"
-                        :title="
-                            getFullName(veteran.firstName, veteran.lastName)
-                        "
-                        :image="veteran.image"
-                        :footer="true"
-                        :options="true"
-                    >
-                        <p>@{{ veteran.username }}</p>
-                        <template v-slot:footer>
-                            <Button @click="remove(veteran.id)">Remove</Button>
-                        </template>
-                    </Card>
-                </Grid>
+                <Column v-else>
+                    <Grid>
+                        <Card
+                            v-for="veteran in veterans"
+                            :title="
+                                getFullName(veteran.firstName, veteran.lastName)
+                            "
+                            :image="veteran.image"
+                            :footer="true"
+                            :options="true"
+                        >
+                            <p>@{{ veteran.username }}</p>
+                            <template v-slot:footer>
+                                <Button @click="remove(veteran.id)"
+                                    >Remove</Button
+                                >
+                            </template>
+                        </Card>
+                    </Grid>
+                </Column>
             </Boundary>
         </Column>
     </Base>

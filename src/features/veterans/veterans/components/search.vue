@@ -5,14 +5,15 @@ import { Gap } from "@/components/common/layout/gap";
 import { ref } from "vue";
 
 defineProps<{
-    send: (username: string) => void;
+    add: (value: string) => void;
 }>();
 
+const emit = defineEmits(["update:modelValue"]);
 const username = ref("");
 </script>
 
 <template>
-    <form @submit.prevent="() => send(username)">
+    <form @submit.prevent="() => add(username)">
         <section :class="`grid sm:grid-cols-4 ${Gap.MEDIUM}`">
             <section class="sm:col-span-3">
                 <Input
