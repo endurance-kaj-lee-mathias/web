@@ -28,7 +28,7 @@ defineExpose({ capture, reset, error });
 <template>
     <section v-if="error" class="my-4">
         <Stack :justify="Justify.CENTER" :align="Align.CENTER">
-            <p class="text-medium">Something went wrong!</p>
+            <p class="text-medium font-bold">Something went wrong!</p>
 
             <p class="text-medium-2 text-sm">"{{ error.message }}"</p>
 

@@ -19,13 +19,13 @@ defineProps<{
         >
         <span
             v-if="disabled"
-            class="bg-light-2 rounded-md h-9 px-2 border-medium-3 border-solid border-2 flex items-center"
+            class="bg-medium-3 text-medium rounded-md h-9 px-2 flex items-center"
         >
             <slot />
         </span>
         <input
             v-else
-            :class="`bg-light-2 rounded-md h-9 px-2 border-medium-3 border-solid border-2 ${centered && 'text-center'}`"
+            :class="`bg-medium-3 text-medium rounded-md h-9 px-2 ${centered && 'text-center'}`"
             :value="modelValue"
             :type="type"
             @input="

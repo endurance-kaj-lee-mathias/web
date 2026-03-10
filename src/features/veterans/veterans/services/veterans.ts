@@ -24,6 +24,7 @@ export async function add(username: string): Promise<void> {
 
 export async function remove(id: VeteranId): Promise<void> {
     try {
+        await api.delete(`/support/${id}`);
     } catch {
         throw new Error("Veteran could not be removed");
     }

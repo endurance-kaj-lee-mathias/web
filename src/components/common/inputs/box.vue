@@ -18,13 +18,13 @@ defineProps<{
         >
         <span
             v-if="disabled"
-            :class="`bg-light-2 rounded-md h-32 px-2 py-1 border-medium-3 border-solid border-2 resize-none ${centered && 'text-center'}`"
+            :class="`bg-medium-3 text-medium rounded-md h-32 px-2 py-1 ${centered && 'text-center'}`"
         >
             <slot />
         </span>
         <textarea
             v-else
-            :class="`bg-light-2 rounded-md h-32 px-2 py-1 border-medium-3 border-solid border-2 resize-none ${centered && 'text-center'}`"
+            :class="`bg-medium-3 text-medium rounded-md h-32 px-2 py-1 resize-none ${centered && 'text-center'}`"
             :value="modelValue"
             @input="
                 (event) =>
