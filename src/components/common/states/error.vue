@@ -8,21 +8,33 @@ import router from "@/router/router";
 
 const error = ref<Error | null>(null);
 
+function capture(err: unknown) {
+    error.value = err instanceof Error ? err : new Error(String(err));
+}
+
+function reset() {
+    error.value = null;
+}
+
 onErrorCaptured((err) => {
-    error.value = err;
+    capture(err);
     return false;
 });
 
-defineExpose({ error });
+defineExpose({ capture, reset, error });
 </script>
 
 <template>
     <section v-if="error" class="my-4">
         <Stack :justify="Justify.CENTER" :align="Align.CENTER">
             <p class="text-medium">Something went wrong!</p>
+
             <p class="text-medium-2 text-sm">"{{ error.message }}"</p>
+
             <p class="text-medium-2 text-sm">
-                Click <Link :action="() => router.go(0)">here</Link> to reload
+                Click
+                <Link :action="() => router.go(0)">here</Link>
+                to reload
             </p>
         </Stack>
     </section>
