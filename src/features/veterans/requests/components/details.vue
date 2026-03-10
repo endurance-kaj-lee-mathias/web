@@ -1,32 +1,28 @@
 <script lang="ts" setup>
 import Button from "@/components/common/buttons/button.vue";
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
+import Box from "@/components/common/inputs/box.vue";
+import Input from "@/components/common/inputs/input.vue";
 import Column from "@/components/common/layout/column.vue";
-import { useTemplateRef, watch } from "vue";
+import { Size } from "@/components/common/layout/grid";
+import Grid from "@/components/common/layout/grid.vue";
+import Boundary from "@/components/common/states/boundary.vue";
+import Loading from "@/components/common/states/loading.vue";
 import type { Request } from "@/features/veterans/requests/models/request";
 import {
     accept,
     decline,
 } from "@/features/veterans/requests/services/requests";
 import { getFullName } from "@/lib/name";
-import Box from "@/components/common/inputs/box.vue";
-import Grid from "@/components/common/layout/grid.vue";
-import Input from "@/components/common/inputs/input.vue";
-import { Size } from "@/components/common/layout/grid";
-import { reactive } from "vue";
-import Error from "@/components/common/states/error.vue";
-import Loading from "@/components/common/states/loading.vue";
-
+import { ref, useTemplateRef, watch } from "vue";
 const props = defineProps<{
     modelValue: boolean;
     request: Request;
 }>();
 
-const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
+const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const emit = defineEmits(["update:modelValue", "responded"]);
-const state = reactive({
-    loading: false,
-});
+const loading = ref(false);
 
 watch(
     () => props.modelValue,
@@ -37,14 +33,14 @@ watch(
 
 async function respond(response: boolean) {
     try {
-        state.loading = true;
+        loading.value = true;
         response
             ? await accept(props.request.id)
             : await decline(props.request.id);
         emit("responded");
-        state.loading = false;
+        loading.value = false;
     } catch (error: unknown) {
-        state.loading = false;
+        loading.value = false;
         boundary.value!.error = error as Error;
     }
 }
@@ -62,7 +58,7 @@ async function respond(response: boolean) {
             :closeable="true"
         >
             <Error ref="boundary">
-                <Loading v-if="state.loading" />
+                <Loading v-if="loading" />
 
                 <Column v-else>
                     <Input label="Full Name" :disabled="true">

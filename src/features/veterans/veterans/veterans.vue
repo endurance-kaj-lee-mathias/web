@@ -2,13 +2,13 @@
 import Base from "@/components/layout/base.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Tabs } from "@/features/veterans/tabs";
-import Error from "@/components/common/states/error.vue";
+import Boundary from "@/components/common/states/boundary.vue";
 import Row from "@/components/common/tabs/links/row.vue";
 import Search from "@/features/veterans/veterans/components/search.vue";
 import Grid from "@/components/common/layout/grid.vue";
 import Empty from "@/components/common/states/empty.vue";
 import { useVeterans } from "@/features/veterans/veterans/composables/use-veterans";
-import { useTemplateRef } from "vue";
+import { useTemplateRef, watchEffect } from "vue";
 import {
     add as addVeteran,
     remove as removeVeteran,
@@ -18,11 +18,10 @@ import type { VeteranId } from "@/features/veterans/models/id";
 import { getFullName } from "@/lib/name";
 import Card from "@/components/common/card/card.vue";
 import Button from "@/components/common/buttons/button.vue";
-import { watch } from "vue";
 
-const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
+const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { veterans, loading, error } = useVeterans();
-watch(error, (err) => err && boundary.value?.capture(err));
+watchEffect(() => error.value && boundary.value?.capture(error.value));
 
 async function add(username: string) {
     if (username.length <= 0) return;
@@ -49,7 +48,7 @@ async function remove(id: VeteranId) {
             <Row :tabs="Object.values(Tabs)" />
             <Search :send="add" />
 
-            <Error ref="boundary">
+            <Boundary ref="boundary">
                 <Loading v-if="loading || !veterans" />
                 <Empty
                     v-else-if="veterans.length <= 0"
@@ -72,7 +71,7 @@ async function remove(id: VeteranId) {
                         </template>
                     </Card>
                 </Grid>
-            </Error>
+            </Boundary>
         </Column>
     </Base>
 </template>

@@ -7,20 +7,21 @@ import type { Request } from "@/features/veterans/requests/models/request";
 export function useRequests() {
     const requests = ref(null as Request[] | null);
     const loading = ref(false);
-    const error = ref<unknown>(null);
+    const error = ref<Error | null>(null);
 
-    const fetch = async () => {
+    async function fetch() {
         try {
             loading.value = true;
             const data = await getAll();
             requests.value = data.incoming;
             error.value = null;
         } catch (err) {
-            error.value = err;
+            if (!(err instanceof Error)) return;
+            error.value = err as Error;
         } finally {
             loading.value = false;
         }
-    };
+    }
 
     usePolling(fetch, POLLING_RATE);
     return { requests, loading, error, fetch };

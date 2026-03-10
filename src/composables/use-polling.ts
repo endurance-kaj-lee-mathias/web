@@ -1,14 +1,13 @@
+import { waitForKeycloak } from "@/lib/auth/token";
 import { onMounted, onUnmounted } from "vue";
 
-export function usePolling(
-    callback: () => void | Promise<void>,
-    intervalMs: number,
-) {
+export function usePolling(callback: () => void | Promise<void>, ms: number) {
     let interval: number | undefined;
 
     onMounted(async () => {
+        await waitForKeycloak();
         await callback();
-        interval = window.setInterval(callback, intervalMs);
+        interval = window.setInterval(callback, ms);
     });
 
     onUnmounted(() => {

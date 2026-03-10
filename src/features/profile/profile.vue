@@ -6,31 +6,27 @@ import Introduction from "@/features/profile/components/introduction.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { useKeycloak } from "@josempgon/vue-keycloak";
-import { onMounted, useTemplateRef } from "vue";
-import { ref } from "vue";
+import { useTemplateRef } from "vue";
 import Preferences from "@/features/profile/components/preferences/preferences.vue";
 import Loading from "@/components/common/states/loading.vue";
-import Error from "@/components/common/states/error.vue";
+import Boundary from "@/components/common/states/boundary.vue";
 import { getFullName } from "@/lib/name";
-import { useProfile } from "@/stores/profile";
-import { reactive } from "vue";
+import { useProfile as useProfileStore } from "@/stores/profile";
+import { ref } from "vue";
+import Empty from "@/components/common/states/empty.vue";
+import { watchEffect } from "vue";
+import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 
 const keycloak = useKeycloak();
-const store = useProfile();
-const boundary = useTemplateRef<InstanceType<typeof Error>>("boundary");
-const state = reactive({
-    preferences: false,
-});
+const store = useProfileStore();
+const { profile, error, loading } = storeToRefs(store);
+onMounted(async () => await store.fetch());
 
-onMounted(async () => await fetch());
+const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
+watchEffect(() => error.value && boundary.value?.capture(error.value));
 
-async function fetch() {
-    try {
-        await store.fetch();
-    } catch (error: unknown) {
-        boundary.value!.error = error as Error;
-    }
-}
+const preferences = ref(false);
 
 function logout() {
     if (!keycloak.keycloak.value) return;
@@ -40,52 +36,53 @@ function logout() {
 
 <template>
     <Base>
-        <Error ref="boundary">
-            <Loading v-if="!store.profile" />
+        <Boundary ref="boundary">
+            <Loading v-if="loading" />
+            <Empty v-else-if="!profile" message="No profile found!" />
 
             <Column v-else :gap="Gap.EXTRA_LARGE">
                 <Information
-                    :name="
-                        getFullName(
-                            store.profile.firstName,
-                            store.profile.lastName,
-                        )
-                    "
-                    :username="store.profile.username"
-                    :about="store.profile.about"
-                    :image="store.profile.image"
-                    :preferences="() => (state.preferences = true)"
+                    :name="getFullName(profile.firstName, profile.lastName)"
+                    :username="profile.username"
+                    :about="profile.about"
+                    :image="profile.image"
+                    :preferences="() => (preferences = true)"
                     :logout="logout"
                     :viewer="Viewer.OWNER"
                 />
 
                 <Introduction
-                    :username="store.profile.username"
-                    :introduction="store.profile.introduction"
+                    :username="profile.username"
+                    :introduction="profile.introduction"
                 />
 
                 <Preferences
-                    v-model="state.preferences"
+                    v-model="preferences"
                     :personal="{
-                        firstName: store.profile.firstName,
-                        lastName: store.profile.lastName,
-                        username: store.profile.username,
-                        phoneNumber: store.profile.phoneNumber,
+                        firstName: profile.firstName,
+                        lastName: profile.lastName,
+                        username: profile.username,
+                        phoneNumber: profile.phoneNumber,
                     }"
                     :address="{
-                        street: store.profile.address.street,
-                        locality: store.profile.address.locality,
-                        postalCode: store.profile.address.postalCode,
-                        region: store.profile.address.region,
-                        country: store.profile.address.country,
+                        street: profile.address.street,
+                        locality: profile.address.locality,
+                        postalCode: profile.address.postalCode,
+                        region: profile.address.region,
+                        country: profile.address.country,
                     }"
                     :about="{
-                        about: store.profile.about,
-                        introduction: store.profile.introduction,
+                        about: profile.about,
+                        introduction: profile.introduction,
                     }"
-                    @saved="fetch"
+                    @saved="
+                        () => {
+                            store.fetch();
+                            preferences = false;
+                        }
+                    "
                 />
             </Column>
-        </Error>
+        </Boundary>
     </Base>
 </template>

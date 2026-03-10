@@ -15,6 +15,8 @@ createApp(app)
             pkceMethod: "S256",
             silentCheckSsoRedirectUri:
                 window.location.origin + "/check-sso.html",
+            enableLogging: true,
+            checkLoginIframe: false,
         },
     })
     .use(createPinia())

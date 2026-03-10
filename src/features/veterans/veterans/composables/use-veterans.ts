@@ -7,19 +7,20 @@ import { ref } from "vue";
 export function useVeterans() {
     const veterans = ref(null as Veteran[] | null);
     const loading = ref(false);
-    const error = ref<unknown>(null);
+    const error = ref<Error | null>(null);
 
-    const fetch = async () => {
+    async function fetch() {
         try {
             loading.value = true;
             veterans.value = await getAll();
             error.value = null;
         } catch (err) {
-            error.value = err;
+            if (!(err instanceof Error)) return;
+            error.value = err as Error;
         } finally {
             loading.value = false;
         }
-    };
+    }
 
     usePolling(fetch, POLLING_RATE);
     return { veterans, loading, error };

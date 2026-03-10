@@ -9,6 +9,7 @@ import router from "@/router/router";
 const error = ref<Error | null>(null);
 
 function capture(err: unknown) {
+    if (!err) return;
     error.value = err instanceof Error ? err : new Error(String(err));
 }
 

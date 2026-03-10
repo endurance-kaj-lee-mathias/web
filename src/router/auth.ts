@@ -1,10 +1,23 @@
 import { Role } from "@/models/roles";
+import { hasRoles } from "@/services/authentication";
 import { useKeycloak } from "@josempgon/vue-keycloak";
 import { watch } from "vue";
-import { hasRoles } from "@/services/authentication";
 import type { Router } from "vue-router";
 
 const keycloak = useKeycloak();
+
+async function ensureValidToken(): Promise<boolean> {
+    if (!keycloak.keycloak.value) return false;
+
+    if (!keycloak.keycloak.value.refreshToken) return false;
+
+    try {
+        await keycloak.keycloak.value.updateToken(30);
+        return true;
+    } catch {
+        return false;
+    }
+}
 
 export function initializeAuth(router: Router) {
     router.beforeEach(async (to, _from, next) => {
@@ -13,9 +26,10 @@ export function initializeAuth(router: Router) {
                 const unwatch = watch(
                     () => keycloak.isPending.value,
                     (pending: boolean) => {
-                        if (pending) return;
-                        unwatch();
-                        resolve();
+                        if (!pending) {
+                            unwatch();
+                            resolve();
+                        }
                     },
                 );
             });
@@ -27,6 +41,15 @@ export function initializeAuth(router: Router) {
         if (guarded && !authenticated) {
             keycloak.keycloak.value?.login();
             return next(false);
+        }
+
+        if (authenticated) {
+            const tokenValid = await ensureValidToken();
+
+            if (!tokenValid && guarded) {
+                keycloak.keycloak.value?.login();
+                return next(false);
+            }
         }
 
         const roles: Role[] = to.meta.roles as Role[];
