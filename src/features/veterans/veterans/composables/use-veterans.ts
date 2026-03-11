@@ -9,19 +9,20 @@ export function useVeterans() {
     const loading = ref(false);
     const error = ref<Error | null>(null);
 
-    async function fetch() {
+    async function fetch(initial = false) {
         try {
-            loading.value = true;
+            if (initial) loading.value = true;
             veterans.value = await getAll();
             error.value = null;
         } catch (err) {
             if (!(err instanceof Error)) return;
             error.value = err as Error;
         } finally {
+            if (!initial) return;
             loading.value = false;
         }
     }
 
     usePolling(fetch, POLLING_RATE);
-    return { veterans, loading, error };
+    return { veterans, loading, error, fetch };
 }

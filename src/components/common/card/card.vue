@@ -2,6 +2,9 @@
 import Overlay from "@/components/common/card/overlay.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
+import Row from "@/components/common/layout/row.vue";
+import { Justify } from "@/components/common/layout/justify";
+import { Align } from "@/components/common/layout/align";
 
 const props = defineProps<{
     image: string;
@@ -17,21 +20,30 @@ const actionStyles = props.action ? "group cursor-pointer select-none" : "";
 <template>
     <Column :gap="Gap.SMALL">
         <article
-            :class="`flex flex-col bg-cover bg-center bg-accent ${actionStyles} relative overflow-hidden justify-end px-4 py-2 rounded-lg h-36`"
+            :class="`flex flex-col bg-cover bg-center bg-accent ${actionStyles} relative overflow-hidden justify-end p-2 rounded-lg h-36`"
             :style="`background-image: url('${image}')`"
         >
             <Overlay v-if="image" />
 
             <section class="relative z-10 text-light-2">
-                <section class="min-w-0">
-                    <section class="flex flex-col -space-y-0.5">
-                        <h3 class="font-bold text-lg truncate">
-                            {{ title }}
-                        </h3>
+                <Row :justify="Justify.BETWEEN" :align="Align.END">
+                    <section class="min-w-0 px-1">
+                        <section class="flex flex-col -space-y-0.5">
+                            <h3 class="font-bold text-lg truncate">
+                                {{ title }}
+                            </h3>
 
-                        <slot />
+                            <slot />
+                        </section>
                     </section>
-                </section>
+
+                    <section
+                        v-if="options"
+                        :class="`flex flex-row ${Gap.MEDIUM}`"
+                    >
+                        <slot name="options" />
+                    </section>
+                </Row>
             </section>
         </article>
 

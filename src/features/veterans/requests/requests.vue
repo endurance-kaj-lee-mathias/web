@@ -15,6 +15,7 @@ import Card from "@/components/common/card/card.vue";
 import Button from "@/components/common/buttons/button.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { useRequests } from "@/features/veterans/requests/composables/use-requests";
+import { Size } from "@/components/common/layout/grid";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { requests, loading, error, fetch } = useRequests();
@@ -42,7 +43,7 @@ async function read(value: Request) {
                 />
 
                 <Column v-else :gap="Gap.EXTRA_LARGE">
-                    <Grid>
+                    <Grid :size="Size.SMALL">
                         <Card
                             v-for="request in requests"
                             :title="

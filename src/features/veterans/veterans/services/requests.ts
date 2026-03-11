@@ -6,7 +6,7 @@ const api = client(Env.apiUrl);
 
 export async function add(username: string, note: string): Promise<void> {
     try {
-        await api.post("/requests", { username, note });
+        await api.post("/support", { username, note });
     } catch {
         throw new Error("Request could not be sent");
     }
@@ -14,7 +14,7 @@ export async function add(username: string, note: string): Promise<void> {
 
 export async function accept(id: RequestId): Promise<void> {
     try {
-        await api.patch(`/requests/${id}/accept`);
+        await api.patch(`/support/${id}/accept`);
     } catch {
         throw new Error("Request could not be accepted");
     }
@@ -22,7 +22,7 @@ export async function accept(id: RequestId): Promise<void> {
 
 export async function decline(id: RequestId): Promise<void> {
     try {
-        await api.patch(`/requests/${id}/decline`);
+        await api.patch(`/support/${id}/decline`);
     } catch {
         throw new Error("Request could not be declined");
     }

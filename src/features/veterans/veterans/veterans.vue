@@ -18,9 +18,13 @@ import Card from "@/components/common/card/card.vue";
 import Button from "@/components/common/buttons/button.vue";
 import Add from "@/features/veterans/veterans/components/add.vue";
 import { ref } from "vue";
+import { Size } from "@/components/common/layout/grid";
+import Logout from "@/components/icons/logout.vue";
+import Remove from "@/components/icons/remove.vue";
+import Small from "@/components/common/buttons/small.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
-const { veterans, loading, error } = useVeterans();
+const { veterans, loading, error, fetch } = useVeterans();
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 const state = ref({
     note: false,
@@ -52,6 +56,7 @@ async function remove(id: VeteranId) {
         await removeVeteran(id);
         state.value.note = false;
         boundary.value!.error = null;
+        fetch();
     } catch (error: unknown) {
         boundary.value!.error = error as Error;
     }
@@ -76,21 +81,24 @@ async function remove(id: VeteranId) {
                 </Column>
 
                 <Column v-else>
-                    <Grid>
+                    <Grid :size="Size.SMALL">
                         <Card
                             v-for="veteran in veterans"
                             :title="
                                 getFullName(veteran.firstName, veteran.lastName)
                             "
                             :image="veteran.image"
-                            :footer="true"
                             :options="true"
                         >
                             <p>@{{ veteran.username }}</p>
-                            <template v-slot:footer>
-                                <Button @click="remove(veteran.id)"
-                                    >Remove</Button
+
+                            <template v-slot:options>
+                                <Small
+                                    :alternative="true"
+                                    :click="() => remove(veteran.id)"
                                 >
+                                    <Remove />
+                                </Small>
                             </template>
                         </Card>
                     </Grid>
