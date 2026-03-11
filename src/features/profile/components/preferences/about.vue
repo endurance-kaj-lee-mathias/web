@@ -14,7 +14,17 @@ const introduction = useComputedField(props, emit, "introduction");
 
 <template>
     <Column>
-        <Input v-model="about" label="About" :required="true" />
-        <Box v-model="introduction" label="Introduction" :required="true" />
+        <Input
+            v-model="about"
+            label="About"
+            placeholder="Hello!"
+            :required="true"
+        />
+        <Box
+            v-model="introduction"
+            label="Introduction"
+            placeholder="Tell us a little bit about yourself!"
+            :required="true"
+        />
     </Column>
 </template>

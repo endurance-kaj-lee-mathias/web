@@ -9,7 +9,8 @@ import Journal from "@/features/journal/journal.vue";
 import Messages from "@/features/messages/messages.vue";
 import Notifications from "@/features/notifications/notifications.vue";
 import Profile from "@/features/profile/profile.vue";
-import Veterans from "@/features/veterans/veterans.vue";
+import Requests from "@/features/veterans/requests/requests.vue";
+import Veterans from "@/features/veterans/veterans/veterans.vue";
 import { Guarded, Visibility, type Route } from "@/router/route";
 
 export const journals: Route[] = [
@@ -41,6 +42,12 @@ export const veterans: Route[] = [
         path: "/veterans",
         visible: Visibility.BAR,
         component: Veterans,
+        auth: { guarded: Guarded.PRIVATE },
+    },
+    {
+        path: "/veterans/requests",
+        visible: Visibility.NONE,
+        component: Requests,
         auth: { guarded: Guarded.PRIVATE },
     },
 ];

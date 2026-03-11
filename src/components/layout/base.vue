@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Bar from "@/components/layout/bar/bar.vue";
-import { Gap } from "../common/layout/gap";
+import { Gap } from "@/components/common/layout/gap";
 </script>
 
 <template>

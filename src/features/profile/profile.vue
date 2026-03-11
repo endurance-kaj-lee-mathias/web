@@ -6,24 +6,27 @@ import Introduction from "@/features/profile/components/introduction.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { useKeycloak } from "@josempgon/vue-keycloak";
-import { onMounted } from "vue";
-import type { Ref } from "vue";
-import type { Profile } from "@/features/profile/models/profile";
-import { ref } from "vue";
-import { getOrCreate as getOrCreateProfile } from "@/features/profile/services/profile";
+import { useTemplateRef } from "vue";
 import Preferences from "@/features/profile/components/preferences/preferences.vue";
 import Loading from "@/components/common/states/loading.vue";
-import Error from "@/components/common/states/error.vue";
+import Boundary from "@/components/common/states/boundary.vue";
+import { getFullName } from "@/lib/name";
+import { useProfile as useProfileStore } from "@/stores/profile";
+import { ref } from "vue";
+import Empty from "@/components/common/states/empty.vue";
+import { watchEffect } from "vue";
+import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 
 const keycloak = useKeycloak();
-const profile: Ref<Profile | null> = ref(null);
+const store = useProfileStore();
+const { profile, error, loading } = storeToRefs(store);
+onMounted(async () => await store.fetch());
+
+const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
+watchEffect(() => error.value && boundary.value?.capture(error.value));
+
 const preferences = ref(false);
-
-onMounted(async () => await fetch());
-
-async function fetch() {
-    profile.value = await getOrCreateProfile();
-}
 
 function logout() {
     if (!keycloak.keycloak.value) return;
@@ -33,12 +36,13 @@ function logout() {
 
 <template>
     <Base>
-        <Error>
-            <Loading v-if="!profile" />
+        <Boundary ref="boundary">
+            <Loading v-if="loading" />
+            <Empty v-else-if="!profile" message="No profile found!" />
 
             <Column v-else :gap="Gap.EXTRA_LARGE">
                 <Information
-                    :name="`${profile.firstName} ${profile.lastName}`"
+                    :name="getFullName(profile.firstName, profile.lastName)"
                     :username="profile.username"
                     :about="profile.about"
                     :image="profile.image"
@@ -71,9 +75,14 @@ function logout() {
                         about: profile.about,
                         introduction: profile.introduction,
                     }"
-                    @saved="fetch"
+                    @saved="
+                        () => {
+                            store.fetch();
+                            preferences = false;
+                        }
+                    "
                 />
             </Column>
-        </Error>
+        </Boundary>
     </Base>
 </template>

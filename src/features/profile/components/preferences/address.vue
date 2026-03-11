@@ -19,14 +19,39 @@ const country = useComputedField(props, emit, "country");
 
 <template>
     <Column>
-        <Input v-model="street" label="Street and Number" :required="true" />
+        <Input
+            v-model="street"
+            label="Street and Number"
+            placeholder="Nationalestraat 1"
+            :required="true"
+        />
 
         <Grid :size="Size.SMALL">
-            <Input v-model="locality" label="City" :required="true" />
-            <Number v-model="postalCode" label="Postal Code" :required="true" />
+            <Input
+                v-model="locality"
+                label="City"
+                placeholder="Antwerp"
+                :required="true"
+            />
+            <Number
+                v-model="postalCode"
+                label="Postal Code"
+                placeholder="2000"
+                :required="true"
+            />
         </Grid>
 
-        <Input v-model="region" label="Region" :required="true" />
-        <Input v-model="country" label="Country" :required="true" />
+        <Input
+            v-model="region"
+            label="Region"
+            placeholder="Flanders"
+            :required="true"
+        />
+        <Input
+            v-model="country"
+            label="Country"
+            placeholder="Belgium"
+            :required="true"
+        />
     </Column>
 </template>

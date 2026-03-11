@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Row from "@/components/common/layout/row.vue";
-import Button from "@/components/common/tabs/button.vue";
+import Button from "@/components/common/tabs/buttons/button.vue";
 
 defineProps<{
     titles: string[];

@@ -3,6 +3,7 @@ defineProps<{
     modelValue?: string;
     label?: string;
     description?: string;
+    disabled?: boolean;
     required?: boolean;
     centered?: boolean;
     type?: string;
@@ -15,8 +16,15 @@ defineProps<{
             >{{ label }}
             <span v-if="required" class="text-medium-2 text-sm">*</span></span
         >
+        <span
+            v-if="disabled"
+            :class="`bg-medium-3 text-medium rounded-md h-32 px-2 py-1 ${centered && 'text-center'}`"
+        >
+            <slot />
+        </span>
         <textarea
-            :class="`bg-light-2 rounded-md h-24 px-2 py-1 border-medium-3 border-solid border-2 resize-none ${centered && 'text-center'}`"
+            v-else
+            :class="`bg-medium-3 text-medium rounded-md h-32 px-2 py-1 resize-none ${centered && 'text-center'}`"
             :value="modelValue"
             @input="
                 (event) =>

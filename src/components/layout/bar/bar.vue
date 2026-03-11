@@ -36,7 +36,7 @@ const close = () => (menu.value = false);
                     v-for="route in getRoutes(Visibility.BAR)"
                     :href="route.path"
                 >
-                    <component :is="route.icon" />
+                    <component v-if="route.icon" :is="route.icon" />
                     {{ route.title ?? "Route" }}
                 </Link>
             </Row>
@@ -48,7 +48,7 @@ const close = () => (menu.value = false);
                     v-for="route in getRoutes(Visibility.ICON)"
                     :href="route.path"
                 >
-                    <component :is="route.icon" />
+                    <component v-if="route.icon" :is="route.icon" />
                 </Button>
             </Row>
         </section>
