@@ -11,4 +11,5 @@ export interface Profile {
     introduction: string;
     image: string;
     address: Address;
+    isPrivate: boolean;
 }

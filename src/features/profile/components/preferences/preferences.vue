@@ -86,7 +86,6 @@ async function save() {
                         v-model:values="address"
                     />
                     <About v-if="tab === Tabs.ABOUT" v-model:values="about" />
-                    <Privacy v-if="tab === Tabs.PRIVACY" />
                 </Column>
             </Boundary>
 

@@ -3,4 +3,10 @@ export interface Personal {
     lastName: string;
     username: string;
     phoneNumber: string;
+    privacy: Privacy;
+}
+
+export enum Privacy {
+    PUBLIC = "public",
+    PRIVATE = "private",
 }

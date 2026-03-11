@@ -63,6 +63,7 @@ function logout() {
                         lastName: profile.lastName,
                         username: profile.username,
                         phoneNumber: profile.phoneNumber,
+                        privacy: profile.isPrivate ? 'private' : 'public',
                     }"
                     :address="{
                         street: profile.address.street,

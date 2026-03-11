@@ -1,7 +1,7 @@
 import { Env } from "@/lib/env";
 import type { Profile } from "@/features/profile/models/profile";
 import { client } from "@/lib/auth/client";
-import type { Personal } from "@/features/profile/models/personal";
+import { Privacy, type Personal } from "@/features/profile/models/personal";
 import type { About } from "@/features/profile/models/about";
 import { type Address, matches } from "@/features/profile/models/address";
 
@@ -25,6 +25,10 @@ export async function changeProfile(
         const profile: Profile = await getOrCreate();
 
         await Promise.all([
+            changePrivacy(
+                profile.isPrivate,
+                personal.privacy === Privacy.PRIVATE,
+            ),
             changeFirstName(profile.firstName, personal.firstName),
             changeLastName(profile.lastName, personal.lastName),
             changePhoneNumber(profile.phoneNumber, personal.phoneNumber),
@@ -35,6 +39,17 @@ export async function changeProfile(
     } catch (error) {
         if (error instanceof Error) throw new Error(error.message);
         throw new Error("Could not update profile");
+    }
+}
+
+async function changePrivacy(old: boolean, model: boolean): Promise<void> {
+    try {
+        if (old === model) return;
+        await api.patch("/users/me/privacy", {
+            IsPrivate: model,
+        });
+    } catch {
+        throw new Error("Profile privacy could not be updated");
     }
 }
 
