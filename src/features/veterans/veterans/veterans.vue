@@ -15,36 +15,50 @@ import Loading from "@/components/common/states/loading.vue";
 import type { VeteranId } from "@/features/veterans/models/id";
 import { getFullName } from "@/lib/name";
 import Card from "@/components/common/card/card.vue";
-import Button from "@/components/common/buttons/button.vue";
 import Add from "@/features/veterans/veterans/components/add.vue";
 import { ref } from "vue";
 import { Size } from "@/components/common/layout/grid";
-import Logout from "@/components/icons/logout.vue";
-import Remove from "@/components/icons/remove.vue";
+import RemoveIcon from "@/components/icons/remove.vue";
+import VisibilityIcon from "@/components/icons/visibility.vue";
 import Small from "@/components/common/buttons/small.vue";
+import Privacy from "./components/privacy/privacy.vue";
+import type { Veteran } from "./models/veteran";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { veterans, loading, error, fetch } = useVeterans();
 watchEffect(() => error.value && boundary.value?.capture(error.value));
+
 const state = ref({
-    note: false,
-    username: "",
+    add: {
+        note: false,
+        username: "",
+    },
+    privacy: {
+        privacy: false,
+        veteran: null as Veteran | null,
+    },
 });
 
 async function add(value: string) {
     if (value.length <= 0) return;
 
-    state.value.username = value;
-    state.value.note = true;
+    state.value.add.username = value;
+    state.value.add.note = true;
+    boundary.value!.error = null;
+}
+
+async function privacy(veteran: Veteran) {
+    state.value.privacy.veteran = veteran;
+    state.value.privacy.privacy = true;
     boundary.value!.error = null;
 }
 
 async function send(username: string, note: string) {
-    state.value.note = false;
+    state.value.add.note = false;
 
     try {
         await addVeteran(username, note);
-        state.value.username = "";
+        state.value.add.username = "";
         boundary.value!.error = null;
     } catch (error: unknown) {
         boundary.value!.error = error as Error;
@@ -54,7 +68,7 @@ async function send(username: string, note: string) {
 async function remove(id: VeteranId) {
     try {
         await removeVeteran(id);
-        state.value.note = false;
+        state.value.add.note = false;
         boundary.value!.error = null;
         fetch();
     } catch (error: unknown) {
@@ -74,8 +88,8 @@ async function remove(id: VeteranId) {
                 <Column v-else-if="veterans.length <= 0">
                     <Empty message="No veterans found!" />
                     <Add
-                        v-model="state.note"
-                        :username="state.username"
+                        v-model="state.add.note"
+                        :username="state.add.username"
                         :send="send"
                     />
                 </Column>
@@ -95,13 +109,26 @@ async function remove(id: VeteranId) {
                             <template v-slot:options>
                                 <Small
                                     :alternative="true"
+                                    :click="() => privacy(veteran)"
+                                >
+                                    <VisibilityIcon />
+                                </Small>
+
+                                <Small
+                                    :alternative="true"
                                     :click="() => remove(veteran.id)"
                                 >
-                                    <Remove />
+                                    <RemoveIcon />
                                 </Small>
                             </template>
                         </Card>
                     </Grid>
+
+                    <Privacy
+                        v-if="state.privacy.veteran"
+                        v-model="state.privacy.privacy"
+                        :veteran="state.privacy.veteran"
+                    />
                 </Column>
             </Boundary>
         </Column>

@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { Align } from "../layout/align";
+import { Gap } from "../layout/gap";
+
 defineProps<{
     modelValue?: any;
     label?: string;
     description?: string;
+    disabled?: boolean;
     required?: boolean;
 }>();
 </script>
@@ -13,8 +17,15 @@ defineProps<{
             >{{ label }}
             <span v-if="required" class="text-medium-2 text-sm">*</span></span
         >
+        <span
+            v-if="disabled"
+            :class="`bg-medium-3 text-medium rounded-md h-9 px-2 flex ${Gap.MEDIUM} ${Align.CENTER}`"
+        >
+            <slot />
+        </span>
         <select
-            class="bg-medium-3 text-medium rounded-md h-8 px-2"
+            v-else
+            class="bg-medium-3 text-medium rounded-md h-9 px-2"
             :value="modelValue"
             @input="
                 (event) =>
