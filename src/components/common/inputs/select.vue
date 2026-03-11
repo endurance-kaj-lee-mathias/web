@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Align } from "../layout/align";
-import { Gap } from "../layout/gap";
+import { Align } from "@/components/common/layout/align";
+import { Gap } from "@/components/common/layout/gap";
 
 defineProps<{
     modelValue?: any;
@@ -15,8 +15,9 @@ defineProps<{
     <label :for="label" class="flex flex-col">
         <span v-if="label" class="text-medium-2"
             >{{ label }}
-            <span v-if="required" class="text-medium-2 text-sm">*</span></span
-        >
+            <span v-if="required" class="text-medium-2 text-sm">*</span>
+        </span>
+        <small class="text-slate-600">{{ description }}</small>
         <span
             v-if="disabled"
             :class="`bg-medium-3 text-medium rounded-md h-9 px-2 flex ${Gap.MEDIUM} ${Align.CENTER}`"
@@ -39,6 +40,5 @@ defineProps<{
         >
             <slot></slot>
         </select>
-        <small class="text-slate-600">{{ description }}</small>
     </label>
 </template>

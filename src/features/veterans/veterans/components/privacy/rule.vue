@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import Button from "@/components/common/buttons/button.vue";
-import { Gap } from "@/components/common/layout/gap";
-import { ref } from "vue";
 import {
     Effect,
     Resource,
@@ -9,30 +6,27 @@ import {
     formatEffect,
 } from "@/features/veterans/veterans/models/rule";
 import Select from "@/components/common/inputs/select.vue";
+import { ref } from "vue";
+import Group from "@/components/common/inputs/group.vue";
 
-defineProps<{
+const props = defineProps<{
+    username: string;
     resource: Resource;
     effect: Effect;
-    remove: () => void;
 }>();
+
+const resource = formatResource(props.resource);
+const effect = ref(props.effect);
 </script>
 
 <template>
-    <form @submit.prevent="() => remove()">
-        <section :class="`grid sm:grid-cols-4 ${Gap.MEDIUM}`">
-            <section class="sm:col-span-3">
-                <section :class="`grid sm:grid-cols-2 ${Gap.MEDIUM}`">
-                    <Select :disabled="true">
-                        {{ formatResource(resource) }}
-                    </Select>
-
-                    <Select :disabled="true">
-                        {{ formatEffect(effect) }}
-                    </Select>
-                </section>
-            </section>
-
-            <Button :full="true">Remove</Button>
-        </section>
-    </form>
+    <Select
+        :label="resource"
+        :description="`Can @${username} take a look at your ${resource.toLowerCase()}?`"
+        v-model="effect"
+    >
+        <option v-for="effect in Object.values(Effect)" :value="effect">
+            {{ formatEffect(effect) }}
+        </option>
+    </Select>
 </template>

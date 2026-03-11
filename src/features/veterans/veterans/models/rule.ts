@@ -1,7 +1,7 @@
 import type { RuleId } from "./id";
 
 export interface Rule {
-    id: RuleId;
+    id: RuleId | null;
     resource: Resource;
     effect: Effect;
 }

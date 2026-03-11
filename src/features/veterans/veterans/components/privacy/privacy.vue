@@ -22,6 +22,7 @@ import {
 } from "@/features/veterans/veterans/services/rules";
 import Seperator from "@/components/common/seperator.vue";
 import type { RuleId } from "../../models/id";
+import Button from "@/components/common/buttons/button.vue";
 
 const props = defineProps<{
     modelValue: boolean;
@@ -42,19 +43,9 @@ watch(
 
 onMounted(async () => await fetch());
 
-async function add(resource: Resource, effect: Effect) {
+async function save(resource: Resource, effect: Effect) {
     try {
         await addRule(props.veteran.id, resource, effect);
-        await fetch();
-        boundary.value!.error = null;
-    } catch (error: unknown) {
-        boundary.value!.error = error as Error;
-    }
-}
-
-async function remove(id: RuleId) {
-    try {
-        await removeRule(id);
         await fetch();
         boundary.value!.error = null;
     } catch (error: unknown) {
@@ -71,13 +62,11 @@ async function remove(id: RuleId) {
         <DialogContent
             title="Privacy"
             :description="`For @${veteran.username}`"
+            :footer="true"
             :closeable="true"
         >
             <Boundary ref="boundary">
                 <Column>
-                    <Add :loading="loading" :add="add" />
-                    <Seperator />
-
                     <Loading v-if="loading || !rules" />
 
                     <Column v-else>
@@ -89,14 +78,18 @@ async function remove(id: RuleId) {
                         <Column v-else>
                             <Rule
                                 v-for="rule in rules"
+                                :username="veteran.username"
                                 :resource="rule.resource"
                                 :effect="rule.effect"
-                                :remove="async () => remove(rule.id)"
                             />
                         </Column>
                     </Column>
                 </Column>
             </Boundary>
+
+            <template v-slot:footer>
+                <Button>Save</Button>
+            </template>
         </DialogContent>
     </Dialog>
 </template>
