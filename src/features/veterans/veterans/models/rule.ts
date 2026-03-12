@@ -1,7 +1,7 @@
-import type { RuleId } from "./id";
+import type { RuleId } from "@/features/veterans/veterans/models/id";
 
 export interface Rule {
-    id: RuleId | null;
+    id?: RuleId;
     resource: Resource;
     effect: Effect;
 }

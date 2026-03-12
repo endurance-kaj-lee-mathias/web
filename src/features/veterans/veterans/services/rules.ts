@@ -15,7 +15,7 @@ export async function getAll(id: VeteranId): Promise<Rule[]> {
     }
 }
 
-export async function add(
+export async function save(
     id: VeteranId,
     resource: Resource,
     effect: Effect,
@@ -23,7 +23,7 @@ export async function add(
     try {
         await api.post("/sharing/rules", { viewerId: id, resource, effect });
     } catch {
-        throw new Error("Rule could not be added");
+        throw new Error("Rule could not be saved");
     }
 }
 

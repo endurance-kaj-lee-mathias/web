@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import Base from "@/components/layout/base.vue";
-import Information from "@/features/profile/components/information.vue";
-import { Viewer } from "@/features/profile/components/viewer";
-import Introduction from "@/features/profile/components/introduction.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
-import { useKeycloak } from "@josempgon/vue-keycloak";
-import { useTemplateRef } from "vue";
-import Preferences from "@/features/profile/components/preferences/preferences.vue";
-import Loading from "@/components/common/states/loading.vue";
 import Boundary from "@/components/common/states/boundary.vue";
+import Empty from "@/components/common/states/empty.vue";
+import Loading from "@/components/common/states/loading.vue";
+import Base from "@/components/layout/base.vue";
+import Information from "@/features/profile/components/information.vue";
+import Introduction from "@/features/profile/components/introduction.vue";
+import Preferences from "@/features/profile/components/preferences/preferences.vue";
+import { Viewer } from "@/features/profile/components/viewer";
 import { getFullName } from "@/lib/name";
 import { useProfile as useProfileStore } from "@/stores/profile";
-import { ref } from "vue";
-import Empty from "@/components/common/states/empty.vue";
-import { watchEffect } from "vue";
+import { useKeycloak } from "@josempgon/vue-keycloak";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { onMounted, ref, useTemplateRef, watchEffect } from "vue";
 
 const keycloak = useKeycloak();
 const store = useProfileStore();

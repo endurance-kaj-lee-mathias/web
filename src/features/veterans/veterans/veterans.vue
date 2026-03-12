@@ -1,26 +1,25 @@
 <script setup lang="ts">
-import Base from "@/components/layout/base.vue";
-import Column from "@/components/common/layout/column.vue";
-import { Tabs } from "@/features/veterans/tabs";
-import Boundary from "@/components/common/states/boundary.vue";
-import Row from "@/components/common/tabs/links/row.vue";
-import Search from "@/features/veterans/veterans/components/search.vue";
-import Grid from "@/components/common/layout/grid.vue";
-import Empty from "@/components/common/states/empty.vue";
-import { useVeterans } from "@/features/veterans/veterans/composables/use-veterans";
-import { useTemplateRef, watchEffect } from "vue";
-import { remove as removeVeteran } from "@/features/veterans/veterans/services/veterans";
-import { add as addVeteran } from "@/features/veterans/veterans/services/requests";
-import Loading from "@/components/common/states/loading.vue";
-import type { VeteranId } from "@/features/veterans/models/id";
-import { getFullName } from "@/lib/name";
+import Small from "@/components/common/buttons/small.vue";
 import Card from "@/components/common/card/card.vue";
-import Add from "@/features/veterans/veterans/components/add.vue";
-import { ref } from "vue";
+import Column from "@/components/common/layout/column.vue";
 import { Size } from "@/components/common/layout/grid";
+import Grid from "@/components/common/layout/grid.vue";
+import Boundary from "@/components/common/states/boundary.vue";
+import Empty from "@/components/common/states/empty.vue";
+import Loading from "@/components/common/states/loading.vue";
+import Row from "@/components/common/tabs/links/row.vue";
 import RemoveIcon from "@/components/icons/remove.vue";
 import VisibilityIcon from "@/components/icons/visibility.vue";
-import Small from "@/components/common/buttons/small.vue";
+import Base from "@/components/layout/base.vue";
+import type { VeteranId } from "@/features/veterans/models/id";
+import { Tabs } from "@/features/veterans/tabs";
+import Add from "@/features/veterans/veterans/components/add.vue";
+import Search from "@/features/veterans/veterans/components/search.vue";
+import { useVeterans } from "@/features/veterans/veterans/composables/use-veterans";
+import { add as addVeteran } from "@/features/veterans/veterans/services/requests";
+import { remove as removeVeteran } from "@/features/veterans/veterans/services/veterans";
+import { getFullName } from "@/lib/name";
+import { ref, useTemplateRef, watchEffect } from "vue";
 import Privacy from "./components/privacy/privacy.vue";
 import type { Veteran } from "./models/veteran";
 
@@ -128,6 +127,7 @@ async function remove(id: VeteranId) {
                         v-if="state.privacy.veteran"
                         v-model="state.privacy.privacy"
                         :veteran="state.privacy.veteran"
+                        @saved="() => (state.privacy.privacy = false)"
                     />
                 </Column>
             </Boundary>
