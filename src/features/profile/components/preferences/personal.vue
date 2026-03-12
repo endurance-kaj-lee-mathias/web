@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Input from "@/components/common/inputs/input.vue";
+import Select from "@/components/common/inputs/select.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Size } from "@/components/common/layout/grid";
 import Grid from "@/components/common/layout/grid.vue";
@@ -15,10 +16,16 @@ const firstName = useComputedField(props, emit, "firstName");
 const lastName = useComputedField(props, emit, "lastName");
 const username = useComputedField(props, emit, "username");
 const phoneNumber = useComputedField(props, emit, "phoneNumber");
+const privacy = useComputedField(props, emit, "privacy");
 </script>
 
 <template>
     <Column>
+        <Select label="Profile Privacy" v-model="privacy">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+        </Select>
+
         <Input label="Username" :disabled="true">
             {{ username }}
         </Input>

@@ -8,7 +8,6 @@ import Row from "@/components/common/tabs/buttons/row.vue";
 import About from "@/features/profile/components/preferences/about.vue";
 import Address from "@/features/profile/components/preferences/address.vue";
 import Personal from "@/features/profile/components/preferences/personal.vue";
-import Privacy from "@/features/profile/components/preferences/privacy.vue";
 import { Tabs } from "@/features/profile/components/preferences/tabs";
 import type { About as AboutModel } from "@/features/profile/models/about";
 import type { Address as AddressModel } from "@/features/profile/models/address";
@@ -86,7 +85,6 @@ async function save() {
                         v-model:values="address"
                     />
                     <About v-if="tab === Tabs.ABOUT" v-model:values="about" />
-                    <Privacy v-if="tab === Tabs.PRIVACY" />
                 </Column>
             </Boundary>
 
