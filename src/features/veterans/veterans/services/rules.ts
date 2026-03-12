@@ -26,11 +26,3 @@ export async function save(
         throw new Error("Rule could not be saved");
     }
 }
-
-export async function remove(id: RuleId): Promise<void> {
-    try {
-        await api.delete(`/sharing/rules/${id}`);
-    } catch {
-        throw new Error("Rule could not be removed");
-    }
-}
