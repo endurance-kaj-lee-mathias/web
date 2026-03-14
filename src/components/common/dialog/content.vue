@@ -71,7 +71,7 @@ const emitsAsProps = useEmitAsProps(emits);
                 </Column>
             </section>
 
-            <section class="flex-1 overflow-y-auto px-6 py-4">
+            <section class="flex-1 overflow-y-auto px-4 py-3">
                 <Column>
                     <slot />
                 </Column>
