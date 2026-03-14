@@ -15,7 +15,7 @@ import Grid from "@/components/common/layout/grid.vue";
 import Small from "@/components/common/buttons/small.vue";
 import { Size } from "@/components/common/layout/grid";
 import { start } from "@/features/messages/services/conversations";
-import type { UserId } from "@/features/messages/models/user_id";
+import type { UserId } from "@/features/messages/models/user-id";
 
 const props = defineProps<{ modelValue: boolean }>();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");

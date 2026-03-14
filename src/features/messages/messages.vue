@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Big from "@/components/common/buttons/big.vue";
 import { Style } from "@/components/common/buttons/style";
-import Card from "@/components/common/card/card.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import Boundary from "@/components/common/states/boundary.vue";
@@ -12,12 +11,25 @@ import { getFullName } from "@/lib/name";
 import { ref } from "vue";
 import { useTemplateRef, watchEffect } from "vue";
 import Network from "@/features/messages/components/network.vue";
-import Conversation from "./components/conversation.vue";
+import Conversation from "@/features/messages/components/conversation.vue";
+import Messages from "@/features/messages/components/messages.vue";
+import type { ConversationId } from "@/features/messages/models/conversation-id";
+import Empty from "@/components/common/states/empty.vue";
+import Button from "@/components/common/buttons/button.vue";
 
-const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { conversations, loading, error } = useConversations();
+const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 const network = ref(false);
+const selected = ref(null as ConversationId | null);
+
+async function select(id: ConversationId) {
+    try {
+        selected.value = id;
+    } catch (error: unknown) {
+        boundary.value!.error = error as Error;
+    }
+}
 </script>
 
 <template>
@@ -31,10 +43,15 @@ const network = ref(false);
                     :class="`grid sm:grid-cols-[200px_1fr] sm:h-86 h-screen ${Gap.MEDIUM}`"
                 >
                     <section
-                        :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll`"
+                        :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
                     >
+                        <Button :style="Style.DEFAULT" @click="network = true">
+                            New Chat
+                        </Button>
+
                         <Conversation
                             v-for="conversation in conversations"
+                            :id="conversation.id"
                             :username="
                                 getFullName(
                                     conversation.firstName,
@@ -43,12 +60,14 @@ const network = ref(false);
                             "
                             :image="conversation.imageUrl"
                         />
-
-                        <Big :style="Style.DEFAULT" @click="network = true">
-                            New Chat
-                        </Big>
                     </section>
-                    <section class="bg-medium-3 rounded-md p-2">aa</section>
+                    <section class="bg-medium-3 rounded-md p-2">
+                        <Empty
+                            v-if="!selected"
+                            message="No conversation selected"
+                        />
+                        <Messages v-else :conversation="selected" />
+                    </section>
                 </section>
             </Column>
         </Boundary>

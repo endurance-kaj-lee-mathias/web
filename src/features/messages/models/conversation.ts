@@ -1,5 +1,5 @@
 import type { ConversationId } from "@/features/messages/models/conversation-id";
-import type { UserId } from "@/features/messages/models/user_id";
+import type { UserId } from "@/features/messages/models/user-id";
 
 export interface Conversation {
     id: ConversationId;

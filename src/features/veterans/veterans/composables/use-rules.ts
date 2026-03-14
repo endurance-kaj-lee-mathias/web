@@ -1,7 +1,11 @@
 import { getAll } from "@/features/veterans/veterans/services/rules";
 import { ref } from "vue";
-import { Effect, Resource, type Rule } from "../models/rule";
-import type { VeteranId } from "../../models/id";
+import {
+    Effect,
+    Resource,
+    type Rule,
+} from "@/features/veterans/veterans/models/rule";
+import type { VeteranId } from "@/features/veterans/models/id";
 
 type PartialRule = Omit<Rule, "id"> & { id?: Rule["id"] };
 
