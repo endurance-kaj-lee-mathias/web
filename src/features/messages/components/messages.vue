@@ -15,19 +15,12 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
 </script>
 
 <template>
-    <Base>
-        <Boundary ref="boundary">
-            <Loading v-if="loading || !messages" />
-            <Empty
-                v-else-if="messages.length <= 0"
-                message="No messages found"
-            />
-
-            <Column v-else>
-                <p v-for="message in messages">
-                    {{ message.content }}
-                </p>
-            </Column>
-        </Boundary>
-    </Base>
+    <Boundary ref="boundary">
+        <Loading v-if="loading || !messages" />
+        <Column v-else>
+            <p v-for="message in messages">
+                {{ message.content }}
+            </p>
+        </Column>
+    </Boundary>
 </template>

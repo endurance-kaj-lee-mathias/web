@@ -13,23 +13,15 @@ import { useTemplateRef, watchEffect } from "vue";
 import Network from "@/features/messages/components/network.vue";
 import Conversation from "@/features/messages/components/conversation.vue";
 import Messages from "@/features/messages/components/messages.vue";
-import type { ConversationId } from "@/features/messages/models/conversation-id";
 import Empty from "@/components/common/states/empty.vue";
 import Button from "@/components/common/buttons/button.vue";
+import { useConversation } from "@/features/messages/stores/conversation";
 
 const { conversations, loading, error } = useConversations();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 const network = ref(false);
-const selected = ref(null as ConversationId | null);
-
-async function select(id: ConversationId) {
-    try {
-        selected.value = id;
-    } catch (error: unknown) {
-        boundary.value!.error = error as Error;
-    }
-}
+const store = useConversation();
 </script>
 
 <template>
@@ -38,7 +30,6 @@ async function select(id: ConversationId) {
             <Loading v-if="loading || !conversations" />
             <Column v-else>
                 <Network v-model="network" />
-
                 <section
                     :class="`grid sm:grid-cols-[200px_1fr] sm:h-86 h-screen ${Gap.MEDIUM}`"
                 >
@@ -51,22 +42,20 @@ async function select(id: ConversationId) {
 
                         <Conversation
                             v-for="conversation in conversations"
-                            :id="conversation.id"
-                            :username="
-                                getFullName(
-                                    conversation.firstName,
-                                    conversation.lastName,
-                                )
-                            "
+                            :id="conversation.conversationId"
+                            :firstName="conversation.firstName"
+                            :lastName="conversation.lastName"
+                            :username="conversation.username"
                             :image="conversation.imageUrl"
+                            @click="store.select(conversation.conversationId)"
                         />
                     </section>
                     <section class="bg-medium-3 rounded-md p-2">
                         <Empty
-                            v-if="!selected"
+                            v-if="!store.selected"
                             message="No conversation selected"
                         />
-                        <Messages v-else :conversation="selected" />
+                        <Messages v-else :conversation="store.selected" />
                     </section>
                 </section>
             </Column>

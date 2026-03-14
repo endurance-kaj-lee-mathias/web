@@ -1,25 +1,23 @@
 <script setup lang="ts">
 import { Gap } from "@/components/common/layout/gap";
-import { RouterLink, useRoute } from "vue-router";
 import type { ConversationId } from "@/features/messages/models/conversation-id";
+import { useConversation } from "@/features/messages/stores/conversation";
+import { getFullName } from "@/lib/name";
 
-const route = useRoute();
-const props = defineProps<{
+defineProps<{
     id: ConversationId;
     image: string;
+    firstName: string;
+    lastName: string;
     username: string;
-    latest?: string;
 }>();
 
-function matches(): boolean {
-    return `/messages/${props.id}` === route.path;
-}
+const store = useConversation();
 </script>
 
 <template>
-    <RouterLink
-        :to="`/messages/${id}`"
-        :class="`grid grid-cols-[auto_1fr] ${Gap.MEDIUM} p-2 ${matches(to) ? 'bg-medium-3' : 'hover:bg-medium-3 transition-colors duration-75'}  cursor-pointer rounded-md group select-none`"
+    <article
+        :class="`grid grid-cols-[auto_1fr] ${Gap.MEDIUM} p-2 ${store.selected === id ? 'bg-medium-3' : 'hover:bg-medium-3 transition-colors duration-75'}  cursor-pointer rounded-md group select-none`"
     >
         <section
             class="bg-cover bg-center min-w-10 min-h-10 w-full h-full rounded-lg bg-accent"
@@ -27,10 +25,12 @@ function matches(): boolean {
         />
 
         <section class="flex flex-col -space-y-0.5">
-            <p class="text-medium">{{ username }}</p>
+            <p class="text-medium">
+                {{ getFullName(firstName, lastName) }}
+            </p>
             <p class="text-medium-2 text-sm">
-                {{ latest ?? "No message yet" }}
+                {{ username }}
             </p>
         </section>
-    </RouterLink>
+    </article>
 </template>
