@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Gap } from "@/components/common/layout/gap";
-import type { ConversationId } from "@/features/messages/models/conversation-id";
+import type { ConversationId } from "@/features/messages/models/conversation/id";
 import { useConversation } from "@/features/messages/stores/conversation";
 import { getFullName } from "@/lib/name";
 

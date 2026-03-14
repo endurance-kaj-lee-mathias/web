@@ -1,7 +1,7 @@
+import type { ConversationId } from "@/features/messages/models/conversation/id";
+import { Stores } from "@/stores/stores";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { ConversationId } from "@/features/messages/models/conversation-id";
-import { Stores } from "@/stores/stores";
 
 export const useConversation = defineStore(
     Stores.CONVERSATION,

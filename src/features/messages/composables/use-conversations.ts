@@ -1,4 +1,4 @@
-import type { Conversation } from "@/features/messages/models/conversation";
+import type { Conversation } from "@/features/messages/models/conversation/conversation";
 import { getAll } from "@/features/messages/services/conversations";
 import { ref } from "vue";
 

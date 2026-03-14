@@ -2,11 +2,13 @@
 import Column from "@/components/common/layout/column.vue";
 import Boundary from "@/components/common/states/boundary.vue";
 import Loading from "@/components/common/states/loading.vue";
-import Base from "@/components/layout/base.vue";
 import { useMessages } from "@/features/messages/composables/use-messages";
 import { useTemplateRef, watchEffect } from "vue";
-import type { ConversationId } from "@/features/messages/models/conversation-id";
-import Empty from "@/components/common/states/empty.vue";
+import type { ConversationId } from "@/features/messages/models/conversation/id";
+import Stack from "@/components/common/layout/stack.vue";
+import { relativeDate } from "@/lib/date";
+import Row from "@/components/common/layout/row.vue";
+import { Justify } from "@/components/common/layout/justify";
 
 const props = defineProps<{ conversation: ConversationId }>();
 const { messages, loading, error } = useMessages(props.conversation);
@@ -18,9 +20,20 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
     <Boundary ref="boundary">
         <Loading v-if="loading || !messages" />
         <Column v-else>
-            <p v-for="message in messages">
-                {{ message.content }}
-            </p>
+            <Stack v-for="message in messages">
+                <Row :justify="Justify.BETWEEN">
+                    <p class="text-medium-2 text-sm max-w-sm truncate">
+                        {{ message.senderId }}
+                    </p>
+
+                    <p class="text-medium-2 text-sm">
+                        {{ relativeDate(message.createdAt) }}
+                    </p>
+                </Row>
+                <p class="text-medium">
+                    {{ message.content }}
+                </p>
+            </Stack>
         </Column>
     </Boundary>
 </template>
