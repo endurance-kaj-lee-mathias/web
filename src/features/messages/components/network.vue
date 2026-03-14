@@ -14,12 +14,14 @@ import MessagesIcon from "@/components/icons/messages.vue";
 import Grid from "@/components/common/layout/grid.vue";
 import Small from "@/components/common/buttons/small.vue";
 import { Size } from "@/components/common/layout/grid";
+import { start } from "@/features/messages/services/conversations";
+import type { UserId } from "@/features/messages/models/user_id";
 
 const props = defineProps<{ modelValue: boolean }>();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { veterans, loading, error } = useVeterans();
 watchEffect(() => error.value && boundary.value?.capture(error.value));
-const emit = defineEmits(["update:modelValue", "saved"]);
+const emit = defineEmits(["update:modelValue", "selected"]);
 
 watch(
     () => props.modelValue,
@@ -27,6 +29,15 @@ watch(
         if (!old || value) return;
     },
 );
+
+async function select(id: UserId) {
+    try {
+        await start(id);
+        emit("selected");
+    } catch (error: unknown) {
+        boundary.value!.error = error as Error;
+    }
+}
 </script>
 
 <template>
@@ -64,7 +75,15 @@ watch(
                                 <p>@{{ veteran.username }}</p>
 
                                 <template v-slot:options>
-                                    <Small :alternative="true">
+                                    <Small
+                                        :click="
+                                            () =>
+                                                select(
+                                                    veteran.id as string as UserId,
+                                                )
+                                        "
+                                        :alternative="true"
+                                    >
                                         <MessagesIcon />
                                     </Small>
                                 </template>

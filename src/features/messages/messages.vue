@@ -11,12 +11,13 @@ import { useConversations } from "@/features/messages/composables/use-conversati
 import { getFullName } from "@/lib/name";
 import { ref } from "vue";
 import { useTemplateRef, watchEffect } from "vue";
-import Search from "./components/search.vue";
+import Network from "@/features/messages/components/network.vue";
+import Conversation from "./components/conversation.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { conversations, loading, error } = useConversations();
 watchEffect(() => error.value && boundary.value?.capture(error.value));
-const search = ref(false);
+const network = ref(false);
 </script>
 
 <template>
@@ -24,30 +25,28 @@ const search = ref(false);
         <Boundary ref="boundary">
             <Loading v-if="loading || !conversations" />
             <Column v-else>
-                <Search v-model="search" />
+                <Network v-model="network" />
 
                 <section
                     :class="`grid sm:grid-cols-[200px_1fr] sm:h-86 h-screen ${Gap.MEDIUM}`"
                 >
                     <section
-                        :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll bg-medium-3 rounded-md p-2`"
+                        :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll`"
                     >
-                        <Big :style="Style.ALTERNATE" @click="search = true"
-                            >New Chat</Big
-                        >
-
-                        <Card
+                        <Conversation
                             v-for="conversation in conversations"
-                            :title="
+                            :username="
                                 getFullName(
                                     conversation.firstName,
                                     conversation.lastName,
                                 )
                             "
                             :image="conversation.imageUrl"
-                            :options="true"
-                        >
-                        </Card>
+                        />
+
+                        <Big :style="Style.DEFAULT" @click="network = true">
+                            New Chat
+                        </Big>
                     </section>
                     <section class="bg-medium-3 rounded-md p-2">aa</section>
                 </section>
