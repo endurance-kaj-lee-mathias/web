@@ -39,10 +39,12 @@ async function send(message: string) {
     <Base>
         <Boundary ref="boundary">
             <Loading v-if="loading || !conversations" />
+
             <Column v-else>
                 <Network v-model="network" />
+
                 <section
-                    :class="`grid sm:grid-cols-[200px_1fr] sm:h-86 h-screen ${Gap.MEDIUM}`"
+                    :class="`grid sm:grid-cols-[200px_1fr] sm:h-86 h-screen ${Gap.MEDIUM} overflow-hidden`"
                 >
                     <section
                         :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
@@ -53,19 +55,21 @@ async function send(message: string) {
 
                         <Conversation
                             v-for="conversation in conversations"
-                            :id="conversation.conversationId"
+                            :id="conversation.id"
                             :firstName="conversation.firstName"
                             :lastName="conversation.lastName"
-                            :username="
-                                conversation.username ?? conversation.lastName
-                            "
-                            :image="conversation.imageUrl"
-                            @click="store.select(conversation.conversationId)"
+                            :username="conversation.username"
+                            :image="conversation.image"
+                            @click="store.select(conversation.id)"
                         />
                     </section>
 
-                    <section class="flex flex-col gap-2 h-full">
-                        <section class="bg-medium-3 rounded-md p-2 h-full">
+                    <section
+                        :class="`flex flex-col ${Gap.MEDIUM} h-full min-h-0`"
+                    >
+                        <section
+                            class="bg-medium-3 rounded-md p-2 h-full min-h-0 overflow-y-scroll"
+                        >
                             <Empty
                                 v-if="!store.selected"
                                 message="No conversation selected"

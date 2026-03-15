@@ -6,6 +6,7 @@ export interface Message {
     id: MessageId;
     conversationId: ConversationId;
     senderId: UserId;
+    username: string;
     content: string;
     createdAt: Date;
 }

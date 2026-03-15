@@ -9,6 +9,7 @@ import Stack from "@/components/common/layout/stack.vue";
 import { relativeDate } from "@/lib/date";
 import Row from "@/components/common/layout/row.vue";
 import { Justify } from "@/components/common/layout/justify";
+import { Gap } from "@/components/common/layout/gap";
 
 const props = defineProps<{ conversation: ConversationId }>();
 const { messages, loading, error } = useMessages(props.conversation);
@@ -19,11 +20,11 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
 <template>
     <Boundary ref="boundary">
         <Loading v-if="loading || !messages" />
-        <Column v-else>
+        <Column :gap="Gap.LARGE" v-else>
             <Stack v-for="message in messages">
                 <Row :justify="Justify.BETWEEN">
                     <p class="text-medium-2 text-sm max-w-sm truncate">
-                        {{ message.senderId }}
+                        {{ message.username }}
                     </p>
 
                     <p class="text-medium-2 text-sm">

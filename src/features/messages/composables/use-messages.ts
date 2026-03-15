@@ -1,16 +1,15 @@
-// use-messages.ts
 import type { Message } from "@/features/messages/models/message/message";
 import { getAll } from "@/features/messages/services/messages";
-import { ref, onUnmounted } from "vue";
+import { onMounted, ref /* onUnmounted */ } from "vue";
 import type { ConversationId } from "@/features/messages/models/conversation/id";
-import { createClient } from "@/lib/socket";
+// import { createClient } from "@/lib/socket";
 
 export function useMessages(id: ConversationId) {
     const messages = ref<Message[] | null>(null);
     const loading = ref(false);
     const error = ref<Error | null>(null);
 
-    const socket = createClient();
+    // const socket = createClient();
 
     async function fetch() {
         try {
@@ -24,6 +23,7 @@ export function useMessages(id: ConversationId) {
         }
     }
 
+    /*
     const unsubscribe = socket.subscribe(`chat:${id}`, (payload) => {
         const incoming = payload as Message;
         if (!messages.value) return;
@@ -35,6 +35,10 @@ export function useMessages(id: ConversationId) {
         socket.close();
     });
 
-    fetch();
+    */
+
+    onMounted(async () => {
+        await fetch();
+    });
     return { messages, loading, error };
 }

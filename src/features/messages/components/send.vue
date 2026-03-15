@@ -14,8 +14,8 @@ const message = ref("");
 
 function send() {
     if (message.value.length <= 0) return;
-    message.value = "";
     props.send(message.value);
+    message.value = "";
 }
 </script>
 

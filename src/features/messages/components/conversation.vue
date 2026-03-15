@@ -28,9 +28,7 @@ const store = useConversation();
             <p class="text-medium">
                 {{ getFullName(firstName, lastName) }}
             </p>
-            <p class="text-medium-2 text-sm">
-                {{ username }}
-            </p>
+            <p class="text-medium-2 text-sm">@{{ username }}</p>
         </section>
     </article>
 </template>
