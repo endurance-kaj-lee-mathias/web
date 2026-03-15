@@ -1,13 +1,11 @@
 import { Visibility, type Route } from "@/router/route";
 import { auth } from "@/router/routes/auth";
-import {
-    bookings,
-    journals,
-    messages,
-    notifications,
-    profile,
-    veterans,
-} from "@/router/routes/pages";
+import { bookings } from "@/router/routes/bookings";
+import { journals } from "@/router/routes/journals";
+import { messages } from "@/router/routes/messages";
+import { notifications } from "@/router/routes/notifications";
+import { profile } from "@/router/routes/profile";
+import { veterans } from "@/router/routes/veterans";
 
 export function getAllRoutes(): Route[] {
     return [
