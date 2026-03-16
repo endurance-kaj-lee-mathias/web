@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import Overlay from "@/components/common/card/overlay.vue";
-import Column from "@/components/common/layout/column.vue";
-import { Gap } from "@/components/common/layout/gap";
-import Row from "@/components/common/layout/row.vue";
-import { Justify } from "@/components/common/layout/justify";
-import { Align } from "@/components/common/layout/align";
+import Inner from "@/components/common/card/inner.vue";
 import { Height } from "@/components/common/layout/height";
 
 const props = defineProps<{
@@ -20,34 +15,36 @@ const actionStyles = props.action ? "group cursor-pointer select-none" : "";
 </script>
 
 <template>
-    <Column :gap="Gap.SMALL">
-        <article
-            :class="`flex flex-col ${height ?? Height.MEDIUM} bg-cover bg-center bg-accent ${actionStyles} relative overflow-hidden justify-end p-2 rounded-lg`"
-            :style="`background-image: url('${image}')`"
-        >
-            <Overlay v-if="image" />
+    <a
+        v-if="typeof action === 'string' && action.startsWith('http')"
+        :href="action"
+        target="_blank"
+    >
+        <Inner v-bind="props" :action-styles="actionStyles">
+            <slot /><template #options><slot name="options" /></template>
+            <template #footer><slot name="footer" /></template>
+        </Inner>
+    </a>
 
-            <section class="relative z-10 text-light-2">
-                <Row :justify="Justify.BETWEEN" :align="Align.END">
-                    <section class="min-w-0 px-1">
-                        <section class="flex flex-col -space-y-0.5">
-                            <h3 class="font-bold text-lg truncate">
-                                {{ title }}
-                            </h3>
+    <RouterLink v-else-if="typeof action === 'string'" :to="action">
+        <Inner v-bind="props" :action-styles="actionStyles">
+            <slot />
+            <template #options><slot name="options" /></template>
+            <template #footer><slot name="footer" /></template>
+        </Inner>
+    </RouterLink>
 
-                            <slot />
-                        </section>
-                    </section>
+    <div v-else-if="typeof action === 'function'" @click="action">
+        <Inner v-bind="props" :action-styles="actionStyles">
+            <slot />
+            <template #options><slot name="options" /></template>
+            <template #footer><slot name="footer" /></template>
+        </Inner>
+    </div>
 
-                    <Row v-if="options">
-                        <slot name="options" />
-                    </Row>
-                </Row>
-            </section>
-        </article>
-
-        <section v-if="footer" :class="`flex flex-col ${Gap.MEDIUM} min-w-0`">
-            <slot name="footer" />
-        </section>
-    </Column>
+    <Inner v-else v-bind="props">
+        <slot />
+        <template #options><slot name="options" /></template>
+        <template #footer><slot name="footer" /></template>
+    </Inner>
 </template>

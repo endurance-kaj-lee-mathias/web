@@ -12,8 +12,10 @@ import { getFullName } from "@/lib/name";
 import { useTemplateRef, watchEffect } from "vue";
 import { Height } from "@/components/common/layout/height";
 import SmileIcon from "@/components/icons/smile.vue";
+import SadIcon from "@/components/icons/sad.vue";
 import ClockIcon from "@/components/icons/clock.vue";
 import Row from "@/components/common/layout/row.vue";
+import { Gap } from "@/components/common/layout/gap";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { veterans, loading, error, fetch } = useVeterans();
@@ -39,21 +41,26 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                         :image="veteran.image"
                         :options="true"
                         :height="Height.LARGE"
+                        :action="`/journals/${veteran.username}`"
                     >
                         <Row
                             v-if="veteran.lastUpdatedAt && veteran.latestScore"
                         >
-                            <Row>
+                            <Row :gap="Gap.SMALL">
                                 <ClockIcon />
                                 {{ veteran.lastUpdatedAt }}
                             </Row>
 
-                            <Row>
+                            <Row :gap="Gap.SMALL">
                                 <SmileIcon />
                                 {{ veteran.latestScore }}/10
                             </Row>
                         </Row>
-                        <p v-else>No statistics available</p>
+
+                        <Row v-else :gap="Gap.SMALL">
+                            <SadIcon />
+                            No statistics available
+                        </Row>
                     </Card>
                 </Grid>
             </Boundary>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Button from "@/components/common/buttons/button.vue";
 import Input from "@/components/common/inputs/input.vue";
+import AddIcon from "@/components/icons/add.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { ref } from "vue";
 
@@ -23,7 +24,9 @@ const username = ref("");
                 />
             </section>
 
-            <Button :full="true">Add</Button>
+            <Button :full="true">
+                <AddIcon />
+            </Button>
         </section>
     </form>
 </template>

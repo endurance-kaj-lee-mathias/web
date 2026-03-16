@@ -4,6 +4,7 @@ export interface Veteran {
     id: VeteranId;
     firstName: string;
     lastName: string;
+    username: string;
     image: string;
     lastUpdatedAt: Date;
     latestScore: number;

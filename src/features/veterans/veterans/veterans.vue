@@ -84,14 +84,10 @@ async function remove(id: VeteranId) {
 
             <Boundary ref="boundary">
                 <Loading v-if="loading || !veterans" />
-                <Column v-else-if="veterans.length <= 0">
-                    <Empty message="No veterans found!" />
-                    <Add
-                        v-model="state.add.note"
-                        :username="state.add.username"
-                        :send="send"
-                    />
-                </Column>
+                <Empty
+                    v-else-if="veterans.length <= 0"
+                    message="No veterans found!"
+                />
 
                 <Column v-else>
                     <Grid :size="Size.SMALL">
@@ -130,6 +126,12 @@ async function remove(id: VeteranId) {
                         @saved="() => (state.privacy.privacy = false)"
                     />
                 </Column>
+
+                <Add
+                    v-model="state.add.note"
+                    :username="state.add.username"
+                    :send="send"
+                />
             </Boundary>
         </Column>
     </Base>
