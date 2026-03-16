@@ -17,15 +17,15 @@ defineProps<{
 
 <template>
     <Row :gap="Gap.SMALL" :items="Align.CENTER" :responsive="false">
-        <Small v-if="viewer === Viewer.OWNER" :click="preferences">
+        <Small v-if="viewer === Viewer.OWNER" :action="preferences">
             <EditIcon />
         </Small>
 
-        <Small v-if="viewer === Viewer.OWNER" :click="logout">
+        <Small v-if="viewer === Viewer.OWNER" :action="logout">
             <LogoutIcon />
         </Small>
 
-        <Small v-else :click="() => {}">
+        <Small v-else action="/veterans">
             <FriendIcon />
         </Small>
     </Row>

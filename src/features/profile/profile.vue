@@ -14,6 +14,7 @@ import { useProfile as useProfileStore } from "@/stores/profile";
 import { useKeycloak } from "@josempgon/vue-keycloak";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, useTemplateRef, watchEffect } from "vue";
+import { Privacy } from "@/features/profile/models/personal";
 
 const keycloak = useKeycloak();
 const store = useProfileStore();
@@ -60,7 +61,9 @@ function logout() {
                         lastName: profile.lastName,
                         username: profile.username,
                         phoneNumber: profile.phoneNumber,
-                        privacy: profile.isPrivate ? 'private' : 'public',
+                        privacy: profile.isPrivate
+                            ? Privacy.PRIVATE
+                            : Privacy.PUBLIC,
                     }"
                     :address="{
                         street: profile.address.street,

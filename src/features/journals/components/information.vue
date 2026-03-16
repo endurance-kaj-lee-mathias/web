@@ -29,11 +29,7 @@ defineProps<{
                         </h2>
 
                         <section class="block md:hidden">
-                            <Actions
-                                :preferences="preferences"
-                                :logout="logout"
-                                :viewer="viewer"
-                            />
+                            <Actions />
                         </section>
                     </Row>
 
@@ -49,11 +45,7 @@ defineProps<{
         </Row>
 
         <section class="hidden md:block">
-            <Actions
-                :preferences="preferences"
-                :logout="logout"
-                :viewer="viewer"
-            />
+            <Actions />
         </section>
     </Row>
 </template>

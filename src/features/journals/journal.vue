@@ -13,6 +13,8 @@ import Link from "@/components/common/link.vue";
 import BackIcon from "@/components/icons/back.vue";
 import Small from "@/components/common/buttons/small.vue";
 import Row from "@/components/common/layout/row.vue";
+import Introduction from "../profile/components/introduction.vue";
+import { Gap } from "@/components/common/layout/gap";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const username: string = getParam("username");
@@ -24,7 +26,7 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
     <Base>
         <Column>
             <Row>
-                <Small>
+                <Small action="/journals">
                     <Row> <BackIcon /> Back To Journals</Row>
                 </Small>
             </Row>
@@ -33,7 +35,7 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                 <Loading v-if="loading" />
                 <Empty v-else-if="!journal" message="No journal found!" />
 
-                <Column v-else>
+                <Column v-else :gap="Gap.EXTRA_LARGE">
                     <Information
                         :name="
                             getFullName(
@@ -44,6 +46,11 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                         :username="journal.userProfile.username"
                         :about="journal.userProfile.about"
                         :image="journal.userProfile.image"
+                    />
+
+                    <Introduction
+                        :username="journal.userProfile.username"
+                        :introduction="journal.userProfile.introduction"
                     />
                 </Column>
             </Boundary>

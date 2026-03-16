@@ -9,11 +9,11 @@ import BookingsIcon from "@/components/icons/bookings.vue";
 
 <template>
     <Row :gap="Gap.SMALL" :items="Align.CENTER" :responsive="false">
-        <Small>
+        <Small action="/messages">
             <MessagesIcon />
         </Small>
 
-        <Small>
+        <Small action="/bookings">
             <BookingsIcon />
         </Small>
     </Row>

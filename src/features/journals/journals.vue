@@ -42,24 +42,30 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                         :height="Height.LARGE"
                         :action="`/journals/@${veteran.username}`"
                     >
-                        <Row
-                            v-if="veteran.lastUpdatedAt && veteran.latestScore"
-                        >
-                            <Row :gap="Gap.SMALL">
-                                <ClockIcon />
-                                {{ veteran.lastUpdatedAt }}
+                        <Column>
+                            <p>@{{ veteran.username }}</p>
+
+                            <Row
+                                v-if="
+                                    veteran.lastUpdatedAt && veteran.latestScore
+                                "
+                            >
+                                <Row :gap="Gap.SMALL">
+                                    <ClockIcon />
+                                    {{ veteran.lastUpdatedAt }}
+                                </Row>
+
+                                <Row :gap="Gap.SMALL">
+                                    <SmileIcon />
+                                    {{ veteran.latestScore }}/10
+                                </Row>
                             </Row>
 
-                            <Row :gap="Gap.SMALL">
-                                <SmileIcon />
-                                {{ veteran.latestScore }}/10
+                            <Row v-else :gap="Gap.SMALL">
+                                <SadIcon />
+                                No statistics yet
                             </Row>
-                        </Row>
-
-                        <Row v-else :gap="Gap.SMALL">
-                            <SadIcon />
-                            No statistics yet
-                        </Row>
+                        </Column>
                     </Card>
                 </Grid>
             </Boundary>
