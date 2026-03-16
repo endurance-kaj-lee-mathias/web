@@ -52,6 +52,8 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                         :username="journal.userProfile.username"
                         :introduction="journal.userProfile.introduction"
                     />
+
+                    <p>Tabs with Stress and Mood here</p>
                 </Column>
             </Boundary>
         </Column>

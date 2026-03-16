@@ -104,14 +104,14 @@ async function remove(id: VeteranId) {
                             <template v-slot:options>
                                 <Small
                                     :alternative="true"
-                                    :click="() => privacy(veteran)"
+                                    :action="() => privacy(veteran)"
                                 >
                                     <VisibilityIcon />
                                 </Small>
 
                                 <Small
                                     :alternative="true"
-                                    :click="() => remove(veteran.id)"
+                                    :action="() => remove(veteran.id)"
                                 >
                                     <RemoveIcon />
                                 </Small>
