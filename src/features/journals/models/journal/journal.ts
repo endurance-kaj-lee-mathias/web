@@ -5,7 +5,7 @@ import type { Paginated } from "@/models/pagination";
 
 export interface Journal {
     veteranId: string;
-    userProfile: Profile;
+    profile: Profile;
     stressScores?: Paginated<Stress>;
     moodEntries?: Paginated<Mood>;
 }

@@ -39,18 +39,18 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                     <Information
                         :name="
                             getFullName(
-                                journal.userProfile.firstName,
-                                journal.userProfile.lastName,
+                                journal.profile.firstName,
+                                journal.profile.lastName,
                             )
                         "
-                        :username="journal.userProfile.username"
-                        :about="journal.userProfile.about"
-                        :image="journal.userProfile.image"
+                        :username="journal.profile.username"
+                        :about="journal.profile.about"
+                        :image="journal.profile.image"
                     />
 
                     <Introduction
-                        :username="journal.userProfile.username"
-                        :introduction="journal.userProfile.introduction"
+                        :username="journal.profile.username"
+                        :introduction="journal.profile.introduction"
                     />
 
                     <p>Tabs with Stress and Mood here</p>
