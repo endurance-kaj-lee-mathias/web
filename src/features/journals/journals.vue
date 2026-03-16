@@ -30,7 +30,7 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                     message="No veterans found!"
                 />
 
-                <Grid v-else :size="Size.SMALL">
+                <Grid v-else>
                     <Card
                         v-for="veteran in veterans"
                         :title="

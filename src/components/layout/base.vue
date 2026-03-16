@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Bar from "@/components/layout/bar/bar.vue";
+import Footer from "@/components/layout/footer.vue";
 import { Gap } from "@/components/common/layout/gap";
 </script>
 
@@ -13,10 +14,12 @@ import { Gap } from "@/components/common/layout/gap";
             </section>
 
             <section
-                :class="`flex flex-col ${Gap.MEDIUM} mx-auto max-w-2xl w-full`"
+                :class="`flex flex-col ${Gap.MEDIUM} mx-auto max-w-3xl w-full`"
             >
                 <slot />
             </section>
         </section>
+
+        <Footer />
     </section>
 </template>
