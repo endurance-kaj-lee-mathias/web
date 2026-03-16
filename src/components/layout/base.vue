@@ -6,7 +6,7 @@ import { Gap } from "@/components/common/layout/gap";
 
 <template>
     <section
-        className="flex flex-col gap-8 justify-between min-h-screen mx-auto max-w-4xl px-4 pt-4 pb-1.5"
+        className="flex flex-col gap-8 justify-between min-h-screen mx-auto max-w-4xl px-4 pt-4 pb-0.5"
     >
         <section className="flex flex-col gap-4 md:gap-12">
             <section className="w-full">

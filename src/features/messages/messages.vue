@@ -44,7 +44,7 @@ async function send(message: string) {
                 <Network v-model="network" />
 
                 <section
-                    :class="`grid sm:grid-cols-[200px_1fr] sm:h-86 h-screen ${Gap.MEDIUM} overflow-hidden`"
+                    :class="`grid sm:grid-cols-[200px_1fr] sm:h-86 h-screen ${Gap.MEDIUM} `"
                 >
                     <section
                         :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
