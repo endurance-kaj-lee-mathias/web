@@ -5,6 +5,7 @@ import { Gap } from "@/components/common/layout/gap";
 import Row from "@/components/common/layout/row.vue";
 import { Justify } from "@/components/common/layout/justify";
 import { Align } from "@/components/common/layout/align";
+import { Height } from "@/components/common/layout/height";
 
 const props = defineProps<{
     image: string;
@@ -12,6 +13,7 @@ const props = defineProps<{
     action?: string | (() => void);
     footer?: boolean;
     options?: boolean;
+    height?: Height;
 }>();
 
 const actionStyles = props.action ? "group cursor-pointer select-none" : "";
@@ -20,7 +22,7 @@ const actionStyles = props.action ? "group cursor-pointer select-none" : "";
 <template>
     <Column :gap="Gap.SMALL">
         <article
-            :class="`flex flex-col bg-cover bg-center bg-accent ${actionStyles} relative overflow-hidden justify-end p-2 rounded-lg h-36`"
+            :class="`flex flex-col ${height ?? Height.MEDIUM} bg-cover bg-center bg-accent ${actionStyles} relative overflow-hidden justify-end p-2 rounded-lg`"
             :style="`background-image: url('${image}')`"
         >
             <Overlay v-if="image" />
@@ -37,12 +39,9 @@ const actionStyles = props.action ? "group cursor-pointer select-none" : "";
                         </section>
                     </section>
 
-                    <section
-                        v-if="options"
-                        :class="`flex flex-row ${Gap.MEDIUM}`"
-                    >
+                    <Row v-if="options">
                         <slot name="options" />
-                    </section>
+                    </Row>
                 </Row>
             </section>
         </article>
