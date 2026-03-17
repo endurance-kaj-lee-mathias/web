@@ -20,7 +20,7 @@ const store = useConversation();
         :class="`grid grid-cols-[auto_1fr] ${Gap.MEDIUM} p-2 ${store.selected === id ? 'bg-medium-3' : 'hover:bg-medium-3 transition-colors duration-75'}  cursor-pointer rounded-md group select-none`"
     >
         <section
-            class="bg-cover bg-center min-w-10 min-h-10 w-full h-full rounded-lg bg-accent"
+            class="bg-cover shadow-sm bg-center min-w-10 min-h-10 w-full h-full rounded-lg bg-accent"
             :style="`background-image: url('${image}');`"
         />
 

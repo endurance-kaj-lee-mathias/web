@@ -20,13 +20,13 @@ defineProps<{
         <small class="text-slate-600">{{ description }}</small>
         <span
             v-if="disabled"
-            :class="`bg-medium-3 text-medium rounded-md h-9 px-2 flex ${Gap.MEDIUM} ${Align.CENTER}`"
+            :class="`bg-light-2 shadow-sm text-medium rounded-md h-9 px-2 flex ${Gap.MEDIUM} ${Align.CENTER}`"
         >
             <slot />
         </span>
         <select
             v-else
-            class="bg-medium-3 text-medium rounded-md h-9 px-2"
+            class="bg-light-2 shadow-sm text-medium rounded-md h-9 px-2"
             :value="modelValue"
             @input="
                 (event) =>

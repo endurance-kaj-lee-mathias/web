@@ -25,7 +25,7 @@ defineProps<{
         >
             <Row :gap="Gap.LARGE" :items="Align.STRETCH">
                 <section
-                    class="bg-cover bg-center w-26 rounded-lg bg-accent"
+                    class="bg-cover shadow-sm bg-center w-26 rounded-lg bg-accent"
                     :style="`background-image: url('${image}');`"
                 />
 

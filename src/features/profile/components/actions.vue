@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import Small from "@/components/common/buttons/small.vue";
 import { Align } from "@/components/common/layout/align";
-import { Gap } from "@/components/common/layout/gap";
 import Row from "@/components/common/layout/row.vue";
 import EditIcon from "@/components/icons/edit.vue";
-import LogoutIcon from "@/components/icons/logout.vue";
 import FriendIcon from "@/components/icons/friend.vue";
+import LogoutIcon from "@/components/icons/logout.vue";
 import { Viewer } from "@/features/profile/components/viewer";
 
 defineProps<{
@@ -16,7 +15,7 @@ defineProps<{
 </script>
 
 <template>
-    <Row :gap="Gap.SMALL" :items="Align.CENTER">
+    <Row :items="Align.CENTER">
         <Small v-if="viewer === Viewer.OWNER" :action="preferences">
             <EditIcon />
         </Small>

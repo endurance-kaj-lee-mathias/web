@@ -7,7 +7,7 @@ import { Justify } from "@/components/common/layout/justify";
 import { Align } from "@/components/common/layout/align";
 import { Height } from "@/components/common/layout/height";
 
-const props = defineProps<{
+defineProps<{
     image: string;
     title: string;
     footer?: boolean;
@@ -20,7 +20,7 @@ const props = defineProps<{
 <template>
     <Column :gap="Gap.SMALL">
         <article
-            :class="`flex flex-col ${height ?? Height.MEDIUM} bg-cover bg-center bg-accent ${actionStyles ?? ''} relative overflow-hidden justify-end p-2 rounded-lg`"
+            :class="`flex flex-col ${height ?? Height.MEDIUM} bg-cover bg-center bg-accent shadow-sm ${actionStyles ?? ''} relative overflow-hidden justify-end p-2 rounded-lg`"
             :style="`background-image: url('${image}')`"
         >
             <Overlay v-if="image" />
