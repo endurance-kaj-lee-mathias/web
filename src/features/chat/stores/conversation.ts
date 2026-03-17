@@ -1,4 +1,4 @@
-import type { ConversationId } from "@/features/messages/models/conversation/id";
+import type { ConversationId } from "@/features/chat/models/conversation/id";
 import { Stores } from "@/stores/stores";
 import { defineStore } from "pinia";
 import { ref } from "vue";
