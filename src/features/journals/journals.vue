@@ -15,6 +15,7 @@ import Base from "@/components/layout/base.vue";
 import { useVeterans } from "@/features/journals/composables/use-veterans";
 import { getFullName } from "@/lib/name";
 import { useTemplateRef, watchEffect } from "vue";
+import { relativeDate } from "@/lib/date";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { veterans, loading, error } = useVeterans();
@@ -52,7 +53,7 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                             >
                                 <Row :gap="Gap.SMALL">
                                     <ClockIcon />
-                                    {{ veteran.lastUpdatedAt }}
+                                    {{ relativeDate(veteran.lastUpdatedAt) }}
                                 </Row>
 
                                 <Row :gap="Gap.SMALL">

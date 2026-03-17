@@ -4,7 +4,7 @@ import { RouterLink } from "vue-router";
 defineProps<{ action: string | (() => void) }>();
 
 const styles =
-    "text-medium-2 font-semibold hover:text-medium underline transition-colors duration-75 cursor-pointer";
+    "text-medium-2 font-semibold hover:text-medium underline decoration-dotted decoration-2 transition-colors duration-75 cursor-pointer";
 </script>
 
 <template>

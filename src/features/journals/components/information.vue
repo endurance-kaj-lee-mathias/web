@@ -19,7 +19,10 @@ defineProps<{
 <template>
     <Row :justify="Justify.BETWEEN" :items="Align.STRETCH" :responsive="true">
         <Row :gap="Gap.LARGE" :items="Align.STRETCH" :responsive="true">
-            <Dynamic :src="image" :alt="`Picture of ${name}`" />
+            <section
+                class="bg-cover bg-center w-18 h-18 rounded-lg bg-accent"
+                :style="`background-image: url('${image}');`"
+            />
 
             <Column :padding="Padding.SMALL">
                 <Column :gap="Gap.NONE">
@@ -37,10 +40,6 @@ defineProps<{
                         @{{ username }}
                     </h3>
                 </Column>
-
-                <p class="max-w-xs truncate">
-                    {{ about }}
-                </p>
             </Column>
         </Row>
 

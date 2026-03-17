@@ -21,7 +21,7 @@ defineProps<{ state: boolean; close: () => void }>();
         >
             <h2 class="text-xl font-bold">Endurance</h2>
 
-            <Small :click="close">
+            <Small :action="close">
                 <CloseIcon />
             </Small>
         </section>

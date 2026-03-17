@@ -12,7 +12,7 @@ function matches(path: string): boolean {
 <template>
     <RouterLink
         :to="href"
-        :class="`flex flex-row items-center gap-2 text-xl font-bold cursor-pointer ${matches(href) ? 'text-accent underline decoration-wavy' : 'text-medium-2 hover:text-accent transition-colors duration-75'}`"
+        :class="`flex flex-row items-center gap-2 text-xl font-bold cursor-pointer ${matches(href) ? 'text-accent underline decoration-dotted decoration-2' : 'text-medium-2 hover:text-accent transition-colors duration-75'}`"
     >
         <slot />
     </RouterLink>

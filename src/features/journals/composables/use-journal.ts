@@ -24,5 +24,12 @@ export function useJournal(username: string) {
     }
 
     usePolling(fetch, POLLING_RATE);
-    return { journal, loading, error, fetch };
+    return {
+        journal,
+        stress: journal.value?.stressScores,
+        mood: journal.value?.moodEntries,
+        loading,
+        error,
+        fetch,
+    };
 }

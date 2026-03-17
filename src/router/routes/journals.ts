@@ -1,6 +1,7 @@
 import JournalIcon from "@/components/icons/journal.vue";
 import Journal from "@/features/journals/journal.vue";
 import Journals from "@/features/journals/journals.vue";
+import Stress from "@/features/journals/stress.vue";
 import { Guarded, Visibility, type Route } from "@/router/route";
 
 export const journals: Route[] = [
@@ -21,13 +22,7 @@ export const journals: Route[] = [
     {
         path: "/journals/:username/stress",
         visible: Visibility.NONE,
-        component: Journal,
-        auth: { guarded: Guarded.PRIVATE },
-    },
-    {
-        path: "/journals/:username/mood",
-        visible: Visibility.NONE,
-        component: Journal,
+        component: Stress,
         auth: { guarded: Guarded.PRIVATE },
     },
 ];

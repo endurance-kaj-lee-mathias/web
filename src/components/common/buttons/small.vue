@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 
 const props = defineProps<{
-    action: string | (() => void);
+    action?: string | (() => void);
     alternative?: boolean;
 }>();
 
@@ -34,4 +34,8 @@ const styles = `flex items-center justify-center font-bold hover:bg-light-2 p-2 
     >
         <slot />
     </button>
+
+    <span v-else :class="styles">
+        <slot />
+    </span>
 </template>
