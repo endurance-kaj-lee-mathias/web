@@ -5,9 +5,7 @@ import { initializeSlashes } from "@/router/slashes";
 import {
     createRouter,
     createWebHistory,
-    type RouteLocationRaw,
     type RouteRecordRaw,
-    type RouteRecordRedirectOption,
 } from "vue-router";
 
 const router = createRouter({

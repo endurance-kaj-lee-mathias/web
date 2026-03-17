@@ -7,7 +7,7 @@ import { useTemplateRef } from "vue";
 import { watch } from "vue";
 import { watchEffect } from "vue";
 import Empty from "@/components/common/states/empty.vue";
-import { useVeterans } from "@/features/veterans/veterans/composables/use-veterans";
+import { useConnections } from "@/features/network/connections/composables/use-connections";
 import Card from "@/components/common/card/card.vue";
 import { getFullName } from "@/lib/name";
 import MessagesIcon from "@/components/icons/messages.vue";
@@ -19,7 +19,7 @@ import type { UserId } from "@/features/messages/models/user-id";
 
 const props = defineProps<{ modelValue: boolean }>();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
-const { veterans, loading, error } = useVeterans();
+const { connections, loading, error } = useConnections();
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 const emit = defineEmits(["update:modelValue", "selected"]);
 
@@ -52,34 +52,34 @@ async function select(id: UserId) {
         >
             <Boundary ref="boundary">
                 <Column>
-                    <Loading v-if="loading || !veterans" />
+                    <Loading v-if="loading || !connections" />
 
                     <Column v-else>
                         <Empty
-                            v-if="veterans.length <= 0"
-                            message="No veterans found"
+                            v-if="connections.length <= 0"
+                            message="No connections in network found"
                         />
 
                         <Grid :size="Size.SMALL" v-else>
                             <Card
-                                v-for="veteran in veterans"
+                                v-for="connection in connections"
                                 :title="
                                     getFullName(
-                                        veteran.firstName,
-                                        veteran.lastName,
+                                        connection.firstName,
+                                        connection.lastName,
                                     )
                                 "
-                                :image="veteran.image"
+                                :image="connection.image"
                                 :options="true"
                             >
-                                <p>@{{ veteran.username }}</p>
+                                <p>@{{ connection.username }}</p>
 
                                 <template v-slot:options>
                                     <Small
                                         :click="
                                             () =>
                                                 select(
-                                                    veteran.id as string as UserId,
+                                                    connection.id as string as UserId,
                                                 )
                                         "
                                         :alternative="true"

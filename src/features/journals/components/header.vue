@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import Information from "@/features/journals/components/information.vue";
 import { getFullName } from "@/lib/name";
-import TabRow from "@/components/common/tabs/links/row.vue";
-import { getTabs } from "@/features/journals/tabs";
+import TabHeader from "@/components/common/tabs/links/tab-header.vue";
 import type { Profile } from "@/features/journals/models/journal/profile";
+import TabLink from "@/components/common/tabs/links/tab-link.vue";
+import Stack from "@/components/common/layout/stack.vue";
+import { Align } from "@/components/common/layout/align";
 
 defineProps<{ profile: Profile }>();
 </script>
@@ -16,5 +18,12 @@ defineProps<{ profile: Profile }>();
         :image="profile.image"
     />
 
-    <TabRow :tabs="Object.values(getTabs(profile.username))" />
+    <Stack :align="Align.START">
+        <TabHeader>
+            <TabLink :href="`/journals/@${profile.username}`">Mood</TabLink>
+            <TabLink :href="`/journals/@${profile.username}/stress`"
+                >Stress</TabLink
+            >
+        </TabHeader>
+    </Stack>
 </template>

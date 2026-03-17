@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import Column from "@/components/common/layout/column.vue";
 import { Align } from "@/components/common/layout/align";
+import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { Justify } from "@/components/common/layout/justify";
 import { Padding } from "@/components/common/layout/padding";
 import Row from "@/components/common/layout/row.vue";
-import { Viewer } from "@/features/profile/components/viewer";
+import Stack from "@/components/common/layout/stack.vue";
 import Actions from "@/features/profile/components/actions.vue";
-import Dynamic from "@/components/common/images/dynamic.vue";
+import { Viewer } from "@/features/profile/components/viewer";
 
 defineProps<{
     name: string;
@@ -21,16 +21,30 @@ defineProps<{
 </script>
 
 <template>
-    <Row :justify="Justify.BETWEEN" :items="Align.STRETCH" :responsive="true">
-        <Row :gap="Gap.LARGE" :items="Align.STRETCH" :responsive="true">
-            <Dynamic :src="image" :alt="`Picture of ${name}`" />
+    <Column>
+        <Row
+            :justify="Justify.BETWEEN"
+            :items="Align.STRETCH"
+            :responsive="true"
+        >
+            <Row :gap="Gap.LARGE" :items="Align.STRETCH">
+                <section
+                    class="bg-cover bg-center w-26 rounded-lg bg-accent"
+                    :style="`background-image: url('${image}');`"
+                />
 
-            <Column :padding="Padding.SMALL">
-                <Column :gap="Gap.NONE">
-                    <Row :items="Align.CENTER" :wrap="true">
-                        <h2 class="max-w-xs text-3xl font-bold truncate">
-                            {{ name }}
-                        </h2>
+                <Column :padding="Padding.SMALL">
+                    <Column :gap="Gap.SMALL">
+                        <Stack>
+                            <h2 class="max-w-xs text-3xl font-bold truncate">
+                                {{ name }}
+                            </h2>
+                            <h3
+                                className="max-w-xs text-medium text-lg truncate"
+                            >
+                                @{{ username }}
+                            </h3>
+                        </Stack>
 
                         <section class="block md:hidden">
                             <Actions
@@ -39,25 +53,23 @@ defineProps<{
                                 :viewer="viewer"
                             />
                         </section>
-                    </Row>
+                    </Column>
 
-                    <h3 className="max-w-xs text-medium text-lg truncate">
-                        @{{ username }}
-                    </h3>
+                    <p class="hidden md:block max-w-xs truncate">
+                        {{ about }}
+                    </p>
                 </Column>
+            </Row>
 
-                <p class="max-w-xs truncate">
-                    {{ about }}
-                </p>
-            </Column>
+            <section class="hidden md:block">
+                <Actions
+                    :preferences="preferences"
+                    :logout="logout"
+                    :viewer="viewer"
+                />
+            </section>
         </Row>
 
-        <section class="hidden md:block">
-            <Actions
-                :preferences="preferences"
-                :logout="logout"
-                :viewer="viewer"
-            />
-        </section>
-    </Row>
+        <p class="block md:hidden">{{ about }}</p>
+    </Column>
 </template>

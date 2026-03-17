@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import { RouterLink } from "vue-router";
+import { Gap } from "@/components/common/layout/gap";
+import { SmallStyle } from "@/components/common/buttons/style";
 
 const props = defineProps<{
     action?: string | (() => void);
-    alternative?: boolean;
+    style?: SmallStyle;
 }>();
 
-const styles = `flex items-center justify-center font-bold hover:bg-light-2 p-2 transition-colors rounded-lg cursor-pointer ${props.alternative ? "text-light" : "text-medium"} hover:text-accent duration-75`;
+const styles = `flex items-center ${Gap.MEDIUM} justify-center font-bold  p-2 transition-colors rounded-lg cursor-pointer duration-75 ${props.style ?? SmallStyle.DEFAULT}`;
 </script>
 
 <template>

@@ -16,7 +16,7 @@ defineProps<{
 </script>
 
 <template>
-    <Row :gap="Gap.SMALL" :items="Align.CENTER" :responsive="false">
+    <Row :gap="Gap.SMALL" :items="Align.CENTER">
         <Small v-if="viewer === Viewer.OWNER" :action="preferences">
             <EditIcon />
         </Small>
@@ -25,8 +25,6 @@ defineProps<{
             <LogoutIcon />
         </Small>
 
-        <Small v-else action="/veterans">
-            <FriendIcon />
-        </Small>
+        <Small v-else action="/veterans"> <FriendIcon /> </Small>
     </Row>
 </template>

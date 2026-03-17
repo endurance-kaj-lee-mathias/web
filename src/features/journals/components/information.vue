@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import Dynamic from "@/components/common/images/dynamic.vue";
 import { Align } from "@/components/common/layout/align";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { Justify } from "@/components/common/layout/justify";
 import { Padding } from "@/components/common/layout/padding";
 import Row from "@/components/common/layout/row.vue";
+import Stack from "@/components/common/layout/stack.vue";
 import Actions from "@/features/journals/components/actions.vue";
 
 defineProps<{
@@ -17,34 +17,47 @@ defineProps<{
 </script>
 
 <template>
-    <Row :justify="Justify.BETWEEN" :items="Align.STRETCH" :responsive="true">
-        <Row :gap="Gap.LARGE" :items="Align.STRETCH" :responsive="true">
-            <section
-                class="bg-cover bg-center w-18 h-18 rounded-lg bg-accent"
-                :style="`background-image: url('${image}');`"
-            />
+    <Column>
+        <Row
+            :justify="Justify.BETWEEN"
+            :items="Align.STRETCH"
+            :responsive="true"
+        >
+            <Row :gap="Gap.LARGE" :items="Align.STRETCH">
+                <section
+                    class="bg-cover bg-center w-26 rounded-lg bg-accent"
+                    :style="`background-image: url('${image}');`"
+                />
 
-            <Column :padding="Padding.SMALL">
-                <Column :gap="Gap.NONE">
-                    <Row :items="Align.CENTER" :wrap="true">
-                        <h2 class="max-w-xs text-3xl font-bold truncate">
-                            {{ name }}
-                        </h2>
+                <Column :padding="Padding.SMALL">
+                    <Column :gap="Gap.SMALL">
+                        <Stack>
+                            <h2 class="max-w-xs text-3xl font-bold truncate">
+                                {{ name }}
+                            </h2>
+                            <h3
+                                className="max-w-xs text-medium text-lg truncate"
+                            >
+                                @{{ username }}
+                            </h3>
+                        </Stack>
 
                         <section class="block md:hidden">
                             <Actions />
                         </section>
-                    </Row>
+                    </Column>
 
-                    <h3 className="max-w-xs text-medium text-lg truncate">
-                        @{{ username }}
-                    </h3>
+                    <p class="hidden md:block max-w-xs truncate">
+                        {{ about }}
+                    </p>
                 </Column>
-            </Column>
+            </Row>
+
+            <section class="hidden md:block">
+                <Actions />
+            </section>
         </Row>
 
-        <section class="hidden md:block">
-            <Actions />
-        </section>
-    </Row>
+        <p class="block md:hidden">{{ about }}</p>
+    </Column>
 </template>
