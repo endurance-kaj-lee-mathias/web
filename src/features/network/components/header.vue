@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TabHeader from "@/components/common/tabs/links/tab-header.vue";
-import TabLink from "@/components/common/tabs/links/tab-link.vue";
+import TabHeader from "@/components/common/tabs/tab-header.vue";
+import TabLink from "@/components/common/tabs/tab-link.vue";
 import Stack from "@/components/common/layout/stack.vue";
 import { Align } from "@/components/common/layout/align";
 </script>

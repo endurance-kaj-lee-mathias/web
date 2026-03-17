@@ -4,7 +4,7 @@ import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import Loading from "@/components/common/states/loading.vue";
-import Row from "@/components/common/tabs/buttons/row.vue";
+import TabHeader from "@/components/common/tabs/tab-header.vue";
 import About from "@/features/profile/components/preferences/about.vue";
 import Address from "@/features/profile/components/preferences/address.vue";
 import Personal from "@/features/profile/components/preferences/personal.vue";
@@ -17,6 +17,9 @@ import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef } from "vue";
 import { ref } from "vue";
 import { watch } from "vue";
+import TabButton from "@/components/common/tabs/tab-button.vue";
+import Stack from "@/components/common/layout/stack.vue";
+import { Align } from "@/components/common/layout/align";
 
 const props = defineProps<{
     modelValue: boolean;
@@ -70,11 +73,30 @@ async function save() {
                 <Loading v-if="loading" />
 
                 <Column v-else :gap="Gap.LARGE">
-                    <Row
-                        :titles="Object.values(Tabs)"
-                        :current="tab"
-                        :navigate="(title: string) => (tab = title as Tabs)"
-                    />
+                    <Stack :align="Align.START">
+                        <TabHeader>
+                            <TabButton
+                                :active="tab === Tabs.PERSONAL"
+                                @click="tab = Tabs.PERSONAL"
+                            >
+                                Personal
+                            </TabButton>
+
+                            <TabButton
+                                :active="tab === Tabs.ADDRESS"
+                                @click="tab = Tabs.ADDRESS"
+                            >
+                                Address
+                            </TabButton>
+
+                            <TabButton
+                                :active="tab === Tabs.ABOUT"
+                                @click="tab = Tabs.ABOUT"
+                            >
+                                About
+                            </TabButton>
+                        </TabHeader>
+                    </Stack>
 
                     <Personal
                         v-if="tab === Tabs.PERSONAL"
