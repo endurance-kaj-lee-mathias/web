@@ -1,7 +1,7 @@
-import type { Message } from "@/features/messages/models/message/message";
-import { getAll } from "@/features/messages/services/messages";
+import type { Message } from "@/features/chat/models/message/message";
+import { getAll } from "@/features/chat/services/messages";
 import { onMounted, ref /* onUnmounted */ } from "vue";
-import type { ConversationId } from "@/features/messages/models/conversation/id";
+import type { ConversationId } from "@/features/chat/models/conversation/id";
 // import { createClient } from "@/lib/socket";
 
 export function useMessages(id: ConversationId) {

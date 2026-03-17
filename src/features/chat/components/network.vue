@@ -14,8 +14,8 @@ import MessagesIcon from "@/components/icons/messages.vue";
 import Grid from "@/components/common/layout/grid.vue";
 import Small from "@/components/common/buttons/small.vue";
 import { Size } from "@/components/common/layout/grid";
-import { start } from "@/features/messages/services/conversations";
-import type { UserId } from "@/features/messages/models/user-id";
+import { start } from "@/features/chat/services/conversations";
+import type { UserId } from "@/features/chat/models/user-id";
 
 const props = defineProps<{ modelValue: boolean }>();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
@@ -46,8 +46,8 @@ async function select(id: UserId) {
         @update:open="$emit('update:modelValue', $event)"
     >
         <DialogContent
-            title="New Chat"
-            description="My Network"
+            title="New Conversation"
+            description="Connections"
             :closeable="true"
         >
             <Boundary ref="boundary">

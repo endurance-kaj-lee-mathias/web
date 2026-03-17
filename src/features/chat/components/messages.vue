@@ -2,9 +2,9 @@
 import Column from "@/components/common/layout/column.vue";
 import Boundary from "@/components/common/states/boundary.vue";
 import Loading from "@/components/common/states/loading.vue";
-import { useMessages } from "@/features/messages/composables/use-messages";
+import { useMessages } from "@/features/chat/composables/use-messages";
 import { useTemplateRef, watchEffect } from "vue";
-import type { ConversationId } from "@/features/messages/models/conversation/id";
+import type { ConversationId } from "@/features/chat/models/conversation/id";
 import Stack from "@/components/common/layout/stack.vue";
 import { relativeDate } from "@/lib/date";
 import Row from "@/components/common/layout/row.vue";

@@ -1,5 +1,5 @@
-import type { Conversation } from "@/features/messages/models/conversation/conversation";
-import { getAll } from "@/features/messages/services/conversations";
+import type { Conversation } from "@/features/chat/models/conversation/conversation";
+import { getAll } from "@/features/chat/services/conversations";
 import { ref } from "vue";
 
 export function useConversations() {

@@ -1,7 +1,7 @@
 import { Env } from "@/lib/env";
 import { client } from "@/lib/auth/client";
-import type { ConversationId } from "@/features/messages/models/conversation/id";
-import type { Message } from "@/features/messages/models/message/message";
+import type { ConversationId } from "@/features/chat/models/conversation/id";
+import type { Message } from "@/features/chat/models/message/message";
 
 const api = client(Env.apiUrl);
 

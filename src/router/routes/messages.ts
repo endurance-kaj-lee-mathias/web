@@ -1,5 +1,5 @@
 import MessagesIcon from "@/components/icons/messages.vue";
-import Messages from "@/features/messages/messages.vue";
+import Chat from "@/features/chat/chat.vue";
 import { Guarded, Visibility, type Route } from "@/router/route";
 
 export const messages: Route[] = [
@@ -8,7 +8,7 @@ export const messages: Route[] = [
         title: "Messages",
         path: "/messages",
         visible: Visibility.ICON,
-        component: Messages,
+        component: Chat,
         auth: { guarded: Guarded.PRIVATE },
     },
 ];

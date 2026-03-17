@@ -5,18 +5,18 @@ import { Gap } from "@/components/common/layout/gap";
 import Boundary from "@/components/common/states/boundary.vue";
 import Loading from "@/components/common/states/loading.vue";
 import Base from "@/components/layout/base.vue";
-import { useConversations } from "@/features/messages/composables/use-conversations";
-import { send as sendMessage } from "@/features/messages/services/messages";
+import { useConversations } from "@/features/chat/composables/use-conversations";
+import { send as sendMessage } from "@/features/chat/services/messages";
 import { ref } from "vue";
 import { useTemplateRef, watchEffect } from "vue";
-import Network from "@/features/messages/components/network.vue";
-import Conversation from "@/features/messages/components/conversation.vue";
-import Messages from "@/features/messages/components/messages.vue";
+import Network from "@/features/chat/components/network.vue";
+import Conversation from "@/features/chat/components/conversation.vue";
+import Messages from "@/features/chat/components/messages.vue";
 import Empty from "@/components/common/states/empty.vue";
 import Button from "@/components/common/buttons/button.vue";
-import Send from "@/features/messages/components/send.vue";
+import Send from "@/features/chat/components/send.vue";
 import AddIcon from "@/components/icons/add.vue";
-import { useConversation } from "@/features/messages/stores/conversation";
+import { useConversation } from "@/features/chat/stores/conversation";
 
 const { conversations, loading, error } = useConversations();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
@@ -53,22 +53,26 @@ async function send(message: string) {
                             <AddIcon /> Conversation
                         </Button>
 
-                        <Conversation
-                            v-for="conversation in conversations"
-                            :id="conversation.id"
-                            :firstName="conversation.firstName"
-                            :lastName="conversation.lastName"
-                            :username="conversation.username"
-                            :image="conversation.image"
-                            @click="store.select(conversation.id)"
-                        />
+                        <section class="bg-light-2 shadow-sm rounded-lg p-1">
+                            <Column>
+                                <Conversation
+                                    v-for="conversation in conversations"
+                                    :id="conversation.id"
+                                    :firstName="conversation.firstName"
+                                    :lastName="conversation.lastName"
+                                    :username="conversation.username"
+                                    :image="conversation.image"
+                                    @click="store.select(conversation.id)"
+                                />
+                            </Column>
+                        </section>
                     </section>
 
                     <section
                         :class="`flex flex-col ${Gap.MEDIUM} h-full min-h-0`"
                     >
                         <section
-                            class="bg-medium-3 rounded-md p-2 h-full min-h-0 overflow-y-scroll"
+                            class="bg-light-2 rounded-md p-2 h-full min-h-0 overflow-y-scroll"
                         >
                             <Empty
                                 v-if="!store.selected"
