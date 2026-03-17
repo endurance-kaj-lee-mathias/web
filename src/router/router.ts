@@ -5,7 +5,9 @@ import { initializeSlashes } from "@/router/slashes";
 import {
     createRouter,
     createWebHistory,
+    type RouteLocationRaw,
     type RouteRecordRaw,
+    type RouteRecordRedirectOption,
 } from "vue-router";
 
 const router = createRouter({
@@ -15,17 +17,28 @@ const router = createRouter({
             path: "/",
             redirect: "/journals",
         },
-        ...getAllRoutes().map(
-            (route: Route): RouteRecordRaw => ({
+        ...getAllRoutes().map((route: Route): RouteRecordRaw => {
+            const base = {
                 path: route.path,
-                component: route.component,
                 meta: {
                     title: route.title,
                     auth: route.auth.guarded,
                     roles: route.auth.roles ?? [],
                 },
-            }),
-        ),
+            };
+
+            if (route.redirect) {
+                return {
+                    ...base,
+                    redirect: route.redirect,
+                };
+            }
+
+            return {
+                ...base,
+                component: route.component,
+            };
+        }),
     ],
 });
 

@@ -9,12 +9,15 @@ import { useTemplateRef, watchEffect } from "vue";
 import Information from "@/features/journals/components/information.vue";
 import { getParam } from "@/lib/params";
 import { getFullName } from "@/lib/name";
-import Link from "@/components/common/link.vue";
 import BackIcon from "@/components/icons/back.vue";
 import Small from "@/components/common/buttons/small.vue";
-import Row from "@/components/common/layout/row.vue";
-import Introduction from "../profile/components/introduction.vue";
+import TabLink from "@/components/common/tabs/links/link.vue";
+import TabRow from "@/components/common/tabs/links/row.vue";
+import Introduction from "@/features/journals/components/introduction.vue";
 import { Gap } from "@/components/common/layout/gap";
+import { getTabs } from "@/features/journals/tabs";
+import Row from "@/components/common/layout/row.vue";
+import { Align } from "@/components/common/layout/align";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const username: string = getParam("username");
@@ -25,11 +28,7 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
 <template>
     <Base>
         <Column>
-            <Row>
-                <Small action="/journals">
-                    <Row> <BackIcon /> Back To Journals</Row>
-                </Small>
-            </Row>
+            <TabRow :tabs="Object.values(getTabs(username))" />
 
             <Boundary ref="boundary">
                 <Loading v-if="loading" />
@@ -52,8 +51,6 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                         :username="journal.profile.username"
                         :introduction="journal.profile.introduction"
                     />
-
-                    <p>Tabs with Stress and Mood here</p>
                 </Column>
             </Boundary>
         </Column>
