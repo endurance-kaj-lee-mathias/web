@@ -76,6 +76,11 @@ const options = computed<ChartOptions<"bar">>(() => ({
             },
         },
     },
+    onHover: (event, elements) => {
+        const target = event.native?.target as HTMLElement | null;
+        if (!target) return;
+        target.style.cursor = elements.length ? "pointer" : "default";
+    },
     onClick: (_event, elements) => {
         const [first] = elements;
         if (!first || !props.select) return;
