@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import Button from "@/components/common/buttons/button.vue";
 import Number from "@/components/common/inputs/number.vue";
-import { Align } from "@/components/common/layout/align";
-import { Gap } from "@/components/common/layout/gap";
 import { Justify } from "@/components/common/layout/justify";
 import Row from "@/components/common/layout/row.vue";
 import Next from "@/components/icons/next.vue";
@@ -27,16 +25,8 @@ function previous() {
 }
 </script>
 <template>
-    <section
-        :class="`flex flex-col sm:flex-row sm:items-end justify-between ${Gap.MEDIUM}`"
-    >
-        <section class="w-20">
-            <Number v-model="week" />
-        </section>
-
-        <Row>
-            <Button @click="previous"> <Previous /> </Button>
-            <Button @click="next"> <Next /> </Button>
-        </Row>
-    </section>
+    <Row :justify="Justify.END">
+        <Button @click="previous"> <Previous /> </Button>
+        <Button @click="next"> <Next /> </Button>
+    </Row>
 </template>

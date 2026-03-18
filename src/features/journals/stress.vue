@@ -24,7 +24,7 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                 <Loading v-if="loading" />
                 <Empty v-else-if="!journal" message="No journal found!" />
 
-                <Column v-else :gap="Gap.EXTRA_LARGE">
+                <Column v-else>
                     <Header :profile="journal.profile" />
                 </Column>
             </Boundary>

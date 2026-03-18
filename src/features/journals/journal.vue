@@ -39,7 +39,7 @@ function select(value: Mood) {
                 <Loading v-if="loading" />
                 <Empty v-else-if="!journal" message="No journal found!" />
 
-                <Column v-else :gap="Gap.EXTRA_LARGE">
+                <Column v-else>
                     <Header :profile="journal.profile" />
 
                     <section
@@ -53,11 +53,6 @@ function select(value: Mood) {
                     </section>
 
                     <Column v-else>
-                        <Pagination
-                            :pagination="journal.moodEntries.pagination"
-                            v-model="page"
-                        />
-
                         <section
                             class="bg-light-2 shadow-sm rounded-lg p-2 min-h-64"
                         >
@@ -66,6 +61,11 @@ function select(value: Mood) {
                                 :select="select"
                             />
                         </section>
+
+                        <Pagination
+                            :pagination="journal.moodEntries.pagination"
+                            v-model="page"
+                        />
 
                         <MoodDetails
                             v-model="details"
