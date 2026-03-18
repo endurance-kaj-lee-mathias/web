@@ -41,8 +41,9 @@ const data = computed(() => {
     return {
         labels: sorted.value.map((e) =>
             new Date(e.date).toLocaleDateString("en-US", {
-                month: "long",
+                weekday: "short",
                 day: "numeric",
+                month: "numeric",
             }),
         ),
         datasets: [
