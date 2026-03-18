@@ -79,7 +79,11 @@ async function send(message: string) {
                                 message="No conversation selected"
                             />
 
-                            <Messages v-else :conversation="store.selected" />
+                            <Messages
+                                v-else
+                                :key="store.selected"
+                                :conversation="store.selected"
+                            />
                         </section>
 
                         <Send :send="send" />

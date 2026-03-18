@@ -16,6 +16,7 @@ import Small from "@/components/common/buttons/small.vue";
 import { Size } from "@/components/common/layout/grid";
 import { start } from "@/features/chat/services/conversations";
 import type { UserId } from "@/features/chat/models/user-id";
+import { SmallStyle } from "@/components/common/buttons/style";
 
 const props = defineProps<{ modelValue: boolean }>();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
@@ -82,7 +83,7 @@ async function select(id: UserId) {
                                                     connection.id as string as UserId,
                                                 )
                                         "
-                                        :alternative="true"
+                                        :style="SmallStyle.ALTERNATE"
                                     >
                                         <MessagesIcon />
                                     </Small>
