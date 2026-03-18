@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Big from "@/components/common/buttons/big.vue";
 import Card from "@/components/common/card/card.vue";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
@@ -6,9 +7,9 @@ import Grid from "@/components/common/layout/grid.vue";
 import { Height } from "@/components/common/layout/height";
 import Row from "@/components/common/layout/row.vue";
 import Boundary from "@/components/common/states/boundary.vue";
-import Empty from "@/components/common/states/empty.vue";
 import Loading from "@/components/common/states/loading.vue";
 import ClockIcon from "@/components/icons/clock.vue";
+import PlusIcon from "@/components/icons/plus.vue";
 import SadIcon from "@/components/icons/sad.vue";
 import SmileIcon from "@/components/icons/smile.vue";
 import Base from "@/components/layout/base.vue";
@@ -27,10 +28,11 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
         <Column>
             <Boundary ref="boundary">
                 <Loading v-if="loading || !veterans" />
-                <Empty
-                    v-else-if="veterans.length <= 0"
-                    message="No journals found!"
-                />
+                <Grid v-else-if="veterans.length <= 0">
+                    <Big action="/network/connections">
+                        <PlusIcon />
+                    </Big>
+                </Grid>
 
                 <Grid v-else>
                     <Card
@@ -62,6 +64,10 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                             No statistics yet
                         </Row>
                     </Card>
+
+                    <Big>
+                        <PlusIcon />
+                    </Big>
                 </Grid>
             </Boundary>
         </Column>
