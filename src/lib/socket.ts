@@ -1,36 +1,79 @@
 import { Env } from "@/lib/env";
+import { getToken, waitForKeycloak } from "@/lib/auth/token";
 
 type MessageHandler = (data: unknown) => void;
 
-export function createClient() {
-    const socket = new WebSocket(`${Env.wsUrl}/ws`);
+export async function createClient(endpoint: string) {
+    await waitForKeycloak();
+
+    const token = await getToken();
+    if (!token) throw new Error("No auth token available");
+
+    const socket = new WebSocket(`${Env.wsUrl}/${endpoint}`, [token]);
+
+    const queue: string[] = [];
+
+    function flushQueue() {
+        while (queue.length && socket.readyState === WebSocket.OPEN) {
+            socket.send(queue.shift()!);
+        }
+    }
+
+    socket.addEventListener("open", flushQueue);
 
     function send(payload: object) {
         const data = JSON.stringify(payload);
 
         if (socket.readyState === WebSocket.OPEN) {
             socket.send(data);
-            return;
+        } else {
+            queue.push(data);
+        }
+    }
+
+    const handlers = new Map<string, Set<MessageHandler>>();
+
+    socket.addEventListener("message", (event) => {
+        let message;
+
+        try {
+            message = JSON.parse(event.data);
+        } catch {
+            throw new Error("Could not parse incoming message");
         }
 
-        socket.addEventListener("open", () => socket.send(data), {
-            once: true,
-        });
+        const channelHandlers = handlers.get(message.channel);
+        rawHandlers.forEach((h) => h(message));
+
+        if (!channelHandlers) return;
+        channelHandlers.forEach((h) => h(message.payload));
+    });
+
+    const rawHandlers = new Set<MessageHandler>();
+
+    function onMessage(handler: MessageHandler) {
+        rawHandlers.add(handler);
+        return () => rawHandlers.delete(handler);
     }
 
     function subscribe(channel: string, handler: MessageHandler) {
-        send({ type: "subscribe", channel });
+        if (!handlers.has(channel)) {
+            handlers.set(channel, new Set());
+            send({ type: "subscribe", channel });
+        }
 
-        const listener = (event: MessageEvent) => {
-            const msg = JSON.parse(event.data);
-            if (msg.channel === channel) handler(msg.payload);
-        };
-
-        socket.addEventListener("message", listener);
+        handlers.get(channel)!.add(handler);
 
         return () => {
-            send({ type: "unsubscribe", channel });
-            socket.removeEventListener("message", listener);
+            const set = handlers.get(channel);
+            if (!set) return;
+
+            set.delete(handler);
+
+            if (set.size === 0) {
+                handlers.delete(channel);
+                send({ type: "unsubscribe", channel });
+            }
         };
     }
 
@@ -38,5 +81,5 @@ export function createClient() {
         socket.close();
     }
 
-    return { subscribe, close };
+    return { subscribe, onMessage, close };
 }

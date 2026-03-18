@@ -76,7 +76,7 @@ async function select(id: UserId) {
 
                                 <template v-slot:options>
                                     <Small
-                                        :click="
+                                        :action="
                                             () =>
                                                 select(
                                                     connection.id as string as UserId,
