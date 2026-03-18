@@ -28,7 +28,7 @@ ChartJS.register(
 
 const props = defineProps<{
     entries: Mood[];
-    select: (date: Date) => void;
+    select: (mood: Mood) => void;
 }>();
 
 const sorted = computed(() =>
@@ -41,7 +41,7 @@ const data = computed(() => {
     return {
         labels: sorted.value.map((e) =>
             new Date(e.date).toLocaleDateString("en-US", {
-                month: "short",
+                month: "long",
                 day: "numeric",
             }),
         ),
@@ -85,11 +85,10 @@ const options = computed<ChartOptions<"bar">>(() => ({
         const [first] = elements;
         if (!first || !props.select) return;
 
-        const entry = sorted.value[first.index];
-        if (!entry) return;
+        const mood = sorted.value[first.index];
+        if (!mood) return;
 
-        const date = new Date(entry.date);
-        props.select(date);
+        props.select(mood);
     },
 }));
 </script>

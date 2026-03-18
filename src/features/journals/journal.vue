@@ -13,12 +13,23 @@ import Bar from "@/features/journals/components/bar.vue";
 import Pagination from "@/features/journals/components/pagination.vue";
 import { Justify } from "@/components/common/layout/justify";
 import { Align } from "@/components/common/layout/align";
+import MoodDetails from "@/features/journals/components/mood-details.vue";
+import type { Mood } from "@/features/journals/models/journal/mood";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const username: string = getParam("username");
 const { journal, loading, error } = useJournal(username);
-const page = ref(1);
 watchEffect(() => error.value && boundary.value?.capture(error.value));
+
+const page = ref(1);
+const details = ref(false);
+const mood = ref(null as Mood | null);
+
+function select(value: Mood) {
+    if (details.value) return;
+    mood.value = value;
+    details.value = true;
+}
 </script>
 
 <template>
@@ -52,13 +63,15 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                         >
                             <Bar
                                 :entries="journal.moodEntries.data"
-                                :select="
-                                    (date: Date) => {
-                                        console.log(date);
-                                    }
-                                "
+                                :select="select"
                             />
                         </section>
+
+                        <MoodDetails
+                            v-model="details"
+                            v-if="mood"
+                            :mood="mood"
+                        />
                     </Column>
                 </Column>
             </Boundary>

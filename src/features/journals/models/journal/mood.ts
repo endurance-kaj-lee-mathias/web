@@ -1,8 +1,6 @@
 export interface Mood {
     id: string;
-    date: string;
+    date: Date;
     moodScore: number;
     notes?: string;
-    createdAt: string;
-    updatedAt: string;
 }
