@@ -18,7 +18,7 @@ import Send from "@/features/chat/components/send.vue";
 import AddIcon from "@/components/icons/add.vue";
 import { useConversation } from "@/features/chat/stores/conversation";
 
-const { conversations, loading, error } = useConversations();
+const { conversations, loading, error, fetch } = useConversations();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 const network = ref(false);
@@ -41,7 +41,15 @@ async function send(message: string) {
             <Loading v-if="loading || !conversations" />
 
             <Column v-else>
-                <Network v-model="network" />
+                <Network
+                    v-model="network"
+                    @selected="
+                        async () => {
+                            await fetch();
+                            network = false;
+                        }
+                    "
+                />
 
                 <section
                     :class="`grid sm:grid-cols-[200px_1fr] sm:h-86 h-screen ${Gap.MEDIUM} `"
@@ -53,7 +61,10 @@ async function send(message: string) {
                             <AddIcon /> Conversation
                         </Button>
 
-                        <section class="bg-light-2 shadow-sm rounded-lg p-1">
+                        <section
+                            v-if="conversations.length > 0"
+                            class="bg-light-2 shadow-sm rounded-lg p-1"
+                        >
                             <Column>
                                 <Conversation
                                     v-for="conversation in conversations"

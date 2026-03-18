@@ -21,5 +21,5 @@ export function useConversations() {
     }
 
     fetch();
-    return { conversations, loading, error };
+    return { conversations, loading, error, fetch };
 }

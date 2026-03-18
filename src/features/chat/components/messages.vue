@@ -11,6 +11,7 @@ import Row from "@/components/common/layout/row.vue";
 import { Justify } from "@/components/common/layout/justify";
 import { Gap } from "@/components/common/layout/gap";
 import { watch } from "vue";
+import Empty from "@/components/common/states/empty.vue";
 
 const props = defineProps<{ conversation: ConversationId }>();
 const { messages, loading, error } = useMessages(props.conversation);
@@ -47,7 +48,8 @@ watchEffect(() => {
 <template>
     <Boundary ref="boundary">
         <Loading v-if="loading || !messages" />
-        <section ref="container" v-else>
+
+        <section v-else-if="messages.length > 0" ref="container">
             <Column :gap="Gap.LARGE">
                 <Stack v-for="message in messages">
                     <Row :justify="Justify.BETWEEN">
@@ -65,5 +67,7 @@ watchEffect(() => {
                 </Stack>
             </Column>
         </section>
+
+        <Empty v-else message="No messages yet" />
     </Boundary>
 </template>
