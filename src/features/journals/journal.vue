@@ -11,7 +11,7 @@ import Bar from "@/features/journals/components/bar.vue";
 import Pagination from "@/features/journals/components/pagination.vue";
 import { Justify } from "@/components/common/layout/justify";
 import { Align } from "@/components/common/layout/align";
-import MoodDetails from "@/features/journals/components/mood-details.vue";
+import Details from "@/features/journals/components/details.vue";
 import Information from "@/features/journals/components/information.vue";
 import type { Day } from "@/features/journals/models/journal/day";
 import { getFullName } from "@/lib/name";
@@ -24,11 +24,11 @@ const { journal, loading, error } = useJournal(username, () => week.value);
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 
 const details = ref(false);
-const mood = ref(null as Day | null);
+const day = ref(null as Day | null);
 
 function select(value: Day) {
     if (details.value) return;
-    mood.value = value;
+    day.value = value;
     details.value = true;
 }
 </script>
@@ -77,11 +77,7 @@ function select(value: Day) {
                             />
                         </section>
 
-                        <MoodDetails
-                            v-model="details"
-                            v-if="mood"
-                            :mood="mood"
-                        />
+                        <Details v-model="details" v-if="day" :day="day" />
                     </Column>
                 </Column>
             </Boundary>

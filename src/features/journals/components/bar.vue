@@ -41,6 +41,7 @@ const data = computed(() => {
     return {
         labels: sorted.value.map((day: Day) =>
             new Date(day.date).toLocaleDateString("en-GB", {
+                weekday: "short",
                 day: "numeric",
                 month: "numeric",
             }),
@@ -57,8 +58,8 @@ const data = computed(() => {
             {
                 label: "Stress",
                 data: sorted.value.map((e) => e.avgStress),
-                backgroundColor: "oklch(0.5341 0.1653 242.79)",
-                borderColor: "oklch(0.5341 0.1653 242.79)",
+                backgroundColor: "oklch(0.5341 0.0429 19.61)",
+                borderColor: "oklch(0.5341 0.0429 19.61)",
                 borderWidth: 1,
                 borderRadius: 4,
             },

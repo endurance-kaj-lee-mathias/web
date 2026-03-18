@@ -6,22 +6,26 @@ import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import { Justify } from "@/components/common/layout/justify";
 import Boundary from "@/components/common/states/boundary.vue";
-import type { Mood } from "@/features/journals/models/journal/mood";
 import { useTemplateRef } from "vue";
 import { getFace } from "@/features/journals/lib/faces";
+import type { Day } from "@/features/journals/models/journal/day";
+import Grid from "@/components/common/layout/grid.vue";
+import Score from "./score.vue";
+import { Size } from "@/components/common/layout/grid";
+import Empty from "@/components/common/states/empty.vue";
 
 const props = defineProps<{
     modelValue: boolean;
-    mood: Mood;
+    day: Day;
 }>();
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const emit = defineEmits(["update:modelValue"]);
 
-const date = new Date(props.mood.date).toLocaleDateString("en-US", {
+const date = new Date(props.day.date).toLocaleDateString("en-GB", {
     weekday: "long",
     day: "numeric",
-    month: "long",
+    month: "numeric",
 });
 </script>
 
@@ -33,23 +37,31 @@ const date = new Date(props.mood.date).toLocaleDateString("en-US", {
         <DialogContent title="Mood Entry" :description="date" :closeable="true">
             <Boundary ref="boundary">
                 <Column :gap="Gap.LARGE">
-                    <label class="flex flex-col">
-                        <span class="text-medium-2">Mood</span>
-                        <section
-                            :class="`bg-light-2 shadow-sm rounded-lg p-2 min-h-36 flex flex-col ${Justify.CENTER} ${Align.CENTER} ${Gap.MEDIUM}`"
-                        >
+                    <Grid :size="Size.SMALL">
+                        <Score label="Mood">
                             <img
-                                :src="`/images/faces/${getFace(mood.moodScore)}.svg`"
+                                :src="`/images/faces/${getFace(day.avgMood)}.svg`"
                                 class="w-12"
                             />
                             <p class="text-lg font-bold text-medium">
-                                {{ mood.moodScore }} / 10
+                                {{ Math.round(day.avgMood) }} / 10
                             </p>
-                        </section>
-                    </label>
+                        </Score>
+
+                        <Score label="Stress">
+                            <img src="/images/graph.svg" class="w-12" />
+                            <p class="text-lg font-bold text-medium">
+                                {{
+                                    day.avgStress
+                                        ? `${Math.round(day.avgStress)}/10`
+                                        : "No stress data found"
+                                }}
+                            </p>
+                        </Score>
+                    </Grid>
 
                     <Box label="Note" :disabled="true">
-                        {{ mood.notes ?? "No note found!" }}
+                        {{ day.notes ?? "No note found!" }}
                     </Box>
                 </Column>
             </Boundary>

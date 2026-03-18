@@ -13,5 +13,5 @@ const faces = [
 ];
 
 export function getFace(score: number) {
-    return faces[score];
+    return faces[Math.round(score)];
 }
