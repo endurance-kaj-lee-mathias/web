@@ -38,7 +38,6 @@ export function useMessages(id: ConversationId) {
     onMounted(async () => {
         try {
             await fetch();
-
             socket.value = await createClient(`ws/${id}`);
             unsubscribe = socket.value.onMessage(handleIncoming);
         } catch (err) {

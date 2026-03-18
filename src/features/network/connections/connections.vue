@@ -17,10 +17,15 @@ import Search from "@/features/network/connections/components/search.vue";
 import { useConnections } from "@/features/network/connections/composables/use-connections";
 import { add as addVeteran } from "@/features/network/connections/services/requests";
 import { remove as removeVeteran } from "@/features/network/connections/services/connections";
-import { getFullName } from "@/lib/name";
+import { getFullName, getCapitalized } from "@/lib/name";
 import { ref, useTemplateRef, watchEffect } from "vue";
 import Privacy from "@/features/network/connections/components/privacy/privacy.vue";
 import type { Connection } from "@/features/network/connections/models/connection";
+import Row from "@/components/common/layout/row.vue";
+import AtIcon from "@/components/icons/at.vue";
+import TagIcon from "@/components/icons/tag.vue";
+import { Gap } from "@/components/common/layout/gap";
+import { SmallStyle } from "@/components/common/buttons/style";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { connections, loading, error, fetch } = useConnections();
@@ -98,14 +103,30 @@ async function remove(id: ConnectionId) {
                             :image="veteran.image"
                             :options="true"
                         >
-                            <p>@{{ veteran.username }}</p>
+                            <Row>
+                                <Row :gap="Gap.SMALL">
+                                    <AtIcon />
+                                    {{ veteran.username }}
+                                </Row>
+
+                                <Row :gap="Gap.SMALL">
+                                    <TagIcon />
+                                    {{ getCapitalized(veteran.role) }}
+                                </Row>
+                            </Row>
 
                             <template v-slot:options>
-                                <Small :action="() => privacy(veteran)">
+                                <Small
+                                    :action="() => privacy(veteran)"
+                                    :style="SmallStyle.ALTERNATE"
+                                >
                                     <VisibilityIcon />
                                 </Small>
 
-                                <Small :action="() => remove(veteran.id)">
+                                <Small
+                                    :action="() => remove(veteran.id)"
+                                    :style="SmallStyle.ALTERNATE"
+                                >
                                     <RemoveIcon />
                                 </Small>
                             </template>

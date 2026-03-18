@@ -1,4 +1,5 @@
 import type { ConnectionId } from "@/features/network/models/id";
+import type { Role } from "@/features/network/connections/models/role";
 
 export interface Connection {
     id: ConnectionId;
@@ -7,4 +8,5 @@ export interface Connection {
     lastName: string;
     username: string;
     image: string;
+    role: Role;
 }

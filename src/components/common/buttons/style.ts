@@ -5,4 +5,5 @@ export enum Style {
 
 export enum SmallStyle {
     DEFAULT = "bg-light-2 shadow-sm text-medium hover:bg-accent hover:text-light",
+    ALTERNATE = "text-light hover:bg-light-2 hover:text-accent",
 }

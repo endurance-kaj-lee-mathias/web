@@ -2,21 +2,14 @@
 import Column from "@/components/common/layout/column.vue";
 import Boundary from "@/components/common/states/boundary.vue";
 import Loading from "@/components/common/states/loading.vue";
-<<<<<<< HEAD:src/features/chat/components/messages.vue
 import { useMessages } from "@/features/chat/composables/use-messages";
-import { useTemplateRef, watchEffect } from "vue";
+import { ref, useTemplateRef, watchEffect, nextTick } from "vue";
 import type { ConversationId } from "@/features/chat/models/conversation/id";
-=======
-import { useMessages } from "@/features/messages/composables/use-messages";
-import { nextTick, useTemplateRef, watchEffect } from "vue";
-import type { ConversationId } from "@/features/messages/models/conversation/id";
->>>>>>> origin/main:src/features/messages/components/messages.vue
 import Stack from "@/components/common/layout/stack.vue";
 import { relativeDate } from "@/lib/date";
 import Row from "@/components/common/layout/row.vue";
 import { Justify } from "@/components/common/layout/justify";
 import { Gap } from "@/components/common/layout/gap";
-import { ref } from "vue";
 import { watch } from "vue";
 
 const props = defineProps<{ conversation: ConversationId }>();

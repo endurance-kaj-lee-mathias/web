@@ -13,9 +13,9 @@ import SadIcon from "@/components/icons/sad.vue";
 import SmileIcon from "@/components/icons/smile.vue";
 import Base from "@/components/layout/base.vue";
 import { useVeterans } from "@/features/journals/composables/use-veterans";
+import { relativeDate } from "@/lib/date";
 import { getFullName } from "@/lib/name";
 import { useTemplateRef, watchEffect } from "vue";
-import { relativeDate } from "@/lib/date";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { veterans, loading, error } = useVeterans();
@@ -29,7 +29,7 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                 <Loading v-if="loading || !veterans" />
                 <Empty
                     v-else-if="veterans.length <= 0"
-                    message="No veterans found!"
+                    message="No journals found!"
                 />
 
                 <Grid v-else>
