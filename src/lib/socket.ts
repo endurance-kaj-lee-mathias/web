@@ -3,13 +3,13 @@ import { getToken, waitForKeycloak } from "@/lib/auth/token";
 
 type MessageHandler = (data: unknown) => void;
 
-export async function createClient() {
+export async function createClient(endpoint: string) {
     await waitForKeycloak();
 
     const token = await getToken();
     if (!token) throw new Error("No auth token available");
 
-    const socket = new WebSocket(`${Env.wsUrl}/ws`, [token]);
+    const socket = new WebSocket(`${Env.wsUrl}/${endpoint}`, [token]);
 
     const queue: string[] = [];
 
@@ -34,20 +34,27 @@ export async function createClient() {
     const handlers = new Map<string, Set<MessageHandler>>();
 
     socket.addEventListener("message", (event) => {
-        let msg;
+        let message;
+
         try {
-            msg = JSON.parse(event.data);
+            message = JSON.parse(event.data);
         } catch {
-            return;
+            throw new Error("Could not parse incoming message");
         }
 
-        const channelHandlers = handlers.get(msg.channel);
+        const channelHandlers = handlers.get(message.channel);
+        rawHandlers.forEach((h) => h(message));
+
         if (!channelHandlers) return;
-
-        for (const h of channelHandlers) {
-            h(msg.payload);
-        }
+        channelHandlers.forEach((h) => h(message.payload));
     });
+
+    const rawHandlers = new Set<MessageHandler>();
+
+    function onMessage(handler: MessageHandler) {
+        rawHandlers.add(handler);
+        return () => rawHandlers.delete(handler);
+    }
 
     function subscribe(channel: string, handler: MessageHandler) {
         if (!handlers.has(channel)) {
@@ -74,9 +81,5 @@ export async function createClient() {
         socket.close();
     }
 
-    socket.addEventListener("close", () => {
-        console.warn("WebSocket closed");
-    });
-
-    return { subscribe, close };
+    return { subscribe, onMessage, close };
 }

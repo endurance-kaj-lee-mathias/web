@@ -39,11 +39,8 @@ export function useMessages(id: ConversationId) {
         try {
             await fetch();
 
-            socket.value = await createClient();
-            unsubscribe = socket.value.subscribe(
-                `conversation:${id}`,
-                handleIncoming,
-            );
+            socket.value = await createClient(`ws/${id}`);
+            unsubscribe = socket.value.onMessage(handleIncoming);
         } catch (err) {
             if (err instanceof Error) error.value = err;
         }
