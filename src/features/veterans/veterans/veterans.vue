@@ -20,8 +20,8 @@ import { add as addVeteran } from "@/features/veterans/veterans/services/request
 import { remove as removeVeteran } from "@/features/veterans/veterans/services/veterans";
 import { getFullName } from "@/lib/name";
 import { ref, useTemplateRef, watchEffect } from "vue";
-import Privacy from "./components/privacy/privacy.vue";
-import type { Veteran } from "./models/veteran";
+import Privacy from "@/features/veterans/veterans/components/privacy/privacy.vue";
+import type { Veteran } from "@/features/veterans/veterans/models/veteran";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { veterans, loading, error, fetch } = useVeterans();

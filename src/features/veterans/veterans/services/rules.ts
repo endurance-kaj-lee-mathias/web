@@ -1,8 +1,11 @@
 import { client } from "@/lib/auth/client";
 import { Env } from "@/lib/env";
-import type { Effect, Resource, Rule } from "../models/rule";
-import type { VeteranId } from "../../models/id";
-import type { RuleId } from "../models/id";
+import type {
+    Effect,
+    Resource,
+    Rule,
+} from "@/features/veterans/veterans/models/rule";
+import type { VeteranId } from "@/features/veterans/models/id";
 
 const api = client(Env.apiUrl);
 

@@ -4,10 +4,14 @@ import router from "@/router/router";
 import "@/styles.css";
 import { vueKeycloak } from "@josempgon/vue-keycloak";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
 
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 createApp(app)
     .use(router)
+    .use(pinia)
     .use(vueKeycloak, {
         config,
         initOptions: {
@@ -19,5 +23,4 @@ createApp(app)
             checkLoginIframe: false,
         },
     })
-    .use(createPinia())
     .mount("#app");

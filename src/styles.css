@@ -12,3 +12,14 @@
     --color-accent: oklch(0.5341 0.0429 161.22);
     --color-accent-2: oklch(0.49 0.0429 161.22);
 }
+
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}

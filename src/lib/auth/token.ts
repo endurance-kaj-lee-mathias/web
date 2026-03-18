@@ -16,25 +16,19 @@ export function waitForKeycloak(): Promise<void> {
     });
 }
 
-export async function getToken(): Promise<string | undefined> {
+export async function getToken(): Promise<string> {
     const { keycloak, isAuthenticated, isPending } = useKeycloak();
 
-    if (isPending.value) return undefined;
-    if (!isAuthenticated.value || !keycloak.value) return undefined;
-
-    if (keycloak.value.refreshToken) {
-        try {
-            return await getKeycloakToken();
-        } catch {
-            keycloak.value.login();
-            return undefined;
-        }
+    if (isPending.value) throw new Error("Keycloak not ready");
+    if (!isAuthenticated.value || !keycloak.value) {
+        keycloak.value?.login();
+        throw new Error("Not authenticated");
     }
 
-    if (keycloak.value.token && !keycloak.value.isTokenExpired()) {
-        return keycloak.value.token;
+    try {
+        return await getKeycloakToken();
+    } catch {
+        keycloak.value.login();
+        throw new Error("Token refresh failed");
     }
-
-    keycloak.value.login();
-    return undefined;
 }
