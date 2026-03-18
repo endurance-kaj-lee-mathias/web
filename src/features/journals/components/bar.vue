@@ -11,7 +11,7 @@ import {
     type TooltipItem,
     type ChartOptions,
 } from "chart.js";
-import type { Mood } from "@/features/journals/models/journal/mood";
+import type { Day } from "@/features/journals/models/journal/day";
 import { computed } from "vue";
 
 ChartJS.defaults.font.family = "Nunito";
@@ -27,8 +27,8 @@ ChartJS.register(
 );
 
 const props = defineProps<{
-    entries: Mood[];
-    select: (mood: Mood) => void;
+    entries: Day[];
+    select: (day: Day) => void;
 }>();
 
 const sorted = computed(() =>
@@ -39,19 +39,26 @@ const sorted = computed(() =>
 
 const data = computed(() => {
     return {
-        labels: sorted.value.map((e) =>
-            new Date(e.date).toLocaleDateString("en-US", {
-                weekday: "short",
+        labels: sorted.value.map((day: Day) =>
+            new Date(day.date).toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "numeric",
             }),
         ),
         datasets: [
             {
-                label: "Mood Score",
-                data: sorted.value.map((e) => e.moodScore),
+                label: "Mood",
+                data: sorted.value.map((e) => e.avgMood),
                 backgroundColor: "oklch(0.5341 0.0429 161.22)",
                 borderColor: "oklch(0.5341 0.0429 161.22)",
+                borderWidth: 1,
+                borderRadius: 4,
+            },
+            {
+                label: "Stress",
+                data: sorted.value.map((e) => e.avgStress),
+                backgroundColor: "oklch(0.5341 0.1653 242.79)",
+                borderColor: "oklch(0.5341 0.1653 242.79)",
                 borderWidth: 1,
                 borderRadius: 4,
             },
@@ -69,7 +76,6 @@ const options = computed<ChartOptions<"bar">>(() => ({
         },
     },
     plugins: {
-        legend: { display: false },
         tooltip: {
             callbacks: {
                 label: (context: TooltipItem<"bar">) =>
@@ -95,5 +101,5 @@ const options = computed<ChartOptions<"bar">>(() => ({
 </script>
 
 <template>
-    <Bar id="mood-entries" :options="options" :data="data" />
+    <Bar id="stress-and-mood" :options="options" :data="data" />
 </template>

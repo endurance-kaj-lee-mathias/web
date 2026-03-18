@@ -7,25 +7,26 @@ import Base from "@/components/layout/base.vue";
 import { useJournal } from "@/features/journals/composables/use-journal";
 import { ref, useTemplateRef, watchEffect } from "vue";
 import { getParam } from "@/lib/params";
-import { Gap } from "@/components/common/layout/gap";
-import Header from "@/features/journals/components/header.vue";
 import Bar from "@/features/journals/components/bar.vue";
 import Pagination from "@/features/journals/components/pagination.vue";
 import { Justify } from "@/components/common/layout/justify";
 import { Align } from "@/components/common/layout/align";
 import MoodDetails from "@/features/journals/components/mood-details.vue";
-import type { Mood } from "@/features/journals/models/journal/mood";
+import Information from "@/features/journals/components/information.vue";
+import type { Day } from "@/features/journals/models/journal/day";
+import { getFullName } from "@/lib/name";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const username: string = getParam("username");
-const { journal, loading, error } = useJournal(username);
+const week = ref(0);
+
+const { journal, loading, error } = useJournal(username, () => week.value);
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 
-const page = ref(1);
 const details = ref(false);
-const mood = ref(null as Mood | null);
+const mood = ref(null as Day | null);
 
-function select(value: Mood) {
+function select(value: Day) {
     if (details.value) return;
     mood.value = value;
     details.value = true;
@@ -40,32 +41,41 @@ function select(value: Mood) {
                 <Empty v-else-if="!journal" message="No journal found!" />
 
                 <Column v-else>
-                    <Header :profile="journal.profile" />
+                    <Information
+                        :name="
+                            getFullName(
+                                journal.profile.firstName,
+                                journal.profile.lastName,
+                            )
+                        "
+                        :username="journal.profile.username"
+                        :about="journal.profile.about"
+                        :image="journal.profile.image"
+                    />
+
+                    <Pagination
+                        :max="journal.weekly.totalWeeks"
+                        v-model="week"
+                    />
 
                     <section
                         v-if="
-                            !journal.moodEntries ||
-                            journal.moodEntries.data.length <= 0
+                            !journal.weekly ||
+                            !journal.weekly.days ||
+                            journal.weekly.days.length <= 0
                         "
-                        :class="`bg-light-2 shadow-sm rounded-lg p-1 min-h-64 flex ${Justify.CENTER} ${Align.CENTER}`"
+                        :class="`bg-light-2 shadow-sm rounded-lg p-1 min-h-96 flex ${Justify.CENTER} ${Align.CENTER}`"
                     >
-                        <Empty message="No mood data found" />
+                        <Empty message="No data found" />
                     </section>
 
                     <Column v-else>
-                        <section
-                            class="bg-light-2 shadow-sm rounded-lg p-2 min-h-64"
-                        >
+                        <section class="bg-light-2 shadow-sm rounded-lg p-2">
                             <Bar
-                                :entries="journal.moodEntries.data"
+                                :entries="journal.weekly.days"
                                 :select="select"
                             />
                         </section>
-
-                        <Pagination
-                            :pagination="journal.moodEntries.pagination"
-                            v-model="page"
-                        />
 
                         <MoodDetails
                             v-model="details"

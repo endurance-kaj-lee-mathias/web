@@ -1,10 +1,10 @@
 import { usePolling } from "@/composables/use-polling";
 import { get } from "@/features/journals/services/veterans";
 import { POLLING_RATE } from "@/lib/polling";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { Journal } from "@/features/journals/models/journal/journal";
 
-export function useJournal(username: string) {
+export function useJournal(username: string, week: () => number) {
     const journal = ref(null as Journal | null);
     const loading = ref(false);
     const error = ref<Error | null>(null);
@@ -12,7 +12,7 @@ export function useJournal(username: string) {
     async function fetch(initial = false) {
         try {
             if (initial) loading.value = true;
-            journal.value = await get(username);
+            journal.value = await get(username, week());
             error.value = null;
         } catch (err) {
             if (!(err instanceof Error)) return;
@@ -24,5 +24,6 @@ export function useJournal(username: string) {
     }
 
     usePolling(fetch, POLLING_RATE);
+    watch(week, () => fetch());
     return { journal, loading, error, fetch };
 }

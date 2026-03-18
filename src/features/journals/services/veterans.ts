@@ -14,10 +14,10 @@ export async function getAll(): Promise<Veteran[]> {
     }
 }
 
-export async function get(username: string): Promise<Journal> {
+export async function get(username: string, week: number): Promise<Journal> {
     try {
         const { data } = await api.get<Journal>(
-            `/users/journal/${username.replace("@", "")}`,
+            `/users/journal/${username.replace("@", "")}?week=${week}`,
         );
         return data;
     } catch {
