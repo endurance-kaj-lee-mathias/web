@@ -4,14 +4,14 @@ import router from "@/router/router";
 import "@/styles.css";
 import { vueKeycloak } from "@josempgon/vue-keycloak";
 import { createPinia } from "pinia";
-import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
+import VCalendar from "v-calendar";
 
 const pinia = createPinia();
-pinia.use(piniaPluginPersistedstate);
 createApp(app)
     .use(router)
     .use(pinia)
+    .use(VCalendar, {})
     .use(vueKeycloak, {
         config,
         initOptions: {
