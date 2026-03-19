@@ -12,7 +12,7 @@ import Grid from "@/components/common/layout/grid.vue";
 import Small from "@/components/common/buttons/small.vue";
 import { Size } from "@/components/common/layout/grid";
 import { SmallStyle } from "@/components/common/buttons/style";
-import BookingsIcon from "@/components/icons/bookings.vue";
+import BookingsIcon from "@/components/icons/appointments.vue";
 import type { ConnectionId } from "@/features/network/models/id";
 
 defineProps<{ select: (id: ConnectionId) => void }>();

@@ -1,11 +1,11 @@
 import { usePolling } from "@/composables/use-polling";
-import type { Appointment } from "@/features/bookings/models/appointment/appointment";
-import type { AppointmentId } from "@/features/bookings/models/id";
-import { get } from "@/features/bookings/services/bookings";
+import type { Appointment } from "@/features/appointments/models/appointment/appointment";
+import { get } from "@/features/appointments/services/appointments";
 import { POLLING_RATE } from "@/lib/polling";
 import { ref } from "vue";
+import type { SlotId } from "@/features/appointments/models/slot/id";
 
-export function useAppointment(id: AppointmentId) {
+export function useAppointment(id: SlotId) {
     const appointment = ref(null as Appointment | null);
     const loading = ref(false);
     const error = ref<Error | null>(null);

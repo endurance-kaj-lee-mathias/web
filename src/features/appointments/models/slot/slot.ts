@@ -1,4 +1,4 @@
-import type { SlotId } from "@/features/bookings/models/slot/id";
+import type { SlotId } from "@/features/appointments/models/slot/id";
 
 export interface Slot {
     id: SlotId;

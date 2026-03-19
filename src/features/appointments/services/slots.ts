@@ -1,8 +1,8 @@
-import type { Slot } from "@/features/bookings/models/slot/slot";
+import type { Slot } from "@/features/appointments/models/slot/slot";
 import { client } from "@/lib/auth/client";
 import { Env } from "@/lib/env";
 import type { ConnectionId } from "@/features/network/models/id";
-import type { SlotId } from "@/features/bookings/models/slot/id";
+import type { SlotId } from "@/features/appointments/models/slot/id";
 
 const api = client(Env.apiUrl);
 

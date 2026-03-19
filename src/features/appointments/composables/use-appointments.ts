@@ -1,5 +1,5 @@
-import type { Appointment } from "@/features/bookings/models/appointment/appointment";
-import { getAll } from "@/features/bookings/services/bookings";
+import type { Appointment } from "@/features/appointments/models/appointment/appointment";
+import { getAll } from "@/features/appointments/services/appointments";
 import { ref } from "vue";
 
 export function useAppointments(day: Date | null) {

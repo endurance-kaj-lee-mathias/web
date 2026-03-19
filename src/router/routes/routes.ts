@@ -1,6 +1,6 @@
 import { Visibility, type Route } from "@/router/route";
 import { auth } from "@/router/routes/auth";
-import { bookings } from "@/router/routes/bookings";
+import { appointments } from "@/router/routes/appointments";
 import { journals } from "@/router/routes/journals";
 import { messages } from "@/router/routes/messages";
 import { notifications } from "@/router/routes/notifications";
@@ -11,7 +11,7 @@ export function getAllRoutes(): Route[] {
     return [
         ...auth,
         ...journals,
-        ...bookings,
+        ...appointments,
         ...network,
         ...notifications,
         ...messages,

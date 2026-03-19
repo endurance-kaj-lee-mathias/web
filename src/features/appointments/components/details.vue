@@ -2,14 +2,15 @@
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef } from "vue";
-import type { AppointmentId } from "@/features/bookings/models/appointment/id";
-import { useAppointment } from "@/features/bookings/composables/use-appointment";
+import { useAppointment } from "@/features/appointments/composables/use-appointment";
 import { getFullName } from "@/lib/name";
 import Loading from "@/components/common/states/loading.vue";
+import type { SlotId } from "@/features/appointments/models/slot/id";
+import { getTime } from "@/lib/date";
 
 const props = defineProps<{
     modelValue: boolean;
-    id: AppointmentId;
+    id: SlotId;
 }>();
 
 const { appointment, loading, error } = useAppointment(props.id);
@@ -28,13 +29,13 @@ const emit = defineEmits(["update:modelValue"]);
             <DialogContent
                 v-else
                 :title="`Appointment with ${getFullName(appointment.providerFirstName, appointment.providerLastName)}`"
-                :description="
-                    new Date(appointment.date).toLocaleDateString('en-GB', {
-                        weekday: 'long',
-                        day: 'numeric',
-                        month: 'numeric',
-                    })
-                "
+                :description="`${new Date(
+                    appointment.startTime,
+                ).toLocaleDateString('en-GB', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'numeric',
+                })}, ${getTime(appointment.startTime)} to ${getTime(appointment.endTime)}`"
                 :closeable="true"
             >
                 <Boundary ref="boundary">

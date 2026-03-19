@@ -8,12 +8,12 @@ import Boundary from "@/components/common/states/boundary.vue";
 import Empty from "@/components/common/states/empty.vue";
 import Loading from "@/components/common/states/loading.vue";
 import AddIcon from "@/components/icons/add.vue";
-import { useSlots } from "@/features/bookings/composables/use-slots";
-import type { Slot } from "@/features/bookings/models/slot/slot";
+import { useSlots } from "@/features/appointments/composables/use-slots";
+import type { Slot } from "@/features/appointments/models/slot/slot";
 import type { ConnectionId } from "@/features/network/models/id";
 import { getDate, getTime } from "@/lib/date";
 import { useTemplateRef, watchEffect } from "vue";
-import { useSlot } from "@/features/bookings/stores/slot";
+import { useSlot } from "@/features/appointments/stores/slot";
 
 const props = defineProps<{
     id: ConnectionId;

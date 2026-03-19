@@ -10,11 +10,11 @@ import { Role } from "@/models/roles";
 <template>
     <Stack :align="Align.START">
         <TabHeader>
-            <TabLink href="/bookings">Appointments</TabLink>
-            <TabLink v-if="hasRoles([Role.VETERAN])" href="/bookings/new"
+            <TabLink href="/appointments">Appointments</TabLink>
+            <TabLink v-if="hasRoles([Role.VETERAN])" href="/appointments/new"
                 >New Appointment</TabLink
             >
-            <TabLink href="/bookings/slots">Available Slots</TabLink>
+            <TabLink href="/appointments/slots">Available Slots</TabLink>
         </TabHeader>
     </Stack>
 </template>

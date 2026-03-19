@@ -26,7 +26,14 @@ defineProps<{
             <p
                 :class="`text-sm text-medium group-hover:text-light transition-colors duration-75`"
             >
-                {{ getDate(date) }}
+                {{
+                    new Date(date).toLocaleDateString("en-GB", {
+                        minute: "numeric",
+                        hour: "numeric",
+                        day: "numeric",
+                        month: "numeric",
+                    })
+                }}
             </p>
         </section>
     </article>

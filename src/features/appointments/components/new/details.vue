@@ -3,10 +3,10 @@ import Column from "@/components/common/layout/column.vue";
 import { ref } from "vue";
 import Input from "@/components/common/inputs/input.vue";
 import Select from "@/components/common/inputs/select.vue";
-import { useSlot } from "@/features/bookings/stores/slot";
+import { useSlot } from "@/features/appointments/stores/slot";
 import { useTemplateRef } from "vue";
 import Boundary from "@/components/common/states/boundary.vue";
-import { send as sendAppointment } from "@/features/bookings/services/slots";
+import { send as sendAppointment } from "@/features/appointments/services/slots";
 
 const store = useSlot();
 const title = ref("");

@@ -1,9 +1,9 @@
 import { usePolling } from "@/composables/use-polling";
-import { getAll } from "@/features/bookings/services/slots";
+import { getAll } from "@/features/appointments/services/slots";
 import type { ConnectionId } from "@/features/network/models/id";
 import { POLLING_RATE } from "@/lib/polling";
 import { ref } from "vue";
-import type { Slot } from "@/features/bookings/models/slot/slot";
+import type { Slot } from "@/features/appointments/models/slot/slot";
 
 export function useSlots(id: ConnectionId) {
     const slots = ref(null as Slot[] | null);
