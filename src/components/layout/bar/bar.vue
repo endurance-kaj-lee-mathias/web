@@ -25,7 +25,7 @@ const close = () => (menu.value = false);
                 <h2 className="text-xl font-bold">Endurance</h2>
             </RouterLink>
 
-            <Small :click="open">
+            <Small :action="open">
                 <MenuIcon />
             </Small>
         </section>

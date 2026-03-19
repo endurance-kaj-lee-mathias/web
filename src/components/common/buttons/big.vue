@@ -1,14 +1,37 @@
 <script setup lang="ts">
-import { Style } from "@/components/common/buttons/style";
+import { Height } from "@/components/common/layout/height";
 
-defineProps<{ disabled?: boolean; full?: boolean; style?: Style }>();
+const props = defineProps<{
+    action?: string | (() => void);
+    height?: Height;
+}>();
+
+const styles = `flex flex-col ${props.height ?? Height.MEDIUM} bg-light-2 hover:bg-accent text-medium hover:text-light-2 transition-colors duration-75 shadow-sm items-center justify-center p-2 rounded-lg`;
 </script>
 
 <template>
-    <button
-        :class="`flex flex-col h-16 items-center justify-center rounded-lg  px-4  py-2 ${style ?? Style.DEFAULT} font-semibold ${disabled ? 'cursor-not-allowed' : 'transition-colors duration-100 cursor-pointer'} ${full ? 'w-full' : ''}`"
-        :disabled="disabled ?? false"
+    <a
+        v-if="typeof action === 'string' && action.startsWith('http')"
+        :href="action"
+        :class="styles"
+        target="_blank"
     >
         <slot />
-    </button>
+    </a>
+
+    <RouterLink
+        v-else-if="typeof action === 'string'"
+        :to="action"
+        :class="styles"
+    >
+        <slot />
+    </RouterLink>
+
+    <div
+        v-else-if="typeof action === 'function'"
+        @click="action"
+        :class="styles"
+    >
+        <slot />
+    </div>
 </template>

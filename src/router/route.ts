@@ -6,6 +6,7 @@ export interface Route {
     title?: string;
     path: string;
     component: Component;
+    redirect?: string;
     visible: Visibility;
     auth: {
         guarded: Guarded;

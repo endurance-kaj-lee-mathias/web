@@ -2,30 +2,33 @@
 import { RouterLink } from "vue-router";
 
 defineProps<{ action: string | (() => void) }>();
+
+const styles =
+    "text-medium-2 font-semibold hover:text-medium underline decoration-dotted decoration-2 transition-colors duration-75 cursor-pointer";
 </script>
 
 <template>
     <a
         v-if="typeof action === 'string' && action.startsWith('http')"
         :href="action"
-        class="text-medium-2 hover:text-medium underline transition-colors duration-75 cursor-pointer"
+        :class="styles"
         target="_blank"
     >
         <slot />
     </a>
 
-    <router-link
+    <RouterLink
         v-else-if="typeof action === 'string' && !action.startsWith('http')"
-        class="text-medium-2 hover:text-medium underline decoration-wavy transition-colors duration-75 cursor-pointer"
+        :class="styles"
         :to="action"
     >
         <slot />
-    </router-link>
+    </RouterLink>
 
     <span
         v-else-if="typeof action === 'function'"
         @click="action"
-        class="text-medium-2 hover:text-medium underline decoration-wavy transition-colors duration-75 cursor-pointer"
+        :class="styles"
     >
         <slot />
     </span>

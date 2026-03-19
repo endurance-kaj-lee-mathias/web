@@ -13,11 +13,7 @@ export function relativeDate(value: Date | string | number): string {
     if (seconds < 60) return "just now";
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
-    if (days < 365) {
-        const years = days / 365;
-        const rounded = Math.round(years * 2) / 2;
-        return `${rounded} year${rounded !== 1 ? "s" : ""} ago`;
-    }
+    if (days < 365) return `${days}d ago`;
 
     const years = Math.floor(days / 365);
     return `${years} year${years !== 1 ? "s" : ""} ago`;
