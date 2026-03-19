@@ -3,12 +3,12 @@ import Button from "@/components/common/buttons/button.vue";
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import { Size } from "@/components/common/layout/grid";
 import Grid from "@/components/common/layout/grid.vue";
-import Available from "@/features/appointments/components/new/available.vue";
-import Details from "@/features/appointments/components/new/details.vue";
-import { Page } from "@/features/appointments/components/new/page";
+import Available from "@/features/appointments/components/new-appointment/available.vue";
+import Details from "@/features/appointments/components/new-appointment/details.vue";
+import { Page } from "@/features/appointments/components/new-appointment/page";
 import type { ConnectionId } from "@/features/network/models/id";
 import { ref, watch } from "vue";
-import Network from "./network.vue";
+import Network from "@/features/appointments/components/new-appointment/network.vue";
 
 const props = defineProps<{ modelValue: boolean }>();
 

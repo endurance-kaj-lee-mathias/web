@@ -66,6 +66,38 @@ export async function send(id: SlotId, title: string, urgent: boolean) {
     }
 }
 
+export async function add(
+    startTime: Date,
+    endTime: Date,
+    urgent: boolean,
+    recurring: boolean,
+) {
+    try {
+        await api.post("/calendar/slots", {
+            startTime:
+                startTime instanceof Date
+                    ? startTime.toISOString()
+                    : new Date(startTime).toISOString(),
+            endTime:
+                endTime instanceof Date
+                    ? endTime.toISOString()
+                    : new Date(endTime).toISOString(),
+            isUrgent: urgent,
+            isRecurring: recurring,
+        });
+    } catch {
+        throw new Error("Slot could not be created");
+    }
+}
+
+export async function remove(id: SlotId) {
+    try {
+        await api.delete(`/calendar/slots/${id}`);
+    } catch {
+        throw new Error("Slot could not be removed");
+    }
+}
+
 function getFormattedDate(date: Date) {
     return date.toISOString();
 }

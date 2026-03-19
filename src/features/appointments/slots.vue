@@ -3,6 +3,7 @@ import Boundary from "@/components/common/states/boundary.vue";
 import Base from "@/components/layout/base.vue";
 import Header from "@/features/appointments/components/header.vue";
 import { useMySlots } from "@/features/appointments/composables/use-my-slots";
+import { remove as removeSlot } from "@/features/appointments/services/slots";
 import { useTemplateRef, watchEffect } from "vue";
 import Small from "@/components/common/buttons/small.vue";
 import { SmallStyle } from "@/components/common/buttons/style";
@@ -11,7 +12,6 @@ import Column from "@/components/common/layout/column.vue";
 import { Height } from "@/components/common/layout/height";
 import Empty from "@/components/common/states/empty.vue";
 import Loading from "@/components/common/states/loading.vue";
-import AddIcon from "@/components/icons/add.vue";
 import { getDate, getTime } from "@/lib/date";
 import { ref } from "vue";
 import Pagination from "@/features/appointments/components/pagination.vue";
@@ -20,12 +20,25 @@ import { Justify } from "@/components/common/layout/justify";
 import Button from "@/components/common/buttons/button.vue";
 import PlusIcon from "@/components/icons/plus.vue";
 import Stack from "@/components/common/layout/stack.vue";
+import MinusIcon from "@/components/icons/minus.vue";
+import type { SlotId } from "@/features/appointments/models/slot/id";
+import New from "@/features/appointments/components/new-slot.vue";
 
 const weeks = ref(1);
-const { days, loading, error } = useMySlots(() => weeks.value);
+const add = ref(false);
+const { days, loading, error, fetch } = useMySlots(() => weeks.value);
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 watchEffect(() => error.value && boundary.value?.capture(error.value));
+
+async function remove(id: SlotId) {
+    try {
+        await Promise.all([await removeSlot(id), await fetch(weeks.value)]);
+        boundary.value!.error = null;
+    } catch (error: unknown) {
+        boundary.value!.error = error as Error;
+    }
+}
 </script>
 
 <template>
@@ -37,7 +50,9 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
 
             <Column v-else>
                 <Row :justify="Justify.BETWEEN">
-                    <Button><PlusIcon /> Slot</Button>
+                    <Button :action="() => (add = true)"
+                        ><PlusIcon /> Slot</Button
+                    >
                     <Pagination v-model="weeks" />
                 </Row>
 
@@ -65,15 +80,17 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                                 <template v-slot:options>
                                     <Small
                                         :style="SmallStyle.ALTERNATE"
-                                        :action="() => {}"
+                                        :action="() => remove(slot.id)"
                                     >
-                                        <AddIcon />
+                                        <MinusIcon />
                                     </Small>
                                 </template>
                             </Card>
                         </Column>
                     </Stack>
                 </Column>
+
+                <New v-model="add" @created="add = false" />
             </Column>
         </Boundary>
     </Base>

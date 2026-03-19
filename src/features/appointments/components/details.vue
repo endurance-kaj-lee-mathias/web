@@ -1,11 +1,6 @@
 <script lang="ts" setup>
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
-import Boundary from "@/components/common/states/boundary.vue";
-import { useTemplateRef, watch } from "vue";
-import { useAppointment } from "@/features/appointments/composables/use-appointment";
 import { getFullName } from "@/lib/name";
-import Loading from "@/components/common/states/loading.vue";
-import type { SlotId } from "@/features/appointments/models/slot/id";
 import { getDate, getTime } from "@/lib/date";
 import Input from "@/components/common/inputs/input.vue";
 import Grid from "@/components/common/layout/grid.vue";

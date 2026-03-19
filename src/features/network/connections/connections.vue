@@ -136,7 +136,7 @@ async function remove(id: ConnectionId) {
                     <Privacy
                         v-if="state.privacy.veteran"
                         v-model="state.privacy.privacy"
-                        :veteran="state.privacy.veteran"
+                        :connection="state.privacy.veteran"
                         @saved="() => (state.privacy.privacy = false)"
                     />
                 </Column>

@@ -13,7 +13,7 @@ import Loading from "@/components/common/states/loading.vue";
 import type { Appointment } from "@/features/appointments/models/appointment/appointment";
 import PlusIcon from "@/components/icons/plus.vue";
 import Button from "@/components/common/buttons/button.vue";
-import New from "@/features/appointments/components/new/new.vue";
+import New from "@/features/appointments/components/new-appointment/new.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const day = ref(new Date());
