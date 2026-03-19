@@ -19,9 +19,10 @@ import Row from "@/components/common/layout/row.vue";
 import { Justify } from "@/components/common/layout/justify";
 import Button from "@/components/common/buttons/button.vue";
 import PlusIcon from "@/components/icons/plus.vue";
+import Stack from "@/components/common/layout/stack.vue";
 
 const weeks = ref(1);
-const { slots, loading, error } = useMySlots(() => weeks.value);
+const { days, loading, error } = useMySlots(() => weeks.value);
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 watchEffect(() => error.value && boundary.value?.capture(error.value));
@@ -32,38 +33,46 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
         <Header />
 
         <Boundary ref="boundary">
-            <Loading v-if="loading || !slots" />
+            <Loading v-if="loading || !days" />
 
             <Column v-else>
-                <Empty v-if="slots.length <= 0" message="No slots found" />
+                <Row :justify="Justify.BETWEEN">
+                    <Button><PlusIcon /> Slot</Button>
+                    <Pagination v-model="weeks" />
+                </Row>
+
+                <Empty v-if="days.length <= 0" message="No slots found" />
 
                 <Column v-else>
-                    <Row :justify="Justify.BETWEEN">
-                        <Button><PlusIcon /> New Slot</Button>
-                        <Pagination v-model="weeks" />
-                    </Row>
-
-                    <Card
-                        v-for="slot in slots"
-                        :title="getDate(slot.startTime)"
-                        :image="slot.id"
-                        :options="true"
-                        :height="Height.SMALL"
-                    >
-                        <p>
-                            {{ getTime(slot.startTime) }} -
-                            {{ getTime(slot.endTime) }}
+                    <Stack v-for="day in days">
+                        <p class="text-medium text-lg">
+                            {{ getDate(day.date) }}
                         </p>
 
-                        <template v-slot:options>
-                            <Small
-                                :style="SmallStyle.ALTERNATE"
-                                :action="() => {}"
+                        <Column>
+                            <Card
+                                v-for="slot in day.slots"
+                                :title="getDate(slot.startTime)"
+                                :image="slot.id"
+                                :options="true"
+                                :height="Height.SMALL"
                             >
-                                <AddIcon />
-                            </Small>
-                        </template>
-                    </Card>
+                                <p>
+                                    {{ getTime(slot.startTime) }} -
+                                    {{ getTime(slot.endTime) }}
+                                </p>
+
+                                <template v-slot:options>
+                                    <Small
+                                        :style="SmallStyle.ALTERNATE"
+                                        :action="() => {}"
+                                    >
+                                        <AddIcon />
+                                    </Small>
+                                </template>
+                            </Card>
+                        </Column>
+                    </Stack>
                 </Column>
             </Column>
         </Boundary>

@@ -60,7 +60,7 @@ const move = (pages: { month: number; year: number }[]) => {
                     :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
                 >
                     <Button :action="() => (add = true)"
-                        ><PlusIcon /> New Slot</Button
+                        ><PlusIcon /> Appointment</Button
                     >
 
                     <section

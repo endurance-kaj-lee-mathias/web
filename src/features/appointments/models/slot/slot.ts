@@ -7,3 +7,8 @@ export interface Slot {
     isUrgent: boolean;
     isBooked: boolean;
 }
+
+export interface Day {
+    date: Date;
+    slots: Slot[];
+}

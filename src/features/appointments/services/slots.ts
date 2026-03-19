@@ -1,17 +1,44 @@
 import type { SlotId } from "@/features/appointments/models/slot/id";
-import type { Slot } from "@/features/appointments/models/slot/slot";
+import type { Slot, Day } from "@/features/appointments/models/slot/slot";
 import type { ConnectionId } from "@/features/network/models/id";
 import { client } from "@/lib/auth/client";
 import { Env } from "@/lib/env";
 
 const api = client(Env.apiUrl);
 
-export async function getAll(weeks: number): Promise<Slot[]> {
+export async function getAll(weeks: number): Promise<Day[]> {
     try {
         const { data } = await api.get<Slot[]>(
             `/calendar/slots?from=${getFormattedDate(getNextPage(weeks - 1))}&to=${getFormattedDate(getNextPage(weeks))}`,
         );
-        return data;
+
+        const grouped = data.reduce<
+            Record<string, { date: Date; slots: Slot[] }>
+        >((acc, slot) => {
+            const date = new Date(slot.startTime);
+            const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
+            if (acc[key]) {
+                acc[key].slots.push(slot);
+                return acc;
+            }
+
+            acc[key] = {
+                date: new Date(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate(),
+                ),
+                slots: [],
+            };
+
+            acc[key].slots.push(slot);
+            return acc;
+        }, {});
+
+        return Object.values(grouped).sort(
+            (a, b) => a.date.getTime() - b.date.getTime(),
+        );
     } catch {
         throw new Error("Slots could not be fetched");
     }
