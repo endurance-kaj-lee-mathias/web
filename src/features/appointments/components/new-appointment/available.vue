@@ -17,7 +17,7 @@ import { useSlot } from "@/features/appointments/stores/slot";
 import { Gap } from "@/components/common/layout/gap";
 import ClockIcon from "@/components/icons/clock.vue";
 import Row from "@/components/common/layout/row.vue";
-import TagIcon from "@/components/icons/tag.vue";
+import DangerIcon from "@/components/icons/danger.vue";
 
 const props = defineProps<{
     id: ConnectionId;
@@ -59,7 +59,7 @@ function select(value: Slot) {
                         </Row>
 
                         <Row :gap="Gap.SMALL">
-                            <TagIcon />
+                            <DangerIcon />
                             {{ slot.isUrgent ? "Urgent" : "Not Urgent" }}
                         </Row>
                     </Row>

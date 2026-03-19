@@ -23,6 +23,9 @@ import Stack from "@/components/common/layout/stack.vue";
 import MinusIcon from "@/components/icons/minus.vue";
 import type { SlotId } from "@/features/appointments/models/slot/id";
 import New from "@/features/appointments/components/new-slot.vue";
+import { Gap } from "@/components/common/layout/gap";
+import DangerIcon from "@/components/icons/danger.vue";
+import TagIcon from "@/components/icons/tag.vue";
 
 const weeks = ref(1);
 const add = ref(false);
@@ -67,15 +70,30 @@ async function remove(id: SlotId) {
                         <Column>
                             <Card
                                 v-for="slot in day.slots"
-                                :title="getDate(slot.startTime)"
+                                :title="`${getTime(slot.startTime)} - ${getTime(slot.endTime)}`"
                                 :image="slot.id"
                                 :options="true"
                                 :height="Height.SMALL"
                             >
-                                <p>
-                                    {{ getTime(slot.startTime) }} -
-                                    {{ getTime(slot.endTime) }}
-                                </p>
+                                <Row>
+                                    <Row :gap="Gap.SMALL">
+                                        <TagIcon />
+                                        {{
+                                            slot.isBooked
+                                                ? "Available"
+                                                : "Unavailable"
+                                        }}
+                                    </Row>
+
+                                    <Row :gap="Gap.SMALL">
+                                        <DangerIcon />
+                                        {{
+                                            slot.isUrgent
+                                                ? "Urgent"
+                                                : "Not Urgent"
+                                        }}
+                                    </Row>
+                                </Row>
 
                                 <template v-slot:options>
                                     <Small
