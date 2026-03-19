@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Gap } from "@/components/common/layout/gap";
-import Empty from "@/components/common/states/empty.vue";
 import Base from "@/components/layout/base.vue";
 import { Calendar } from "v-calendar";
 import Button from "@/components/common/buttons/button.vue";
@@ -8,11 +7,12 @@ import AddIcon from "@/components/icons/add.vue";
 import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef, watchEffect } from "vue";
 import { useAppointments } from "@/features/bookings/composables/use-appointments";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const day = ref(null as Date | null);
-const { appointments, loading, error } = useAppointments(day.value);
+const { appointments, error, fetch } = useAppointments(day.value);
+watch(day, (day) => fetch(day));
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 </script>
 
@@ -101,6 +101,16 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
 }
 
 :deep(.vc-arrow.vc-focus) {
+    outline: none;
+    box-shadow: none;
+}
+
+:deep(.vc-nav-arrow:hover) {
+    background-color: var(--color-medium-3) !important;
+    transition: background-color 75ms;
+}
+
+:deep(.vc-nav-arrow.vc-focus) {
     outline: none;
     box-shadow: none;
 }

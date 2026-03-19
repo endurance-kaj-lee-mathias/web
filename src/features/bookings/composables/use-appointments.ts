@@ -9,7 +9,7 @@ export function useAppointments(day: Date | null) {
     const loading = ref(false);
     const error = ref<Error | null>(null);
 
-    async function fetch(initial = false) {
+    async function fetch(day: Date | null, initial?: boolean) {
         if (!day) return;
 
         try {
@@ -25,6 +25,6 @@ export function useAppointments(day: Date | null) {
         }
     }
 
-    usePolling(fetch, POLLING_RATE);
+    usePolling(() => fetch(day, false), POLLING_RATE);
     return { appointments, loading, error, fetch };
 }

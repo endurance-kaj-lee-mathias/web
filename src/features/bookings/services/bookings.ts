@@ -7,7 +7,7 @@ const api = client(Env.apiUrl);
 export async function getAll(day: Date): Promise<Appointment[]> {
     try {
         const { data } = await api.get<Appointment[]>(
-            `/calendar/slots/me/${day}`,
+            `/calendar/appointments/me/${day.toISOString().split("T")[0]}`,
         );
         return data;
     } catch {
