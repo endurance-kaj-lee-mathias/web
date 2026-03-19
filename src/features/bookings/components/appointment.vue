@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { Gap } from "@/components/common/layout/gap";
-import type { AppointmentId } from "@/features/bookings/models/id";
+import { getDate } from "@/lib/date";
 import { getFullName } from "@/lib/name";
 
 defineProps<{
-    id: AppointmentId;
-    image: string;
     firstName: string;
     lastName: string;
     username: string;
+    image: string;
     date: Date;
 }>();
 </script>
@@ -27,13 +26,7 @@ defineProps<{
             <p
                 :class="`text-sm text-medium group-hover:text-light transition-colors duration-75`"
             >
-                {{
-                    new Date(date).toLocaleDateString("en-GB", {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "numeric",
-                    })
-                }}
+                {{ getDate(date) }}
             </p>
         </section>
     </article>

@@ -1,7 +1,5 @@
-import { usePolling } from "@/composables/use-polling";
 import type { Appointment } from "@/features/bookings/models/appointment/appointment";
 import { getAll } from "@/features/bookings/services/bookings";
-import { POLLING_RATE } from "@/lib/polling";
 import { ref } from "vue";
 
 export function useAppointments(day: Date | null) {
@@ -25,6 +23,5 @@ export function useAppointments(day: Date | null) {
         }
     }
 
-    usePolling(() => fetch(day, false), POLLING_RATE);
     return { appointments, loading, error, fetch };
 }

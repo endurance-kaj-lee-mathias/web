@@ -5,7 +5,10 @@ import type { AppointmentId } from "@/features/bookings/models/appointment/id";
 
 const api = client(Env.apiUrl);
 
-export async function getAll(day: Date): Promise<Appointment[]> {
+export async function getAll(
+    day: Date,
+    options?: { signal?: AbortSignal },
+): Promise<Appointment[]> {
     try {
         const { data } = await api.get<Appointment[]>(
             `/calendar/appointments/me/${day.toISOString().split("T")[0]}`,
