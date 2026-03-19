@@ -1,20 +1,19 @@
 import { usePolling } from "@/composables/use-polling";
-import type { Appointment } from "@/features/bookings/models/appointment/appointment";
-import { getAll } from "@/features/bookings/services/bookings";
+import { getAll } from "@/features/bookings/services/slots";
+import type { ConnectionId } from "@/features/network/models/id";
 import { POLLING_RATE } from "@/lib/polling";
 import { ref } from "vue";
+import type { Slot } from "@/features/bookings/models/slot/slot";
 
-export function useAppointments(day: Date | null) {
-    const appointments = ref(null as Appointment[] | null);
+export function useSlots(id: ConnectionId) {
+    const slots = ref(null as Slot[] | null);
     const loading = ref(false);
     const error = ref<Error | null>(null);
 
-    async function fetch(day: Date | null, initial?: boolean) {
-        if (!day) return;
-
+    async function fetch(id: ConnectionId, initial?: boolean) {
         try {
             if (initial) loading.value = true;
-            appointments.value = await getAll(day);
+            slots.value = await getAll(id);
             error.value = null;
         } catch (err) {
             if (!(err instanceof Error)) return;
@@ -25,6 +24,6 @@ export function useAppointments(day: Date | null) {
         }
     }
 
-    usePolling(() => fetch(day, false), POLLING_RATE);
-    return { appointments, loading, error, fetch };
+    usePolling(() => fetch(id, false), POLLING_RATE);
+    return { slots, loading, error, fetch };
 }

@@ -1,5 +1,5 @@
 import { usePolling } from "@/composables/use-polling";
-import type { Appointment } from "@/features/bookings/models/appointment";
+import type { Appointment } from "@/features/bookings/models/appointment/appointment";
 import type { AppointmentId } from "@/features/bookings/models/id";
 import { get } from "@/features/bookings/services/bookings";
 import { POLLING_RATE } from "@/lib/polling";

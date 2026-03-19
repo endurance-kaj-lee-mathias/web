@@ -3,7 +3,6 @@ import Column from "@/components/common/layout/column.vue";
 import Loading from "@/components/common/states/loading.vue";
 import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef } from "vue";
-import { watch } from "vue";
 import { watchEffect } from "vue";
 import Empty from "@/components/common/states/empty.vue";
 import { useConnections } from "@/features/network/connections/composables/use-connections";
@@ -16,7 +15,7 @@ import { SmallStyle } from "@/components/common/buttons/style";
 import BookingsIcon from "@/components/icons/bookings.vue";
 import type { ConnectionId } from "@/features/network/models/id";
 
-defineProps<{ day: Date; select: (id: ConnectionId) => void }>();
+defineProps<{ select: (id: ConnectionId) => void }>();
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const { connections, loading, error } = useConnections();
 watchEffect(() => error.value && boundary.value?.capture(error.value));

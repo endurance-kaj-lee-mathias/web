@@ -56,7 +56,7 @@ async function send(message: string) {
                     <section
                         :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
                     >
-                        <Button @click="network = true">
+                        <Button :action="() => (network = true)">
                             <AddIcon /> Conversation
                         </Button>
 

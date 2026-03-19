@@ -2,20 +2,18 @@
 import { Gap } from "@/components/common/layout/gap";
 import Base from "@/components/layout/base.vue";
 import { DatePicker } from "v-calendar";
-import Button from "@/components/common/buttons/button.vue";
-import AddIcon from "@/components/icons/add.vue";
 import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef, watchEffect } from "vue";
 import { useAppointments } from "@/features/bookings/composables/use-appointments";
 import { ref, watch } from "vue";
 import Details from "@/features/bookings/components/details.vue";
-import type { AppointmentId } from "@/features/bookings/models/id";
-import New from "@/features/bookings/components/new/new.vue";
+import type { AppointmentId } from "@/features/bookings/models/appointment/id";
+import Header from "@/features/bookings/components/header.vue";
+import Empty from "@/components/common/states/empty.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const day = ref(new Date());
 const details = ref(false);
-const network = ref(false);
 
 const { appointments, error, fetch } = useAppointments(day.value);
 const appointment = ref(null as AppointmentId | null);
@@ -35,20 +33,12 @@ const move = (pages: { month: number; year: number }[]) => {
 
 <template>
     <Base>
+        <Header />
         <Boundary ref="boundary">
-            <section :class="`grid sm:grid-cols-[200px_1fr] ${Gap.MEDIUM} `">
+            <section :class="`grid sm:grid-cols-[10.5rem_1fr] ${Gap.MEDIUM} `">
                 <section
-                    :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
-                >
-                    <Button @click="network = true">
-                        <AddIcon /> Appointment
-                    </Button>
-
-                    <section
-                        v-if="day && appointments && appointments.length <= 0"
-                        class="bg-light-2 rounded-md p-2"
-                    ></section>
-                </section>
+                    :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar bg-light-2 rounded-md p-2`"
+                ></section>
 
                 <DatePicker
                     class="calendar"
@@ -63,8 +53,6 @@ const move = (pages: { month: number; year: number }[]) => {
                     :id="appointment"
                     v-model="details"
                 />
-
-                <New v-if="day" :day="day" v-model="network" />
             </section>
         </Boundary>
     </Base>

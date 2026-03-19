@@ -2,7 +2,7 @@
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef } from "vue";
-import type { AppointmentId } from "@/features/bookings/models/id";
+import type { AppointmentId } from "@/features/bookings/models/appointment/id";
 import { useAppointment } from "@/features/bookings/composables/use-appointment";
 import { getFullName } from "@/lib/name";
 import Loading from "@/components/common/states/loading.vue";

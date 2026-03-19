@@ -18,3 +18,18 @@ export function relativeDate(value: Date | string | number): string {
     const years = Math.floor(days / 365);
     return `${years} year${years !== 1 ? "s" : ""} ago`;
 }
+
+export function getDate(date: Date) {
+    return new Date(date).toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "numeric",
+    });
+}
+
+export function getTime(date: Date) {
+    return new Date(date).toLocaleTimeString("en-GB", {
+        hour: "numeric",
+        minute: "numeric",
+    });
+}
