@@ -1,19 +1,36 @@
 <script setup lang="ts">
 import { Gap } from "@/components/common/layout/gap";
 import Base from "@/components/layout/base.vue";
-import { Calendar } from "v-calendar";
+import { DatePicker } from "v-calendar";
 import Button from "@/components/common/buttons/button.vue";
 import AddIcon from "@/components/icons/add.vue";
 import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef, watchEffect } from "vue";
 import { useAppointments } from "@/features/bookings/composables/use-appointments";
 import { ref, watch } from "vue";
+import Details from "@/features/bookings/components/details.vue";
+import type { AppointmentId } from "@/features/bookings/models/id";
+import New from "@/features/bookings/components/new/new.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
-const day = ref(null as Date | null);
+const day = ref(new Date());
+const details = ref(false);
+const network = ref(false);
+
 const { appointments, error, fetch } = useAppointments(day.value);
+const appointment = ref(null as AppointmentId | null);
+
 watch(day, (day) => fetch(day));
 watchEffect(() => error.value && boundary.value?.capture(error.value));
+
+const move = (pages: { month: number; year: number }[]) => {
+    const page = pages[0];
+    if (!page) return;
+    const newDay = new Date(day.value ?? new Date());
+    newDay.setFullYear(page.year);
+    newDay.setMonth(page.month - 1);
+    day.value = newDay;
+};
 </script>
 
 <template>
@@ -23,7 +40,9 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                 <section
                     :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
                 >
-                    <Button> <AddIcon /> Appointment </Button>
+                    <Button @click="network = true">
+                        <AddIcon /> Appointment
+                    </Button>
 
                     <section
                         v-if="day && appointments && appointments.length <= 0"
@@ -31,12 +50,21 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
                     ></section>
                 </section>
 
-                <Calendar
+                <DatePicker
                     class="calendar"
                     color="gray"
                     :expanded="true"
-                    @dayclick="(d) => (day = d.date)"
+                    v-model="day"
+                    @did-move="move"
                 />
+
+                <Details
+                    v-if="day && appointment"
+                    :id="appointment"
+                    v-model="details"
+                />
+
+                <New v-if="day" :day="day" v-model="network" />
             </section>
         </Boundary>
     </Base>
@@ -111,6 +139,16 @@ watchEffect(() => error.value && boundary.value?.capture(error.value));
 }
 
 :deep(.vc-nav-arrow.vc-focus) {
+    outline: none;
+    box-shadow: none;
+}
+
+:deep(.vc-nav-title:hover) {
+    background-color: var(--color-medium-3) !important;
+    transition: background-color 75ms;
+}
+
+:deep(.vc-nav-title.vc-focus) {
     outline: none;
     box-shadow: none;
 }
