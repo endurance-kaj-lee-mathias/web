@@ -1,18 +1,16 @@
 <script lang="ts" setup>
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import Box from "@/components/common/inputs/box.vue";
-import { Align } from "@/components/common/layout/align";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
-import { Justify } from "@/components/common/layout/justify";
+import { Size } from "@/components/common/layout/grid";
+import Grid from "@/components/common/layout/grid.vue";
 import Boundary from "@/components/common/states/boundary.vue";
-import { useTemplateRef } from "vue";
 import { getFace } from "@/features/journals/lib/faces";
 import type { Day } from "@/features/journals/models/journal/day";
-import Grid from "@/components/common/layout/grid.vue";
+import { useTemplateRef } from "vue";
 import Score from "./score.vue";
-import { Size } from "@/components/common/layout/grid";
-import Empty from "@/components/common/states/empty.vue";
+import { ref } from "vue";
 
 const props = defineProps<{
     modelValue: boolean;
@@ -60,8 +58,15 @@ const date = new Date(props.day.date).toLocaleDateString("en-GB", {
                         </Score>
                     </Grid>
 
-                    <Box label="Note" :disabled="true">
-                        {{ day.notes ?? "No note found!" }}
+                    <Box label="Notes" :disabled="true">
+                        <p
+                            v-if="day.notes && day.notes.length > 0"
+                            v-for="note in day.notes"
+                        >
+                            {{ note }}
+                        </p>
+
+                        <p v-else>No notes found!</p>
                     </Box>
                 </Column>
             </Boundary>
