@@ -1,20 +1,22 @@
 <script lang="ts" setup>
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import Boundary from "@/components/common/states/boundary.vue";
-import { useTemplateRef } from "vue";
+import { useTemplateRef, watch } from "vue";
 import { useAppointment } from "@/features/appointments/composables/use-appointment";
 import { getFullName } from "@/lib/name";
 import Loading from "@/components/common/states/loading.vue";
 import type { SlotId } from "@/features/appointments/models/slot/id";
-import { getTime } from "@/lib/date";
+import { getDate, getTime } from "@/lib/date";
+import Input from "@/components/common/inputs/input.vue";
+import Grid from "@/components/common/layout/grid.vue";
+import Column from "@/components/common/layout/column.vue";
+import type { Appointment } from "@/features/appointments/models/appointment/appointment";
 
-const props = defineProps<{
+defineProps<{
     modelValue: boolean;
-    id: SlotId;
+    appointment: Appointment;
 }>();
 
-const { appointment, loading, error } = useAppointment(props.id);
-const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const emit = defineEmits(["update:modelValue"]);
 </script>
 
@@ -23,25 +25,51 @@ const emit = defineEmits(["update:modelValue"]);
         :open="modelValue"
         @update:open="$emit('update:modelValue', $event)"
     >
-        <Boundary ref="boundary">
-            <Loading v-if="loading || !appointment" />
-
-            <DialogContent
-                v-else
-                :title="`Appointment with ${getFullName(appointment.providerFirstName, appointment.providerLastName)}`"
-                :description="`${new Date(
-                    appointment.startTime,
-                ).toLocaleDateString('en-GB', {
+        <DialogContent
+            :title="`Appointment with ${getFullName(appointment.providerFirstName, appointment.providerLastName)}`"
+            :description="`${new Date(appointment.startTime).toLocaleDateString(
+                'en-GB',
+                {
                     weekday: 'long',
                     day: 'numeric',
                     month: 'numeric',
-                })}, ${getTime(appointment.startTime)} to ${getTime(appointment.endTime)}`"
-                :closeable="true"
-            >
-                <Boundary ref="boundary">
-                    {{ appointment.id }}
-                </Boundary>
-            </DialogContent>
-        </Boundary>
+                },
+            )}, ${getTime(appointment.startTime)} to ${getTime(appointment.endTime)}`"
+            :closeable="true"
+        >
+            <Column>
+                <Input label="Date" :disabled="true">
+                    {{ getDate(appointment.startTime) }}
+                </Input>
+
+                <Grid>
+                    <Input label="Title" :disabled="true">
+                        {{ appointment.title }}
+                    </Input>
+
+                    <Input label="Urgency" :disabled="true">
+                        {{ appointment.isUrgent ? "Urgent" : "Not Urgent" }}
+                    </Input>
+                </Grid>
+
+                <Input label="Connection" :disabled="true">
+                    {{
+                        getFullName(
+                            appointment.providerFirstName,
+                            appointment.providerLastName,
+                        )
+                    }}
+                </Input>
+
+                <Grid>
+                    <Input label="From" :disabled="true">
+                        {{ getTime(appointment.startTime) }}
+                    </Input>
+                    <Input label="To" :disabled="true">
+                        {{ getTime(appointment.endTime) }}
+                    </Input>
+                </Grid>
+            </Column>
+        </DialogContent>
     </Dialog>
 </template>

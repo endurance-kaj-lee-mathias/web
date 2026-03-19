@@ -10,7 +10,7 @@ import { send as sendAppointment } from "@/features/appointments/services/slots"
 
 const store = useSlot();
 const title = ref("");
-const urgent = ref(false);
+const urgent = ref("false");
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 defineExpose({ send });
@@ -19,7 +19,11 @@ async function send() {
     if (!store.selected) return;
 
     try {
-        await sendAppointment(store.selected.id, title.value, urgent.value);
+        await sendAppointment(
+            store.selected.id,
+            title.value,
+            urgent.value === "true",
+        );
         boundary.value!.error = null;
     } catch (error: unknown) {
         boundary.value!.error = error as Error;

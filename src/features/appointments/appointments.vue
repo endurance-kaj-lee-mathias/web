@@ -8,23 +8,24 @@ import { useAppointments } from "@/features/appointments/composables/use-appoint
 import { ref, watch } from "vue";
 import Details from "@/features/appointments/components/details.vue";
 import Header from "@/features/appointments/components/header.vue";
-import Appointment from "@/features/appointments/components/appointment.vue";
+import AppointmentCard from "@/features/appointments/components/appointment.vue";
 import Empty from "@/components/common/states/empty.vue";
 import Loading from "@/components/common/states/loading.vue";
 import type { SlotId } from "@/features/appointments/models/slot/id";
+import type { Appointment } from "@/features/appointments/models/appointment/appointment";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const day = ref(new Date());
 const details = ref(false);
 
 const { appointments, loading, error, fetch } = useAppointments(day.value);
-const slot = ref(null as SlotId | null);
+const appointment = ref(null as Appointment | null);
 
 watch(day, (day) => fetch(day));
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 
-function select(id: SlotId) {
-    slot.value = id;
+function select(value: Appointment) {
+    appointment.value = value;
     details.value = true;
 }
 
@@ -61,7 +62,7 @@ const move = (pages: { month: number; year: number }[]) => {
                         message="No appointments found"
                     />
 
-                    <Appointment
+                    <AppointmentCard
                         v-else
                         v-for="appointment in appointments"
                         :firstName="appointment.providerFirstName"
@@ -69,7 +70,7 @@ const move = (pages: { month: number; year: number }[]) => {
                         :username="appointment.providerUsername"
                         :image="appointment.providerImage"
                         :date="appointment.startTime"
-                        @click="select(appointment.slotId)"
+                        @click="select(appointment)"
                     />
                 </section>
 
@@ -81,7 +82,11 @@ const move = (pages: { month: number; year: number }[]) => {
                     @did-move="move"
                 />
 
-                <Details v-if="day && slot" :id="slot" v-model="details" />
+                <Details
+                    v-if="day && appointment"
+                    :appointment="appointment"
+                    v-model="details"
+                />
             </section>
         </Boundary>
     </Base>

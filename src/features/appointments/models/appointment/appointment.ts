@@ -13,4 +13,5 @@ export interface Appointment {
     status: Status;
     startTime: Date;
     endTime: Date;
+    isUrgent: boolean;
 }
