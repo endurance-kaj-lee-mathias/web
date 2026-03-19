@@ -9,13 +9,15 @@ import { ref, watch } from "vue";
 import Details from "@/features/appointments/components/details.vue";
 import Header from "@/features/appointments/components/header.vue";
 import AppointmentCard from "@/features/appointments/components/appointment.vue";
-import Empty from "@/components/common/states/empty.vue";
 import Loading from "@/components/common/states/loading.vue";
-import type { SlotId } from "@/features/appointments/models/slot/id";
 import type { Appointment } from "@/features/appointments/models/appointment/appointment";
+import PlusIcon from "@/components/icons/plus.vue";
+import Button from "@/components/common/buttons/button.vue";
+import New from "@/features/appointments/components/new/new.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const day = ref(new Date());
+const add = ref(false);
 const details = ref(false);
 
 const { appointments, loading, error, fetch } = useAppointments(day.value);
@@ -55,23 +57,26 @@ const move = (pages: { month: number; year: number }[]) => {
                 :class="`grid sm:grid-cols-[200px_1fr] ${Gap.MEDIUM} `"
             >
                 <section
-                    :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar bg-light-2 rounded-md p-2`"
+                    :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
                 >
-                    <Empty
-                        v-if="!appointments || appointments.length <= 0"
-                        message="No appointments found"
-                    />
+                    <Button :action="() => (add = true)"
+                        ><PlusIcon /> New Slot</Button
+                    >
 
-                    <AppointmentCard
-                        v-else
-                        v-for="appointment in appointments"
-                        :firstName="appointment.providerFirstName"
-                        :lastName="appointment.providerLastName"
-                        :username="appointment.providerUsername"
-                        :image="appointment.providerImage"
-                        :date="appointment.startTime"
-                        @click="select(appointment)"
-                    />
+                    <section
+                        v-if="appointments && appointments.length > 0"
+                        class="bg-light-2 rounded-md p-2"
+                    >
+                        <AppointmentCard
+                            v-for="appointment in appointments"
+                            :firstName="appointment.providerFirstName"
+                            :lastName="appointment.providerLastName"
+                            :username="appointment.providerUsername"
+                            :image="appointment.providerImage"
+                            :date="appointment.startTime"
+                            @click="select(appointment)"
+                        />
+                    </section>
                 </section>
 
                 <DatePicker
@@ -81,6 +86,8 @@ const move = (pages: { month: number; year: number }[]) => {
                     @dayclick="(d) => (day = d.noonDate)"
                     @did-move="move"
                 />
+
+                <New v-model="add" @sent="add = false" />
 
                 <Details
                     v-if="day && appointment"

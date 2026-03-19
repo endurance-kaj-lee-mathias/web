@@ -14,6 +14,10 @@ import type { ConnectionId } from "@/features/network/models/id";
 import { getDate, getTime } from "@/lib/date";
 import { useTemplateRef, watchEffect } from "vue";
 import { useSlot } from "@/features/appointments/stores/slot";
+import { Gap } from "@/components/common/layout/gap";
+import ClockIcon from "@/components/icons/clock.vue";
+import Row from "@/components/common/layout/row.vue";
+import TagIcon from "@/components/icons/tag.vue";
 
 const props = defineProps<{
     id: ConnectionId;
@@ -39,7 +43,7 @@ function select(value: Slot) {
         <Column v-else>
             <Empty v-if="slots.length <= 0" message="No slots found" />
 
-            <Column v-else>
+            <Column :gap="Gap.SMALL" v-else>
                 <Card
                     v-for="slot in slots"
                     :title="getDate(slot.startTime)"
@@ -47,10 +51,18 @@ function select(value: Slot) {
                     :options="true"
                     :height="Height.SMALL"
                 >
-                    <p>
-                        {{ getTime(slot.startTime) }} -
-                        {{ getTime(slot.endTime) }}
-                    </p>
+                    <Row>
+                        <Row :gap="Gap.SMALL">
+                            <ClockIcon />
+                            {{ getTime(slot.startTime) }} -
+                            {{ getTime(slot.endTime) }}
+                        </Row>
+
+                        <Row :gap="Gap.SMALL">
+                            <TagIcon />
+                            {{ slot.isUrgent ? "Urgent" : "Not Urgent" }}
+                        </Row>
+                    </Row>
 
                     <template v-slot:options>
                         <Small

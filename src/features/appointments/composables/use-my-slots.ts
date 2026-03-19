@@ -1,19 +1,18 @@
 import { usePolling } from "@/composables/use-polling";
-import { get } from "@/features/appointments/services/slots";
-import type { ConnectionId } from "@/features/network/models/id";
-import { POLLING_RATE } from "@/lib/polling";
-import { ref } from "vue";
 import type { Slot } from "@/features/appointments/models/slot/slot";
+import { getAll } from "@/features/appointments/services/slots";
+import { POLLING_RATE } from "@/lib/polling";
+import { ref, watch } from "vue";
 
-export function useSlots(id: ConnectionId) {
+export function useMySlots(weeks: () => number) {
     const slots = ref(null as Slot[] | null);
     const loading = ref(false);
     const error = ref<Error | null>(null);
 
-    async function fetch(id: ConnectionId, initial?: boolean) {
+    async function fetch(weeks: number, initial?: boolean) {
         try {
             if (initial) loading.value = true;
-            slots.value = await get(id);
+            slots.value = await getAll(weeks);
             error.value = null;
         } catch (err) {
             if (!(err instanceof Error)) return;
@@ -24,6 +23,7 @@ export function useSlots(id: ConnectionId) {
         }
     }
 
-    usePolling(() => fetch(id, false), POLLING_RATE);
+    usePolling(() => fetch(weeks()), POLLING_RATE);
+    watch(weeks, () => fetch(weeks()));
     return { slots, loading, error, fetch };
 }

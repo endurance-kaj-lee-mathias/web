@@ -4,4 +4,6 @@ export interface Slot {
     id: SlotId;
     startTime: Date;
     endTime: Date;
+    isUrgent: boolean;
+    isBooked: boolean;
 }

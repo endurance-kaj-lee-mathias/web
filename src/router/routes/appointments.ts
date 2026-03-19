@@ -1,6 +1,6 @@
 import AppointsmentsIcon from "@/components/icons/appointments.vue";
 import Bookings from "@/features/appointments/appointments.vue";
-import New from "@/features/appointments/new.vue";
+import Slots from "@/features/appointments/slots.vue";
 import { Role } from "@/models/roles";
 import { Guarded, Visibility, type Route } from "@/router/route";
 
@@ -14,9 +14,9 @@ export const appointments: Route[] = [
         auth: { guarded: Guarded.PRIVATE },
     },
     {
-        path: "/appointments/new",
+        path: "/appointments/slots",
         visible: Visibility.NONE,
-        component: New,
+        component: Slots,
         auth: { guarded: Guarded.PRIVATE, roles: [Role.VETERAN] },
     },
 ];

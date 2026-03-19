@@ -5,6 +5,7 @@ import { SmallStyle } from "@/components/common/buttons/style";
 
 const props = defineProps<{
     action?: string | (() => void);
+    disabled?: boolean;
     style?: SmallStyle;
 }>();
 
@@ -33,6 +34,7 @@ const styles = `flex items-center ${Gap.MEDIUM} justify-center font-bold  p-2 tr
         v-else-if="typeof action === 'function'"
         :class="styles"
         @click="action"
+        :disabled="disabled"
     >
         <slot />
     </button>

@@ -1,0 +1,31 @@
+<script setup lang="ts">
+import Button from "@/components/common/buttons/button.vue";
+import { Justify } from "@/components/common/layout/justify";
+import Row from "@/components/common/layout/row.vue";
+import Next from "@/components/icons/next.vue";
+import Previous from "@/components/icons/previous.vue";
+import { ref, watch } from "vue";
+
+const props = defineProps<{ max?: number }>();
+const emit = defineEmits<{ (e: "update:modelValue", page: number): void }>();
+const week = ref(1);
+
+watch(week, (week) => emit("update:modelValue", week));
+
+function next() {
+    if (week.value >= (props.max ?? Infinity)) return;
+    week.value++;
+}
+
+function previous() {
+    if (week.value <= 1) return;
+    week.value--;
+}
+</script>
+
+<template>
+    <Row :justify="Justify.END">
+        <Button @click="previous"> <Previous /> </Button>
+        <Button @click="next"> <Next /> </Button>
+    </Row>
+</template>

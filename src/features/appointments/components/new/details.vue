@@ -14,6 +14,7 @@ const urgent = ref("false");
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 defineExpose({ send });
+const emit = defineEmits(["sent"]);
 
 async function send() {
     if (!store.selected) return;
@@ -22,9 +23,10 @@ async function send() {
         await sendAppointment(
             store.selected.id,
             title.value,
-            urgent.value === "true",
+            store.selected.isUrgent,
         );
         boundary.value!.error = null;
+        emit("sent");
     } catch (error: unknown) {
         boundary.value!.error = error as Error;
     }
@@ -35,9 +37,8 @@ async function send() {
     <Boundary ref="boundary">
         <Column>
             <Input label="Title" placeholder="Coffee Break" v-model="title" />
-            <Select label="Urgency" v-model="urgent">
-                <option :value="false">Not Urgent</option>
-                <option :value="true">Very Urgent</option>
+            <Select label="Urgency" :disabled="true">
+                {{ store.selected?.isUrgent ? "Urgent" : "Not Urgent" }}
             </Select>
         </Column>
     </Boundary>
