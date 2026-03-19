@@ -9,7 +9,7 @@ const api = client(Env.apiUrl);
 export async function getAll(weeks: number): Promise<Day[]> {
     try {
         const { data } = await api.get<Slot[]>(
-            `/calendar/slots?from=${getFormattedDate(getNextPage(weeks - 1))}&to=${getFormattedDate(getNextPage(weeks))}`,
+            `/calendar/slots/me?from=${getFormattedDate(getNextPage(weeks - 1))}&to=${getFormattedDate(getNextPage(weeks))}`,
         );
 
         const grouped = data.reduce<
