@@ -2,7 +2,7 @@
 import Small from "@/components/common/buttons/small.vue";
 import { Align } from "@/components/common/layout/align";
 import Row from "@/components/common/layout/row.vue";
-import BookingsIcon from "@/components/icons/bookings.vue";
+import AppointsmentsIcon from "@/components/icons/appointments.vue";
 import MessagesIcon from "@/components/icons/messages.vue";
 </script>
 
@@ -12,8 +12,8 @@ import MessagesIcon from "@/components/icons/messages.vue";
             <MessagesIcon />
         </Small>
 
-        <Small action="/bookings">
-            <BookingsIcon />
+        <Small action="/appointments/new">
+            <AppointsmentsIcon />
         </Small>
     </Row>
 </template>

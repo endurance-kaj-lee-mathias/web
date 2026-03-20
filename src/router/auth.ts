@@ -53,7 +53,7 @@ export function initializeAuth(router: Router) {
         }
 
         const roles: Role[] = to.meta.roles as Role[];
-        if (guarded && !hasRoles(roles)) return next("/");
+        if (guarded && roles?.length && !hasRoles(roles)) return next("/");
 
         next();
     });

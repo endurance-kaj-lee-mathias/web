@@ -5,7 +5,6 @@ import Loading from "@/components/common/states/loading.vue";
 import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef } from "vue";
 import { watch } from "vue";
-import type { Veteran } from "@/features/network/connections/models/veteran";
 import {
     Effect,
     formatEffect,
@@ -20,14 +19,15 @@ import { save as saveRule } from "@/features/network/connections/services/rules"
 import Button from "@/components/common/buttons/button.vue";
 import { ref } from "vue";
 import Select from "@/components/common/inputs/select.vue";
+import type { Connection } from "@/features/network/connections/models/connection";
 
 const props = defineProps<{
     modelValue: boolean;
-    veteran: Veteran;
+    connection: Connection;
 }>();
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
-const { rules, loading, error, fetch } = useRules(props.veteran.id);
+const { rules, loading, error, fetch } = useRules(props.connection.id);
 const pending = ref([] as Rule[]);
 watchEffect(() => error.value && boundary.value?.capture(error.value));
 const emit = defineEmits(["update:modelValue", "saved"]);
@@ -56,7 +56,7 @@ async function savePending() {
     try {
         await Promise.all(
             pending.value!.map((rule: Rule) =>
-                saveRule(props.veteran.id, rule.resource, rule.effect),
+                saveRule(props.connection.id, rule.resource, rule.effect),
             ),
         );
         await fetch();
@@ -75,7 +75,7 @@ async function savePending() {
     >
         <DialogContent
             title="Privacy"
-            :description="`For @${veteran.username}`"
+            :description="`For @${connection.username}`"
             :footer="true"
             :closeable="true"
         >
@@ -93,7 +93,7 @@ async function savePending() {
                             <Select
                                 v-for="rule in rules"
                                 :label="formatResource(rule.resource)"
-                                :description="`Can @${veteran.username} take a look at your ${formatResource(rule.resource).toLowerCase()}?`"
+                                :description="`Can @${connection.username} take a look at your ${formatResource(rule.resource).toLowerCase()}?`"
                                 :modelValue="rule.effect"
                                 @update:modelValue="
                                     save({

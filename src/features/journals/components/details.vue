@@ -9,8 +9,7 @@ import Boundary from "@/components/common/states/boundary.vue";
 import { getFace } from "@/features/journals/lib/faces";
 import type { Day } from "@/features/journals/models/journal/day";
 import { useTemplateRef } from "vue";
-import Score from "./score.vue";
-import { ref } from "vue";
+import Score from "@/features/journals/components/score.vue";
 
 const props = defineProps<{
     modelValue: boolean;

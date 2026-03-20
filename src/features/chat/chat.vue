@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Style } from "@/components/common/buttons/style";
 import Column from "@/components/common/layout/column.vue";
 import { Gap } from "@/components/common/layout/gap";
 import Boundary from "@/components/common/states/boundary.vue";
@@ -57,7 +56,7 @@ async function send(message: string) {
                     <section
                         :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
                     >
-                        <Button :style="Style.DEFAULT" @click="network = true">
+                        <Button :action="() => (network = true)">
                             <AddIcon /> Conversation
                         </Button>
 
