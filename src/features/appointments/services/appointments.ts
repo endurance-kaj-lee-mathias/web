@@ -14,3 +14,21 @@ export async function getAll(day: Date): Promise<Appointment[]> {
         throw new Error("Appointments could not be fetched");
     }
 }
+
+export async function download(): Promise<void> {
+    try {
+        const { data } = await api.get<Blob>("/calendar/me/export", {
+            responseType: "blob",
+        });
+
+        const url = URL.createObjectURL(data);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "export.ics";
+        a.click();
+
+        URL.revokeObjectURL(url);
+    } catch {
+        throw new Error("Calendar could not be downloaded");
+    }
+}
