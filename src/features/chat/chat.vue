@@ -82,7 +82,7 @@ async function send(message: string) {
                         :class="`flex flex-col ${Gap.MEDIUM} h-full min-h-0`"
                     >
                         <section
-                            class="bg-light-2 rounded-md p-2 h-full min-h-0 overflow-y-scroll"
+                            class="bg-light-2 rounded-md shadow-sm p-2 h-full min-h-0 overflow-y-scroll"
                         >
                             <Empty
                                 v-if="!store.selected"

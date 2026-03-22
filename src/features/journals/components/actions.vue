@@ -12,7 +12,7 @@ import MessagesIcon from "@/components/icons/messages.vue";
             <MessagesIcon />
         </Small>
 
-        <Small action="/appointments/new">
+        <Small action="/appointments">
             <AppointsmentsIcon />
         </Small>
     </Row>

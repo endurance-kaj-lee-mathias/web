@@ -75,7 +75,7 @@ const move = (pages: { month: number; year: number }[]) => {
 
                     <section
                         v-if="appointments && appointments.length > 0"
-                        class="bg-light-2 rounded-md p-2"
+                        class="bg-light-2 rounded-md p-2 shadow-sm"
                     >
                         <AppointmentCard
                             v-for="appointment in appointments"
@@ -90,7 +90,7 @@ const move = (pages: { month: number; year: number }[]) => {
                 </section>
 
                 <DatePicker
-                    class="calendar"
+                    class="calendar shadow-sm"
                     color="gray"
                     :expanded="true"
                     @dayclick="(d) => (day = d.noonDate)"

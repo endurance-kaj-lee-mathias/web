@@ -26,6 +26,8 @@ import New from "@/features/appointments/components/new-slot.vue";
 import { Gap } from "@/components/common/layout/gap";
 import DangerIcon from "@/components/icons/danger.vue";
 import TagIcon from "@/components/icons/tag.vue";
+import Grid from "@/components/common/layout/grid.vue";
+import { Size } from "@/components/common/layout/grid";
 
 const weeks = ref(1);
 const add = ref(false);
@@ -67,7 +69,7 @@ async function remove(id: SlotId) {
                             {{ getDate(day.date) }}
                         </p>
 
-                        <Column>
+                        <Grid :size="Size.SMALL">
                             <Card
                                 v-for="slot in day.slots"
                                 :title="`${getTime(slot.startTime)} - ${getTime(slot.endTime)}`"
@@ -104,7 +106,7 @@ async function remove(id: SlotId) {
                                     </Small>
                                 </template>
                             </Card>
-                        </Column>
+                        </Grid>
                     </Stack>
                 </Column>
 
