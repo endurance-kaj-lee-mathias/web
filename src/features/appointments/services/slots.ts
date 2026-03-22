@@ -6,39 +6,19 @@ import { Env } from "@/lib/env";
 
 const api = client(Env.apiUrl);
 
-export async function getAll(weeks: number): Promise<Day[]> {
+export async function getAll(date: Date): Promise<Slot[]> {
     try {
+        const from = new Date(date);
+        from.setHours(0, 0, 0, 0);
+
+        const to = new Date(date);
+        to.setHours(23, 59, 59, 999);
+
         const { data } = await api.get<Slot[]>(
-            `/calendar/slots/me?from=${getFormattedDate(getNextPage(weeks - 1))}&to=${getFormattedDate(getNextPage(weeks))}`,
+            `/calendar/slots/me?from=${from.toISOString()}&to=${to.toISOString()}`,
         );
 
-        const grouped = data.reduce<
-            Record<string, { date: Date; slots: Slot[] }>
-        >((acc, slot) => {
-            const date = new Date(slot.startTime);
-            const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-
-            if (acc[key]) {
-                acc[key].slots.push(slot);
-                return acc;
-            }
-
-            acc[key] = {
-                date: new Date(
-                    date.getFullYear(),
-                    date.getMonth(),
-                    date.getDate(),
-                ),
-                slots: [],
-            };
-
-            acc[key].slots.push(slot);
-            return acc;
-        }, {});
-
-        return Object.values(grouped).sort(
-            (a, b) => a.date.getTime() - b.date.getTime(),
-        );
+        return data;
     } catch {
         throw new Error("Slots could not be fetched");
     }

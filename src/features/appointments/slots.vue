@@ -1,117 +1,81 @@
-<script lang="ts" setup>
-import Boundary from "@/components/common/states/boundary.vue";
-import Base from "@/components/layout/base.vue";
-import Header from "@/features/appointments/components/header.vue";
-import { useMySlots } from "@/features/appointments/composables/use-my-slots";
-import { remove as removeSlot } from "@/features/appointments/services/slots";
-import { useTemplateRef, watchEffect } from "vue";
-import Small from "@/components/common/buttons/small.vue";
-import { SmallStyle } from "@/components/common/buttons/style";
-import Card from "@/components/common/card/card.vue";
-import Column from "@/components/common/layout/column.vue";
-import { Height } from "@/components/common/layout/height";
-import Empty from "@/components/common/states/empty.vue";
-import Loading from "@/components/common/states/loading.vue";
-import { getDate, getTime } from "@/lib/date";
-import { ref } from "vue";
-import Pagination from "@/features/appointments/components/pagination.vue";
-import Row from "@/components/common/layout/row.vue";
-import { Justify } from "@/components/common/layout/justify";
-import Button from "@/components/common/buttons/button.vue";
-import PlusIcon from "@/components/icons/plus.vue";
-import Stack from "@/components/common/layout/stack.vue";
-import MinusIcon from "@/components/icons/minus.vue";
-import type { SlotId } from "@/features/appointments/models/slot/id";
-import New from "@/features/appointments/components/new-slot.vue";
+<script setup lang="ts">
 import { Gap } from "@/components/common/layout/gap";
-import DangerIcon from "@/components/icons/danger.vue";
-import TagIcon from "@/components/icons/tag.vue";
-import Grid from "@/components/common/layout/grid.vue";
-import { Size } from "@/components/common/layout/grid";
-
-const weeks = ref(1);
-const add = ref(false);
-const { days, loading, error, fetch } = useMySlots(() => weeks.value);
+import Base from "@/components/layout/base.vue";
+import Calendar from "@/components/common/calendar.vue";
+import Boundary from "@/components/common/states/boundary.vue";
+import { useTemplateRef, watchEffect } from "vue";
+import { ref, watch } from "vue";
+import Header from "@/features/appointments/components/header.vue";
+import Loading from "@/components/common/states/loading.vue";
+import PlusIcon from "@/components/icons/plus.vue";
+import Button from "@/components/common/buttons/button.vue";
+import Empty from "@/components/common/states/empty.vue";
+import { useMySlots } from "@/features/appointments/composables/use-my-slots";
+import type { Slot } from "@/features/appointments/models/slot/slot";
+import { move } from "@/features/appointments/lib/move";
+import New from "@/features/appointments/components/new-slot.vue";
+import SlotCard from "@/features/appointments/components/slot.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
-watchEffect(() => error.value && boundary.value?.capture(error.value));
+const day = ref(new Date());
+const add = ref(false);
+const details = ref(false);
 
-async function remove(id: SlotId) {
-    try {
-        await Promise.all([await removeSlot(id), await fetch(weeks.value)]);
-        boundary.value!.error = null;
-    } catch (error: unknown) {
-        boundary.value!.error = error as Error;
-    }
+const { slots, loading, error, fetch } = useMySlots();
+const slot = ref(null as Slot | null);
+
+watch(day, (day) => fetch(day));
+watchEffect(() => error.value && boundary.value?.capture(error.value));
+const handleMove = (pages: { month: number; year: number }[]) =>
+    move(day, pages);
+
+function select(value: Slot) {
+    slot.value = value;
+    details.value = true;
 }
 </script>
 
 <template>
     <Base>
         <Header />
-
         <Boundary ref="boundary">
-            <Loading v-if="loading || !days" />
+            <Loading v-if="loading" />
 
-            <Column v-else>
-                <Row :justify="Justify.BETWEEN">
+            <section
+                v-else
+                :class="`grid sm:grid-cols-[200px_1fr] ${Gap.MEDIUM} `"
+            >
+                <section
+                    :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
+                >
                     <Button :action="() => (add = true)"
                         ><PlusIcon /> Slot</Button
                     >
-                    <Pagination v-model="weeks" />
-                </Row>
 
-                <Empty v-if="days.length <= 0" message="No slots found" />
+                    <Empty
+                        v-if="!slots || slots.length === 0"
+                        message="No slots found"
+                    />
 
-                <Column v-else>
-                    <Stack v-for="day in days">
-                        <p class="text-medium text-lg">
-                            {{ getDate(day.date) }}
+                    <section v-else class="bg-light-2 rounded-md p-2 shadow-sm">
+                        <p v-for="slot in slots" @click="select(slot)">
+                            <SlotCard
+                                :from="slot.startTime"
+                                :to="slot.endTime"
+                                :urgent="slot.isUrgent"
+                                :booked="slot.isBooked"
+                            />
                         </p>
+                    </section>
+                </section>
 
-                        <Grid :size="Size.SMALL">
-                            <Card
-                                v-for="slot in day.slots"
-                                :title="`${getTime(slot.startTime)} - ${getTime(slot.endTime)}`"
-                                :image="slot.id"
-                                :options="true"
-                                :height="Height.SMALL"
-                            >
-                                <Row>
-                                    <Row :gap="Gap.SMALL">
-                                        <TagIcon />
-                                        {{
-                                            slot.isBooked
-                                                ? "Available"
-                                                : "Unavailable"
-                                        }}
-                                    </Row>
+                <Calendar
+                    @dayclick="(d) => (day = d.noonDate)"
+                    @did-move="handleMove"
+                />
 
-                                    <Row :gap="Gap.SMALL">
-                                        <DangerIcon />
-                                        {{
-                                            slot.isUrgent
-                                                ? "Urgent"
-                                                : "Not Urgent"
-                                        }}
-                                    </Row>
-                                </Row>
-
-                                <template v-slot:options>
-                                    <Small
-                                        :style="SmallStyle.ALTERNATE"
-                                        :action="() => remove(slot.id)"
-                                    >
-                                        <MinusIcon />
-                                    </Small>
-                                </template>
-                            </Card>
-                        </Grid>
-                    </Stack>
-                </Column>
-
-                <New v-model="add" @created="add = false" />
-            </Column>
+                <New v-model="add" @sent="add = false" :day="day" />
+            </section>
         </Boundary>
     </Base>
 </template>
