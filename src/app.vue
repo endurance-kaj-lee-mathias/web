@@ -23,10 +23,5 @@ watch(
 
 <template>
     <RouterView />
-    <Toaster
-        :toastOptions="{
-            unstyled: true,
-            class: 'shadow-sm rounded-lg bg-light-2 min-w-32 p-4',
-        }"
-    />
+    <Toaster :closeButton="true" closeButtonPosition="top-right" />
 </template>

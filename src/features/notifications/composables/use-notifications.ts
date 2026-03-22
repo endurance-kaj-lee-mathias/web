@@ -26,7 +26,6 @@ export function useNotifications() {
 
     onMounted(async () => {
         try {
-            toast("test");
             socket.value = await createClient("ws/notifications");
             unsubscribe = socket.value.onMessage(handleIncoming);
         } catch (err) {
