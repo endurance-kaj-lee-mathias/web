@@ -15,6 +15,9 @@ import Details from "@/features/journals/components/details.vue";
 import Information from "@/features/journals/components/information.vue";
 import type { Day } from "@/features/journals/models/journal/day";
 import { getFullName } from "@/lib/name";
+import { RiskLevel } from "@/features/journals/models/journal/risk";
+import { watch } from "vue";
+import Link from "@/components/common/link.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const username: string = getParam("username");
@@ -22,6 +25,14 @@ const week = ref(0);
 
 const { journal, loading, error } = useJournal(username, () => week.value);
 watchEffect(() => error.value && boundary.value?.capture(error.value));
+
+const risk = ref(false);
+
+watch(journal, (journal) => {
+    if (!journal) return;
+    if (journal.profile.riskLevel !== RiskLevel.NORMAL) return;
+    risk.value = true;
+});
 
 const details = ref(false);
 const day = ref(null as Day | null);
@@ -52,6 +63,23 @@ function select(value: Day) {
                         :about="journal.profile.about"
                         :image="journal.profile.image"
                     />
+
+                    <section
+                        class="bg-light-2 rounded-lg shadow-sm p-4 text-medium"
+                    >
+                        <p>
+                            Our calculated risk level for
+                            <b class="font-bold"
+                                >@{{ journal.profile.username }}
+                            </b>
+                            is
+                            <b class="font-bold">high</b>. Consider sending them
+                            a <Link action="/messages"> message</Link> or
+                            <Link action="/appointments">
+                                scheduling an appointment</Link
+                            >!
+                        </p>
+                    </section>
 
                     <Pagination
                         :max="journal.weekly.totalWeeks"

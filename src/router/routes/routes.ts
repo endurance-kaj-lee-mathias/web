@@ -3,7 +3,6 @@ import { auth } from "@/router/routes/auth";
 import { appointments } from "@/router/routes/appointments";
 import { journals } from "@/router/routes/journals";
 import { messages } from "@/router/routes/messages";
-import { notifications } from "@/router/routes/notifications";
 import { profile } from "@/router/routes/profile";
 import { network } from "@/router/routes/network";
 
@@ -13,7 +12,6 @@ export function getAllRoutes(): Route[] {
         ...journals,
         ...appointments,
         ...network,
-        ...notifications,
         ...messages,
         ...profile,
     ];

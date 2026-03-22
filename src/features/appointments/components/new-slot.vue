@@ -2,7 +2,7 @@
 import Button from "@/components/common/buttons/button.vue";
 import { Dialog, DialogContent } from "@/components/common/dialog/dialog";
 import Column from "@/components/common/layout/column.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import DateInput from "@/components/common/inputs/date.vue";
 import Time from "@/components/common/inputs/time.vue";
 import Select from "@/components/common/inputs/select.vue";
@@ -11,21 +11,29 @@ import Boundary from "@/components/common/states/boundary.vue";
 import { add as addSlot } from "@/features/appointments/services/slots";
 import Grid from "@/components/common/layout/grid.vue";
 
-defineProps<{ modelValue: boolean }>();
+const props = defineProps<{ modelValue: boolean; day: Date }>();
 const emit = defineEmits(["update:modelValue", "created"]);
 
 defineExpose({ add });
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 
-function now(): Date {
-    const date = new Date();
+function reset(date: Date): Date {
     date.setSeconds(0, 0);
     return date;
 }
 
-const date = ref(now());
-const startTime = ref(now());
-const endTime = ref(now());
+const date = ref(reset(new Date(props.day)));
+const startTime = ref(new Date(props.day));
+const endTime = ref(new Date(props.day.getTime() + 60 * 60 * 1000));
+
+watch(
+    () => props.day,
+    (day) => {
+        startTime.value = new Date(day);
+        endTime.value = new Date(day.getTime() + 60 * 60 * 1000);
+    },
+);
+
 const urgent = ref(false);
 const recurring = ref(false);
 

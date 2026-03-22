@@ -2,7 +2,7 @@ import type { Appointment } from "@/features/appointments/models/appointment/app
 import { getAll } from "@/features/appointments/services/appointments";
 import { ref } from "vue";
 
-export function useAppointments(day: Date | null) {
+export function useAppointments() {
     const appointments = ref(null as Appointment[] | null);
     const loading = ref(false);
     const error = ref<Error | null>(null);

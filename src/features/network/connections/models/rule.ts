@@ -1,4 +1,4 @@
-import type { RuleId } from "@/features/network/veterans/models/id";
+import type { RuleId } from "@/features/network/connections/models/id";
 
 export interface Rule {
     id?: RuleId;
@@ -8,8 +8,6 @@ export interface Rule {
 
 export enum Resource {
     PROFILE = "userProfile",
-    STRESS = "stressScores",
-    MOOD = "moodEntries",
     CALENDAR = "calendar",
 }
 
@@ -22,10 +20,6 @@ export function formatResource(resource: Resource) {
     switch (resource) {
         case Resource.PROFILE:
             return "Profile";
-        case Resource.STRESS:
-            return "Stress";
-        case Resource.MOOD:
-            return "Mood";
         case Resource.CALENDAR:
             return "Calendar";
     }

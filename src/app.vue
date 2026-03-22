@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import { Toaster } from "vue-sonner";
+import { Toaster, toast } from "vue-sonner";
+import "vue-sonner/style.css";
 import { useProfile } from "@/stores/profile";
-
 import { watch } from "vue";
 import { useKeycloak } from "@josempgon/vue-keycloak";
+import { useNotifications } from "@/features/notifications/composables/use-notifications";
 
 const store = useProfile();
 const keycloak = useKeycloak();
+useNotifications();
 
 watch(
     () => keycloak.isAuthenticated,
@@ -21,5 +23,5 @@ watch(
 
 <template>
     <RouterView />
-    <Toaster />
+    <Toaster :closeButton="true" closeButtonPosition="top-right" />
 </template>

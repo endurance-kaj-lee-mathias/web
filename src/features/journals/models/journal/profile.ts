@@ -1,3 +1,5 @@
+import type { RiskLevel } from "@/features/journals/models/journal/risk";
+
 export interface Profile {
     firstName: string;
     lastName: string;
@@ -7,4 +9,5 @@ export interface Profile {
     image: string;
     phoneNumber?: string;
     isPrivate: boolean;
+    riskLevel: RiskLevel;
 }

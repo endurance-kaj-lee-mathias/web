@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Gap } from "@/components/common/layout/gap";
-import { getDate } from "@/lib/date";
 import { getFullName } from "@/lib/name";
 
 defineProps<{
