@@ -14,6 +14,7 @@ import { useMySlots } from "@/features/appointments/composables/use-my-slots";
 import type { Slot } from "@/features/appointments/models/slot/slot";
 import { move } from "@/features/appointments/lib/move";
 import New from "@/features/appointments/components/new-slot.vue";
+import Details from "@/features/appointments/components/slot-details.vue";
 import SlotCard from "@/features/appointments/components/slot.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
@@ -74,7 +75,19 @@ function select(value: Slot) {
                     @did-move="handleMove"
                 />
 
-                <New v-model="add" @sent="add = false" :day="day" />
+                <New
+                    v-model="add"
+                    @sent="add = false"
+                    :day="day"
+                    @created="add = false"
+                />
+
+                <Details
+                    v-if="day && slot"
+                    :slot="slot"
+                    v-model="details"
+                    @removed="slot = null"
+                />
             </section>
         </Boundary>
     </Base>

@@ -6,7 +6,7 @@ import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef, watchEffect } from "vue";
 import { useAppointments } from "@/features/appointments/composables/use-appointments";
 import { ref, watch } from "vue";
-import Details from "@/features/appointments/components/details.vue";
+import Details from "@/features/appointments/components/appointment-details.vue";
 import Header from "@/features/appointments/components/header.vue";
 import AppointmentCard from "@/features/appointments/components/appointment.vue";
 import Loading from "@/components/common/states/loading.vue";

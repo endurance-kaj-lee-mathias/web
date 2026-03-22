@@ -24,7 +24,7 @@ export async function download(): Promise<void> {
         const url = URL.createObjectURL(data);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "export.ics";
+        a.download = "calendar.ics";
         a.click();
 
         URL.revokeObjectURL(url);
