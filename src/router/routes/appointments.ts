@@ -17,6 +17,6 @@ export const appointments: Route[] = [
         path: "/appointments/slots",
         visible: Visibility.NONE,
         component: Slots,
-        auth: { guarded: Guarded.PRIVATE, roles: [Role.VETERAN] },
+        auth: { guarded: Guarded.PRIVATE },
     },
 ];

@@ -14,6 +14,9 @@ import type { Appointment } from "@/features/appointments/models/appointment/app
 import PlusIcon from "@/components/icons/plus.vue";
 import Button from "@/components/common/buttons/button.vue";
 import New from "@/features/appointments/components/new-appointment/new.vue";
+import { hasRoles } from "@/services/authentication";
+import { Role } from "@/models/roles";
+import Empty from "@/components/common/states/empty.vue";
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
 const day = ref(new Date());
@@ -59,9 +62,16 @@ const move = (pages: { month: number; year: number }[]) => {
                 <section
                     :class="`flex flex-col ${Gap.MEDIUM} overflow-y-scroll no-scrollbar`"
                 >
-                    <Button :action="() => (add = true)"
+                    <Button
+                        v-if="!hasRoles([Role.THERAPIST])"
+                        :action="() => (add = true)"
                         ><PlusIcon /> Appointment</Button
                     >
+
+                    <Empty
+                        v-if="!appointments || appointments.length === 0"
+                        message="No appointments found"
+                    />
 
                     <section
                         v-if="appointments && appointments.length > 0"
