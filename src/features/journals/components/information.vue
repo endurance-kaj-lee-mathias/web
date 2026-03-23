@@ -5,6 +5,7 @@ import { Gap } from "@/components/common/layout/gap";
 import { Justify } from "@/components/common/layout/justify";
 import { Padding } from "@/components/common/layout/padding";
 import Row from "@/components/common/layout/row.vue";
+import Picture from "@/components/common/picture.vue";
 import Stack from "@/components/common/layout/stack.vue";
 import Actions from "@/features/journals/components/actions.vue";
 
@@ -24,10 +25,7 @@ defineProps<{
             :responsive="true"
         >
             <Row :gap="Gap.LARGE" :items="Align.STRETCH">
-                <section
-                    class="bg-cover shadow-sm bg-center w-26 rounded-lg bg-accent"
-                    :style="`background-image: url('${image}');`"
-                />
+                <Picture :image="image" :username="username" />
 
                 <Column :padding="Padding.SMALL">
                     <Column :gap="Gap.SMALL">
