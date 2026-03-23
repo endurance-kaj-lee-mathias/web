@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
+import Loading from "@/features/loading/loading.vue";
 import { Toaster, toast } from "vue-sonner";
 import "vue-sonner/style.css";
 import { useProfile } from "@/stores/profile";
@@ -22,6 +23,7 @@ watch(
 </script>
 
 <template>
+    <Loading />
     <RouterView />
     <Toaster :closeButton="true" closeButtonPosition="top-right" />
 </template>
