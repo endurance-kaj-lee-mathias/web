@@ -5,9 +5,16 @@ import { Justify } from "@/components/common/layout/justify";
 import Stack from "@/components/common/layout/stack.vue";
 import { Align } from "@/components/common/layout/align";
 
-const visible = ref(true);
+const shown = localStorage.getItem("LOADING_SHOWN");
+const visible = ref(!shown);
 
-onMounted(() => setTimeout(() => (visible.value = false), 1500));
+onMounted(() => {
+    if (shown) return;
+    setTimeout(() => {
+        visible.value = false;
+        localStorage.setItem("LOADING_SHOWN", "1");
+    }, 1500);
+});
 </script>
 
 <template>
