@@ -6,6 +6,8 @@ import Input from "@/components/common/inputs/input.vue";
 import Grid from "@/components/common/layout/grid.vue";
 import Column from "@/components/common/layout/column.vue";
 import type { Appointment } from "@/features/appointments/models/appointment/appointment";
+import { Size } from "@/components/common/layout/grid";
+import Box from "@/components/common/inputs/box.vue";
 
 defineProps<{
     modelValue: boolean;
@@ -33,13 +35,9 @@ const emit = defineEmits(["update:modelValue"]);
             :closeable="true"
         >
             <Column>
-                <Input label="Date" :disabled="true">
-                    {{ getDate(appointment.startTime) }}
-                </Input>
-
-                <Grid>
-                    <Input label="Title" :disabled="true">
-                        {{ appointment.title }}
+                <Grid :size="Size.SMALL">
+                    <Input label="Date" :disabled="true">
+                        {{ getDate(appointment.startTime) }}
                     </Input>
 
                     <Input label="Urgency" :disabled="true">
@@ -56,14 +54,9 @@ const emit = defineEmits(["update:modelValue"]);
                     }}
                 </Input>
 
-                <Grid>
-                    <Input label="From" :disabled="true">
-                        {{ getTime(appointment.startTime) }}
-                    </Input>
-                    <Input label="To" :disabled="true">
-                        {{ getTime(appointment.endTime) }}
-                    </Input>
-                </Grid>
+                <Box label="Title" :disabled="true">
+                    {{ appointment.title }}
+                </Box>
             </Column>
         </DialogContent>
     </Dialog>
