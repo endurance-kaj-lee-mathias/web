@@ -96,7 +96,7 @@ async function send(message: string) {
                             />
                         </section>
 
-                        <Send :send="send" />
+                        <Send v-if="store.selected" :send="send" />
                     </section>
                 </section>
             </Column>
