@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import { Toaster, toast } from "vue-sonner";
+import Loading from "@/features/loading.vue";
+import { ref } from "vue";
+import { Toaster } from "vue-sonner";
 import "vue-sonner/style.css";
 import { useProfile } from "@/stores/profile";
 import { watch } from "vue";
@@ -10,6 +12,7 @@ import { useNotifications } from "@/features/notifications/composables/use-notif
 const store = useProfile();
 const keycloak = useKeycloak();
 useNotifications();
+const shown = ref(!!localStorage.getItem("LOADING_SHOWN"));
 
 watch(
     () => keycloak.isAuthenticated,
@@ -22,6 +25,7 @@ watch(
 </script>
 
 <template>
+    <Loading v-if="!shown" />
     <RouterView />
     <Toaster :closeButton="true" closeButtonPosition="top-right" />
 </template>

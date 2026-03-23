@@ -30,7 +30,7 @@ const risk = ref(false);
 
 watch(journal, (journal) => {
     if (!journal) return;
-    if (journal.profile.riskLevel !== RiskLevel.NORMAL) return;
+    if (journal.profile.riskLevel === RiskLevel.HIGH) return;
     risk.value = true;
 });
 
