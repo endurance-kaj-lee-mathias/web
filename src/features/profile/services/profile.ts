@@ -1,9 +1,11 @@
 import { Env } from "@/lib/env";
 import type { Profile } from "@/features/profile/models/profile";
 import { client } from "@/lib/auth/client";
-import { Privacy, type Personal } from "@/features/profile/models/personal";
+import { type Personal } from "@/features/profile/models/personal";
 import type { About } from "@/features/profile/models/about";
 import { type Address, matches } from "@/features/profile/models/address";
+import { type Privacy } from "@/features/profile/models/privacy";
+import { Resource, type Rule } from "@/features/profile/models/rule";
 
 const api = client(Env.apiUrl);
 
@@ -16,19 +18,24 @@ export async function getOrCreate(): Promise<Profile> {
     }
 }
 
+export function getRule(resource: Resource, rules: Rule[]): Rule {
+    return (
+        rules.find((rule: Rule) => rule.resource === resource) ??
+        ({ resource, isPrivate: true } as Rule)
+    );
+}
+
 export async function changeProfile(
     personal: Personal,
     address: Address,
     about: About,
+    privacy: Privacy,
 ): Promise<void> {
     try {
         const profile: Profile = await getOrCreate();
 
         await Promise.all([
-            changePrivacy(
-                profile.isPrivate,
-                personal.privacy === Privacy.PRIVATE,
-            ),
+            changePrivacy(profile.sharingResources, privacy),
             changeFirstName(profile.firstName, personal.firstName),
             changeLastName(profile.lastName, personal.lastName),
             changePhoneNumber(profile.phoneNumber, personal.phoneNumber),
@@ -42,12 +49,19 @@ export async function changeProfile(
     }
 }
 
-async function changePrivacy(old: boolean, model: boolean): Promise<void> {
+async function changePrivacy(old: Rule[], model: Privacy): Promise<void> {
     try {
-        if (old === model) return;
-        await api.patch("/users/me/privacy", {
-            IsPrivate: model,
-        });
+        if (!getRule(Resource.PROFILE, old).isPrivate === model.userProfile) {
+            await api.patch("/sharing/resources/userProfile/privacy", {
+                IsPrivate: model.userProfile,
+            });
+        }
+
+        if (!getRule(Resource.CALENDAR, old).isPrivate === model.calendar) {
+            await api.patch("/sharing/resources/calendar/privacy", {
+                IsPrivate: model.calendar,
+            });
+        }
     } catch {
         throw new Error("Profile privacy could not be updated");
     }

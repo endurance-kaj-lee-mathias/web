@@ -16,16 +16,10 @@ const firstName = useComputedField(props, emit, "firstName");
 const lastName = useComputedField(props, emit, "lastName");
 const username = useComputedField(props, emit, "username");
 const phoneNumber = useComputedField(props, emit, "phoneNumber");
-const privacy = useComputedField(props, emit, "privacy");
 </script>
 
 <template>
     <Column>
-        <Select label="Profile Privacy" v-model="privacy">
-            <option value="public">Public</option>
-            <option value="private">Private</option>
-        </Select>
-
         <Input label="Username" :disabled="true">
             {{ username }}
         </Input>
