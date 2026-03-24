@@ -12,6 +12,7 @@ import { Tabs } from "@/features/profile/components/preferences/tabs";
 import type { About as AboutModel } from "@/features/profile/models/about";
 import type { Address as AddressModel } from "@/features/profile/models/address";
 import type { Personal as PersonalModel } from "@/features/profile/models/personal";
+import type { Privacy as PrivacyModel } from "@/features/profile/models/privacy";
 import { changeProfile } from "@/features/profile/services/profile";
 import Boundary from "@/components/common/states/boundary.vue";
 import { useTemplateRef } from "vue";
@@ -20,12 +21,14 @@ import { watch } from "vue";
 import TabButton from "@/components/common/tabs/tab-button.vue";
 import Stack from "@/components/common/layout/stack.vue";
 import { Align } from "@/components/common/layout/align";
+import Privacy from "@/features/profile/components/preferences/privacy.vue";
 
 const props = defineProps<{
     modelValue: boolean;
     personal: PersonalModel;
     address: AddressModel;
     about: AboutModel;
+    privacy: PrivacyModel;
 }>();
 
 const boundary = useTemplateRef<InstanceType<typeof Boundary>>("boundary");
@@ -36,6 +39,7 @@ const tab = ref(Tabs.PERSONAL);
 const personal = ref({ ...props.personal });
 const address = ref({ ...props.address });
 const about = ref({ ...props.about });
+const privacy = ref({ ...props.privacy });
 
 watch(
     () => props.modelValue,
@@ -48,7 +52,12 @@ watch(
 async function save() {
     try {
         loading.value = true;
-        await changeProfile(personal.value, address.value, about.value);
+        await changeProfile(
+            personal.value,
+            address.value,
+            about.value,
+            privacy.value,
+        );
         emit("saved");
         loading.value = false;
     } catch (error: unknown) {
@@ -83,6 +92,13 @@ async function save() {
                             </TabButton>
 
                             <TabButton
+                                :active="tab === Tabs.PRIVACY"
+                                @click="tab = Tabs.PRIVACY"
+                            >
+                                Privacy
+                            </TabButton>
+
+                            <TabButton
                                 :active="tab === Tabs.ADDRESS"
                                 @click="tab = Tabs.ADDRESS"
                             >
@@ -101,6 +117,10 @@ async function save() {
                     <Personal
                         v-if="tab === Tabs.PERSONAL"
                         v-model:values="personal"
+                    />
+                    <Privacy
+                        v-if="tab === Tabs.PRIVACY"
+                        v-model:values="privacy"
                     />
                     <Address
                         v-if="tab === Tabs.ADDRESS && props.address"

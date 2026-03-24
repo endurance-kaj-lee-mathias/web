@@ -1,7 +1,7 @@
 import type { Connection } from "@/features/network/connections/models/connection";
 import { client } from "@/lib/auth/client";
 import { Env } from "@/lib/env";
-import type { VeteranId } from "@/features/network/models/id";
+import type { ConnectionId } from "@/features/network/models/id";
 
 const api = client(Env.apiUrl);
 
@@ -14,7 +14,7 @@ export async function getAll(): Promise<Connection[]> {
     }
 }
 
-export async function remove(id: VeteranId): Promise<void> {
+export async function remove(id: ConnectionId): Promise<void> {
     try {
         await api.delete(`/users/support/${id}`);
     } catch {

@@ -1,5 +1,6 @@
 import type { ProfileId } from "@/features/profile/models/id";
 import type { Address } from "@/features/profile/models/address";
+import type { Resource, Rule } from "@/features/profile/models/rule";
 
 export interface Profile {
     id: ProfileId;
@@ -11,5 +12,5 @@ export interface Profile {
     introduction: string;
     image: string;
     address: Address;
-    isPrivate: boolean;
+    sharingResources: Rule[];
 }

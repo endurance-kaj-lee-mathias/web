@@ -10,11 +10,12 @@ import Introduction from "@/features/profile/components/introduction.vue";
 import Preferences from "@/features/profile/components/preferences/preferences.vue";
 import { Viewer } from "@/features/profile/components/viewer";
 import { getFullName } from "@/lib/name";
+import { getRule } from "@/features/profile/services/profile";
 import { useProfile as useProfileStore } from "@/stores/profile";
 import { useKeycloak } from "@josempgon/vue-keycloak";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, useTemplateRef, watchEffect } from "vue";
-import { Privacy } from "@/features/profile/models/personal";
+import { Resource } from "./models/rule";
 
 const keycloak = useKeycloak();
 const store = useProfileStore();
@@ -61,9 +62,16 @@ function logout() {
                         lastName: profile.lastName,
                         username: profile.username,
                         phoneNumber: profile.phoneNumber,
-                        privacy: profile.isPrivate
-                            ? Privacy.PRIVATE
-                            : Privacy.PUBLIC,
+                    }"
+                    :privacy="{
+                        userProfile: getRule(
+                            Resource.PROFILE,
+                            profile.sharingResources,
+                        ).isPrivate,
+                        calendar: getRule(
+                            Resource.CALENDAR,
+                            profile.sharingResources,
+                        ).isPrivate,
                     }"
                     :address="{
                         street: profile.address.street,

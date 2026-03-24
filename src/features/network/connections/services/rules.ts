@@ -5,11 +5,11 @@ import type {
     Resource,
     Rule,
 } from "@/features/network/connections/models/rule";
-import type { VeteranId } from "@/features/network/models/id";
+import type { ConnectionId } from "@/features/network/models/id";
 
 const api = client(Env.apiUrl);
 
-export async function getAll(id: VeteranId): Promise<Rule[]> {
+export async function getAll(id: ConnectionId): Promise<Rule[]> {
     try {
         const { data } = await api.get<Rule[]>(`/sharing/rules/${id}`);
         return data;
@@ -19,7 +19,7 @@ export async function getAll(id: VeteranId): Promise<Rule[]> {
 }
 
 export async function save(
-    id: VeteranId,
+    id: ConnectionId,
     resource: Resource,
     effect: Effect,
 ): Promise<void> {
